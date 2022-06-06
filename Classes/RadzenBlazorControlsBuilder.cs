@@ -97,7 +97,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
                 TemplateConfigurationEntry generationFolderEntry = generationProject.TemplateConfigurationEntries.Find(e => e.Template.Equals(TemplateName) && e.Name.Equals(generationFolder));
 
-                 string displayColumn = generationProject.EntityDisplayName;
+                string displayColumn = generationProject.EntityDisplayName;
                 string relativepath = generationProject.Location;
 
                 if (generationProject.DeletePreviousGeneratedFiles)
@@ -117,6 +117,8 @@ public class RadzenBlazorControlsBuilder : IPlugin
                     {
                         output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
                         output.AppendLine("@inject NotificationService NotificationService");
+                        output.AppendLine("@inject Blazored.SessionStorage.ISessionStorageService sessionStorage");
+                        output.AppendLine("@inject NavigationManager NavManager");
                         output.AppendLine(" ");
                         output.AppendLine("@if (" + table.Name + "_entities == null)");
                         output.AppendLine("{");
@@ -129,21 +131,21 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("        case CrudMode.Add:");
                         output.AppendLine("            <RadzenBadge  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                <ChildContent>");
-                        output.AppendLine("                    <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">Ingrese los datos de " + table.Name + "</h4>");
+                        output.AppendLine("                        <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "ABM_A_TITLE" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto  @dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + table.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto </h4>");
                         output.AppendLine("                </ChildContent>");
                         output.AppendLine("            </RadzenBadge>");
                         output.AppendLine("            break;");
                         output.AppendLine("        case CrudMode.Delete:");
                         output.AppendLine("            <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Warning" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                <ChildContent>");
-                        output.AppendLine("                    <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">Confirma eliminar el " + table.Name + " ?</h4>");
+                        output.AppendLine("                        <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "ABM_D_TITLE" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto  @dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + table.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto? </h4>");
                         output.AppendLine("                </ChildContent>");
                         output.AppendLine("            </RadzenBadge>");
                         output.AppendLine("            break;");
                         output.AppendLine("            case CrudMode.Edit:");
                         output.AppendLine("            <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                <ChildContent>");
-                        output.AppendLine("                    <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">Modificación de datos de " + table.Name + "</h4>");
+                        output.AppendLine("                        <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "ABM_M_TITLE" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto  @dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + table.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto </h4>");
                         output.AppendLine("                </ChildContent>");
                         output.AppendLine("            </RadzenBadge>");
                         output.AppendLine("            break;         ");
@@ -151,7 +153,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                <ChildContent>");
                         output.AppendLine("                    <div>");
-                        output.AppendLine("                        <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">Administración de " + table.Name + "</h4>");
+                        output.AppendLine("                        <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "ABM_L_TITLE" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto  @dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + table.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto </h4>");
                         output.AppendLine("                    </div>");
                         output.AppendLine("                </ChildContent>");
                         output.AppendLine("            </RadzenBadge>");
@@ -166,9 +168,9 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            <p style=" + System.Convert.ToChar(34) + "color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;" + System.Convert.ToChar(34) + ">No existen registros.</p>");
                         output.AppendLine("        </EmptyTemplate>        ");
                         output.AppendLine("        <Columns>");
-                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "120px" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "80px" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("             <HeaderTemplate>");
-                        output.AppendLine("                 <RadzenButton Icon=" + System.Convert.ToChar(34) + "add_circle_outline" + System.Convert.ToChar(34) + " ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Success" + System.Convert.ToChar(34) + " Text =" + System.Convert.ToChar(34) + "Nuevo" + System.Convert.ToChar(34) + " Click=" + System.Convert.ToChar(34) + "Add" + System.Convert.ToChar(34) + ">");
+                        output.AppendLine("                 <RadzenButton Icon=" + System.Convert.ToChar(34) + "add_circle_outline" + System.Convert.ToChar(34) + " ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Success" + System.Convert.ToChar(34) + " Text =@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "NEW_BUTTON" + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Click=" + System.Convert.ToChar(34) + "Add" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("                 </RadzenButton>");
                         output.AppendLine("                 </HeaderTemplate>");
                         output.AppendLine("                 <Template Context=" + System.Convert.ToChar(34) + "element" + System.Convert.ToChar(34) + ">");
@@ -180,9 +182,10 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("             </RadzenDataGridColumn>");
                         foreach (var column in table.Columns)
                         {
+
                             if (column.IsInPrimaryKey)
                             {
-                                output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
+                                output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
                             }
                             else
                             {
@@ -191,7 +194,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                     var foreignKey = column.ForeignKeys.FirstOrDefault();
                                     MyMeta.ITable fkTable = foreignKey.PrimaryTable;
 
-                                    output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "100px" + System.Convert.ToChar(34) + " >");
+                                    output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Title=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "100px" + System.Convert.ToChar(34) + " >");
                                     output.AppendLine("                <Template>");
                                     output.AppendLine("                    @if(" + fkTable.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ") != null){");
                                     output.AppendLine("                       <RadzenLabel Text=" + System.Convert.ToChar(34) + "@" + fkTable.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ")." + displayColumn + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
@@ -210,11 +213,28 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                 {
                                     if (fieldsToTreatAsImage.IndexOf(column.Name) < 0)
                                     {
-                                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
+                                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " >");
+
+                                        switch (column.DataTypeName)
+                                        {
+                                            case "bit":
+                                                output.AppendLine("            <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
+                                                output.AppendLine("                <RadzenCheckBox TValue =" + System.Convert.ToChar(34) + "bool" + System.Convert.ToChar(34) + " Value=@data." + column.Name + " Disabled=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + ">");
+                                                output.AppendLine("                </RadzenCheckBox>");
+                                                output.AppendLine("            </Template>");
+                                                break;
+                                            case "ntext":
+                                                output.AppendLine("            <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
+                                                output.AppendLine("                    <RadzenImage Path=" + System.Convert.ToChar(34) + "@data." + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 40px; height: 40px; border-radius: 8px;" + System.Convert.ToChar(34) + " >");
+                                                output.AppendLine("                </RadzenImage>");
+                                                output.AppendLine("            </Template>");
+                                                break;
+                                        }
+                                        output.AppendLine("    </RadzenDataGridColumn>");
                                     }
                                     else
                                     {
-                                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
+                                        output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Title=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
                                         output.AppendLine("                <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
                                         output.AppendLine("                    <RadzenImage Path=" + System.Convert.ToChar(34) + "@data." + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 40px; height: 40px; border-radius: 8px;" + System.Convert.ToChar(34) + " />");
                                         output.AppendLine("                </Template>");
@@ -224,7 +244,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                 }
                             }
                         }
-                        
+
 
                         output.AppendLine("        </Columns>");
                         output.AppendLine("        </RadzenDataGrid>");
@@ -233,11 +253,13 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine(" ");
                         output.AppendLine("    if (crudMode == CrudMode.Add || crudMode == CrudMode.Edit || crudMode == CrudMode.Delete)");
                         output.AppendLine("    {");
-                        output.AppendLine("         <RadzenTemplateForm TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity" + System.Convert.ToChar(34) + "  @bind-Value=" + System.Convert.ToChar(34) + table.Name + "_entity" + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity != null)" + System.Convert.ToChar(34) + ">");
+                        output.AppendLine("         <RadzenTemplateForm TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity" + System.Convert.ToChar(34) + "  @bind-Value=" + System.Convert.ToChar(34) + table.Name + "_entity" + System.Convert.ToChar(34) + " Submit =" + System.Convert.ToChar(34) + "Save" + System.Convert.ToChar(34) + " Visible =" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity != null)" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("          <ChildContent>");
 
                         foreach (var column in table.Columns)
                         {
+                            string Disabled = column.IsAutoKey ? "true" : "@(crudMode==CrudMode.Delete)";
+
                             if (column.IsInForeignKey && !column.IsInPrimaryKey)
                             {
                                 var foreignKey = column.ForeignKeys.FirstOrDefault();
@@ -246,24 +268,23 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
                                 output.AppendLine("            <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                                 output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                output.AppendLine("                <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                output.AppendLine("                <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component =" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
                                 output.AppendLine("                </RadzenLabel>");
                                 output.AppendLine("              </div>");
                                 output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                output.AppendLine("                  @if(@" + fkTable.Name + "_entities.Count > 0 && @" + fkTable.Name + "_entities.FirstOrDefault( c => c.Id == @" + table.Name + "_entity." + column.Name + ") != null)");
+                                output.AppendLine("                  @if((@" + fkTable.Name + "_entities.Count > 0 && @" + fkTable.Name + "_entities.FirstOrDefault( c => c.Id == @" + table.Name + "_entity." + column.Name + ") != null) || crudMode != CrudMode.Delete)");
                                 output.AppendLine("                  {");
-                                output.AppendLine("                        <RadzenDropDown AllowClear=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + column.LanguageType + nullable + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity." + column.Name + System.Convert.ToChar(34));
-
-                                output.AppendLine("                                    Data=@" + fkTable.Name  + "_entities TextProperty = " + System.Convert.ToChar(34) + displayColumn + System.Convert.ToChar(34) + " ValueProperty = " + System.Convert.ToChar(34) + foreignKey.PrimaryColumns.FirstOrDefault().Name + System.Convert.ToChar(34) );
+                                output.AppendLine("                        <RadzenDropDown AllowClear=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + column.LanguageType + nullable + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34));
+                                output.AppendLine("                                    Data=@" + fkTable.Name + "_entities TextProperty = " + System.Convert.ToChar(34) + displayColumn + System.Convert.ToChar(34) + " ValueProperty = " + System.Convert.ToChar(34) + foreignKey.PrimaryColumns.FirstOrDefault().Name + System.Convert.ToChar(34));
                                 output.AppendLine("                                    Change=@(args => Select" + fkTable.Name + "ValueChanged(args))");
-                                output.AppendLine("                                    Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + " />");
+                                output.AppendLine("                                    Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " />");
                                 output.AppendLine("                  }");
                                 output.AppendLine("                  else");
                                 output.AppendLine("                  {");
                                 output.AppendLine("                       <RadzenDropDown AllowClear=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + column.LanguageType + nullable + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " ");
                                 output.AppendLine("                                    Data=@" + fkTable.Name + "_entities TextProperty = " + System.Convert.ToChar(34) + displayColumn + System.Convert.ToChar(34) + " ValueProperty = " + System.Convert.ToChar(34) + foreignKey.PrimaryColumns.FirstOrDefault().Name + System.Convert.ToChar(34));
                                 output.AppendLine("                                    Change=@(args => Select" + fkTable.Name + "ValueChanged(args))");
-                                output.AppendLine("                                    Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + " />");
+                                output.AppendLine("                                    Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " />");
                                 output.AppendLine("                  }");
                                 output.AppendLine("              </div>");
                                 output.AppendLine("            </div>");
@@ -288,7 +309,10 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                                 numericFormat = " TValue=" + System.Convert.ToChar(34) + "short" + System.Convert.ToChar(34);
                                                 break;
                                             case "bigint":
-                                                numericFormat = " TValue=" + System.Convert.ToChar(34) + "long" + System.Convert.ToChar(34);
+                                                if (column.IsNullable)
+                                                    numericFormat = " TValue=" + System.Convert.ToChar(34) + "long?" + System.Convert.ToChar(34);
+                                                else
+                                                    numericFormat = " TValue=" + System.Convert.ToChar(34) + "long" + System.Convert.ToChar(34);
                                                 break;
                                             case "decimal":
                                                 numericFormat = " Format=" + System.Convert.ToChar(34) + "c" + System.Convert.ToChar(34);
@@ -302,77 +326,164 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                                 numericFormat = " TValue=" + System.Convert.ToChar(34) + "int" + System.Convert.ToChar(34);
                                                 break;
                                         }
-                                        string disabled = "true"; ;
-                                        if (column.IsInPrimaryKey)
-                                            disabled = "true";
-                                        else
-                                            disabled = "@(crudMode==CrudMode.Delete)";
 
-                                        output.AppendLine("          <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("             <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                 <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name  + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                 </RadzenLabel>");
-                                        output.AppendLine("             </div>");
-                                        output.AppendLine("             <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                 <RadzenNumeric " + numericFormat  + " style=" + System.Convert.ToChar(34) + "display: block; width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name +"_entity." + column.Name +")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + disabled + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                </RadzenNumeric>");
-                                        output.AppendLine("             </div>");
-                                        output.AppendLine("         </div>");
+                                        if (column.Name == "UsuarioModificacion" || column.Name == "UsuarioCreacion")
+                                        {
+                                            output.AppendLine("         @if(crudMode!=CrudMode.Add)");
+                                            output.AppendLine("         {");
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenNumeric " + numericFormat + " style=" + System.Convert.ToChar(34) + "display: block; width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 </RadzenNumeric>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("             </div>");
+                                            output.AppendLine("         }");
+                                        }
+                                        else
+                                        {
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenNumeric " + numericFormat + " style=" + System.Convert.ToChar(34) + "display: block; width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("                 </RadzenNumeric>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("             </div>");
+                                        }
 
                                         break;
                                     case "date":
-                                        output.AppendLine("            <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                </RadzenLabel>");
-                                        output.AppendLine("              </div>");
-                                        output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenDatePicker style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + " >");
-                                        output.AppendLine("                </RadzenDatePicker>");
-                                        output.AppendLine("              </div>");
-                                        output.AppendLine("            </div>");
+                                        if (column.Name == "FechaModificacion" || column.Name == "FechaCreacion")
+                                        {
+                                            output.AppendLine("         @if(crudMode!=CrudMode.Add)");
+                                            output.AppendLine("         {");
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <RadzenDatePicker style=" + System.Convert.ToChar(34) + "width: 25%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("                 </RadzenDatePicker>");
+                                            output.AppendLine("              </div>");
+                                            output.AppendLine("            </div>");
+                                            output.AppendLine("         }");
+                                        }
+                                        else
+                                        {
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <RadzenDatePicker style=" + System.Convert.ToChar(34) + "width: 25%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("                 </RadzenDatePicker>");
+                                            output.AppendLine("              </div>");
+                                            output.AppendLine("            </div>");
+                                        }
                                         break;
                                     case "datetime":
                                     case "smalldatetime":
-                                        output.AppendLine("            <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                </RadzenLabel>");
-                                        output.AppendLine("              </div>");
-                                        output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenDatePicker ShowTime=" + System.Convert.ToChar(34) + "true"+ System.Convert.ToChar(34) + " ShowSeconds =" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " style =" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + " >");
-                                        output.AppendLine("                </RadzenDatePicker>");
-                                        output.AppendLine("              </div>");
-                                        output.AppendLine("            </div>");
+                                        if (column.Name == "FechaModificacion" || column.Name == "FechaCreacion")
+                                        {
+                                            output.AppendLine("         @if(crudMode!=CrudMode.Add)");
+                                            output.AppendLine("         {");
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <RadzenDatePicker ShowTime=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " ShowSeconds =" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " style =" + System.Convert.ToChar(34) + "width: 25%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("                 </RadzenDatePicker>");
+                                            output.AppendLine("              </div>");
+                                            output.AppendLine("            </div>");
+                                            output.AppendLine("         }");
+                                        }
+                                        else
+                                        {
+                                            output.AppendLine("             <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     </RadzenLabel>");
+                                            output.AppendLine("                 </div>");
+                                            output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                 <RadzenDatePicker ShowTime=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " ShowSeconds =" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " style =" + System.Convert.ToChar(34) + "width: 25%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("                 </RadzenDatePicker>");
+                                            output.AppendLine("              </div>");
+                                            output.AppendLine("            </div>");
+                                        }
                                         break;
                                     case "bit":
                                         output.AppendLine("              <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                                         output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
+                                        output.AppendLine("                <RadzenLabelText=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
                                         output.AppendLine("                 </div>");
                                         output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                        output.AppendLine("                <RadzenCheckBox @bind-Value=@" + table.Name + "_entity." + column.Name + "  Name=" + System.Convert.ToChar(34) + column.Name +"CheckBox" + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + "bool" + System.Convert.ToChar(34) + " Change=@(args => " + column.Name + "Change(args, " + "@" + table.Name + "_entity" + ")) />");
+                                        output.AppendLine("                <RadzenCheckBox @bind-Value=@" + table.Name + "_entity." + column.Name + "  Name=" + System.Convert.ToChar(34) + column.Name + "CheckBox" + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + "bool" + System.Convert.ToChar(34) + " Change=@(args => " + column.Name + "Change(args, " + "@" + table.Name + "_entity" + ")) />");
                                         output.AppendLine("                 </div>");
                                         output.AppendLine("               </div>");
                                         break;
                                     case "image":
                                     case "varbinary":
                                         break;
+                                    case "ntext":
+                                        //if (fieldsToTreatAsImage.IndexOf(column.+
+                                        //) < 0)
+                                        //{
+                                        //    output.AppendLine("              <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                     <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                     </RadzenLabel>");
+                                        //    output.AppendLine("                 </div>");
+                                        //    output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                     <RadzenTextBox  style=" + System.Convert.ToChar(34) + "display: block" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                     </RadzenTextBox>");
+                                        //    output.AppendLine("                     @if(@crudMode!=CrudMode.Delete)");
+                                        //    output.AppendLine("                     {");
+                                        //    output.AppendLine("                         <RadzenRequiredValidator Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + column.Name + " is required" + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "position: absolute" + System.Convert.ToChar(34) + ">");
+                                        //    output.AppendLine("                         </RadzenRequiredValidator>");
+                                        //    output.AppendLine("                     }");
+                                        //    output.AppendLine("                 </div>");
+                                        //    output.AppendLine("               </div>");
+                                        //}
+                                        //else
+                                        //{
+                                        output.AppendLine("              <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                        output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                        output.AppendLine("                <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
+                                        output.AppendLine("                 </div>");
+                                        output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
+                                        output.AppendLine("                     <RadzenFileInput @bind-Value=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity." + column.Name + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + "string" + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " />  ");
+                                        output.AppendLine("                 </div>");
+                                        output.AppendLine("               </div>");
+
+                                        break;
                                     case "text":
                                     default:
- 
-                                        if (fieldsToTreatAsImage.IndexOf(column.Name)< 0)
+
+                                        if (fieldsToTreatAsImage.IndexOf(column.Name) < 0)
                                         {
                                             output.AppendLine("              <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                            output.AppendLine("                     <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                     </RadzenLabel>");
                                             output.AppendLine("                 </div>");
                                             output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
-                                            output.AppendLine("                     <RadzenTextBox  style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                     <RadzenTextBox  style=" + System.Convert.ToChar(34) + "display: block" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                     </RadzenTextBox>");
-                                            output.AppendLine("                     <RadzenRequiredValidator Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + column.Name + " is required" + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "position: absolute" + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + "@(crudMode==CrudMode.Delete)" + System.Convert.ToChar(34) + ">");
-                                            output.AppendLine("                     </RadzenRequiredValidator>");
+                                            output.AppendLine("                     @if(@crudMode!=CrudMode.Delete)");
+                                            output.AppendLine("                     {");
+                                            output.AppendLine("                         <RadzenRequiredValidator Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + column.Name + " is required" + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "position: absolute" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                         </RadzenRequiredValidator>");
+                                            output.AppendLine("                     }");
                                             output.AppendLine("                 </div>");
                                             output.AppendLine("               </div>");
                                         }
@@ -380,7 +491,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                         {
                                             output.AppendLine("              <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                            output.AppendLine("                <RadzenLabel Text=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
+                                            output.AppendLine("                <RadzenLabel Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + " || x.Clave == " + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
                                             output.AppendLine("                 </div>");
                                             output.AppendLine("                 <div class=" + System.Convert.ToChar(34) + "col-md-9" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                     <RadzenFileInput @bind-Value=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity." + column.Name + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + "string" + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " />  ");
@@ -392,17 +503,17 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                 }
                             }
                         }
-                        output.AppendLine("           </ChildContent>");
-                        output.AppendLine("         </RadzenTemplateForm>");
-                        output.AppendLine(" <hr>");
                         output.AppendLine("            <div class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("              <div class=" + System.Convert.ToChar(34) + "col offset-sm-3" + System.Convert.ToChar(34) + ">");
-                        output.AppendLine("                <RadzenButton ButtonType=" + System.Convert.ToChar(34) + "ButtonType.Submit" + System.Convert.ToChar(34) + " Icon=" + System.Convert.ToChar(34) + "save" + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + "Aceptar" + System.Convert.ToChar(34) + " ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Primary" + System.Convert.ToChar(34) + " Click=" + System.Convert.ToChar(34) + "Save" + System.Convert.ToChar(34) + ">");
+                        output.AppendLine("                <RadzenButton ButtonType=" + System.Convert.ToChar(34) + "ButtonType.Submit" + System.Convert.ToChar(34) + " Icon=" + System.Convert.ToChar(34) + "save" + System.Convert.ToChar(34) + " Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "ACCEPT_BUTTON" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " ButtonStyle =" + System.Convert.ToChar(34) + "ButtonStyle.Primary" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("                </RadzenButton>");
-                        output.AppendLine("                <RadzenButton ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Secondary" + System.Convert.ToChar(34) + " Icon = " + System.Convert.ToChar(34) + "save" + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "margin-left: 1rem" + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + "Cancelar" + System.Convert.ToChar(34) + " Click=" + System.Convert.ToChar(34) + "Cancel" + System.Convert.ToChar(34) + ">");
+                        output.AppendLine("                <RadzenButton ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Secondary" + System.Convert.ToChar(34) + " Icon = " + System.Convert.ToChar(34) + "save" + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "margin-left: 1rem" + System.Convert.ToChar(34) + " Text=@dataLenguaje.Where(x => x.Clave == " + System.Convert.ToChar(34) + "CANCEL_BUTTON" + System.Convert.ToChar(34) + " || x.Clave==" + System.Convert.ToChar(34) + "GENERIC" + System.Convert.ToChar(34) + ").FirstOrDefault().Texto" + " Click=" + System.Convert.ToChar(34) + "Cancel" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("                </RadzenButton>");
                         output.AppendLine("              </div>");
                         output.AppendLine("            </div>");
+                        output.AppendLine("           </ChildContent>");
+                        output.AppendLine("         </RadzenTemplateForm>");
+                        output.AppendLine(" <hr>");
                         output.AppendLine("    }");
                         output.AppendLine(" ");
                         output.AppendLine("    <RadzenNotification /> ");
@@ -424,6 +535,11 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private " + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + " " + table.Name + "_entity = new();");
                         output.AppendLine("    private List<" + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "> " + table.Name + "_entities = null;");
+                        output.AppendLine(" ");
+                        output.AppendLine("    /// <summary>");
+                        output.AppendLine("    /// Variables to multilanguaje");
+                        output.AppendLine("    /// </summary>");
+                        output.AppendLine("    private List<DepositarioAdminWeb.Entities.Procedures.Regionalizacion.ObtenerTextosLenguaje.Resultado> dataLenguaje;");
                         output.AppendLine(" ");
                         foreach (var column in table.Columns)
                         {
@@ -447,16 +563,25 @@ public class RadzenBlazorControlsBuilder : IPlugin
                             }
                         }
 
- 
+
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    ///  Page crud mode {List,Add,Edit,Delete}");
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private CrudMode crudMode = CrudMode.List;");
                         output.AppendLine(" ");
+                        output.AppendLine("    /// <summary>");
+                        output.AppendLine("    ///  Variable to store the user id");
+                        output.AppendLine("    /// </summary>");
+                        output.AppendLine("    private Int64? userId = null;");
+                        output.AppendLine(" ");
                         output.AppendLine("    protected override async Task OnInitializedAsync()");
                         output.AppendLine("    {");
+                        output.AppendLine("        dataLenguaje = await sessionStorage.GetItemAsync<List<DepositarioAdminWeb.Entities.Procedures.Regionalizacion.ObtenerTextosLenguaje.Resultado>>(" +System.Convert.ToChar(34) + "DataLenguaje" + System.Convert.ToChar(34) + ");");
                         output.AppendLine("        await Task.Run(LoadMainEntityData);");
                         output.AppendLine("        await Task.Run(LoadTypesData);");
+                        output.AppendLine("        userId = await sessionStorage.GetItemAsync<Int64?>(" + System.Convert.ToChar(34) + "Id" + System.Convert.ToChar(34) + ");");
+                        output.AppendLine("        if (userId == null)");
+                        output.AppendLine("             NavManager.NavigateTo(" + System.Convert.ToChar(34) + "login" + System.Convert.ToChar(34) + ", true);");
                         output.AppendLine("    }");
                         output.AppendLine("    #region Loading entities data");
                         output.AppendLine("    /// <summary>");
@@ -464,7 +589,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private void LoadMainEntityData()");
                         output.AppendLine("    {");
-                        output.AppendLine("        " +generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
+                        output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
                         output.AppendLine("        " + table.Name + "_entities = entity.Items();");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
@@ -536,10 +661,15 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                     var foreignKey = column.ForeignKeys.FirstOrDefault();
                                     MyMeta.ITable fkTable = foreignKey.PrimaryTable;
 
-                                    output.AppendLine("            " + fkTable.Name + "_entity = new() { ");
-                                    output.AppendLine("            Id = " + fkTable.Name + "_entities.FirstOrDefault(c => c.Id == " + table.Name + "_entity." + column.Name + ").Id, ");
-                                    output.AppendLine("            " + displayColumn + " = " + fkTable.Name + "_entities.FirstOrDefault(c => c.Id == " + table.Name + "_entity." + column.Name + ")." + displayColumn);
-                                    output.AppendLine("            };");
+                                    //Si es autoreferenciada no generamos el codigo
+                                    if (fkTable.Name != table.Name)
+                                    {
+                                        output.AppendLine("            " + fkTable.Name + "_entity = new() { ");
+                                        output.AppendLine("            Id = " + fkTable.Name + "_entities.FirstOrDefault(c => c.Id == " + table.Name + "_entity." + column.Name + ").Id, ");
+                                        output.AppendLine("            " + displayColumn + " = " + fkTable.Name + "_entities.FirstOrDefault(c => c.Id == " + table.Name + "_entity." + column.Name + ")." + displayColumn);
+                                        output.AppendLine("            };");
+                                    }
+
                                 }
                             }
                         }
@@ -556,20 +686,107 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    private async Task Save()");
                         output.AppendLine("    {");
                         output.AppendLine("        string actionInformation = string.Empty;");
+                        output.AppendLine("        NotificationSeverity severityType = NotificationSeverity.Error;");
+                        output.AppendLine("        string summary = string.Empty;");
                         output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " crud = new();");
+                        output.AppendLine("        foreach(var property in " + table.Name + "_entity.GetType().GetProperties())");
+                        output.AppendLine("        {");
+                        output.AppendLine("             switch(property.Name)");
+                        output.AppendLine("             {");
+                        if (table.Columns.Where(x => x.Name == "FechaModificacion").FirstOrDefault() != null)
+                        {
+                            output.AppendLine("                 case " + System.Convert.ToChar(34) + "FechaModificacion" + System.Convert.ToChar(34) + ":");
+                            output.AppendLine("                 if(crudMode == CrudMode.Add)");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.FechaModificacion=null;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 else");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.FechaModificacion=DateTime.Now;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 break;");
+                        }
+                        if (table.Columns.Where(x => x.Name == "FechaCreacion").FirstOrDefault() != null)
+                        {
+                            output.AppendLine("                 case " + System.Convert.ToChar(34) + "FechaCreacion" + System.Convert.ToChar(34) + ":");
+                            output.AppendLine("                 if(crudMode == CrudMode.Add)");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.FechaCreacion=DateTime.Now;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 break;");
+                        }
+                        if (table.Columns.Where(x => x.Name == "UsuarioCreacion").FirstOrDefault() != null)
+                        {
+                            output.AppendLine("                 case " + System.Convert.ToChar(34) + "UsuarioCreacion" + System.Convert.ToChar(34) + ":");
+                            output.AppendLine("                 if(crudMode == CrudMode.Add)");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.UsuarioCreacion=userId.Value;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 break;");
+                        }
+                        if (table.Columns.Where(x => x.Name == "UsuarioCreacion").FirstOrDefault() != null)
+                        {
+                            output.AppendLine("                 case " + System.Convert.ToChar(34) + "UsuarioModificacion" + System.Convert.ToChar(34) + ":");
+                            output.AppendLine("                 if(crudMode == CrudMode.Add)");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.UsuarioModificacion=null;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 else");
+                            output.AppendLine("                 {");
+                            output.AppendLine("                     " + table.Name + "_entity.UsuarioModificacion=userId.Value;");
+                            output.AppendLine("                 }");
+                            output.AppendLine("                 break;");
+                        }
+                        output.AppendLine("             }");
+                        output.AppendLine("        }");
+
+
                         output.AppendLine("        switch (crudMode)");
                         output.AppendLine("        {");
                         output.AppendLine("            case CrudMode.Add:");
-                        output.AppendLine("                crud.Add(" + table.Name + "_entity);");
-                        output.AppendLine("                actionInformation = " + System.Convert.ToChar(34) + "agregado." + System.Convert.ToChar(34) + ";");
-                        output.AppendLine("                break;");
+                        output.AppendLine("                try");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     crud.Add(" + table.Name + "_entity);");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "agregado." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     severityType = NotificationSeverity.Success;");
+                        output.AppendLine("                }");
+                        output.AppendLine("                catch(Exception ex)");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = ex.Message;");
+                        output.AppendLine("                     severityType = NotificationSeverity.Error;");
+                        output.AppendLine("                }");
+                        output.AppendLine("            break;");
                         output.AppendLine("            case CrudMode.Edit:");
-                        output.AppendLine("                crud.Update(" + table.Name + "_entity);");
-                        output.AppendLine("                actionInformation = " + System.Convert.ToChar(34) + "modificado." + System.Convert.ToChar(34) + ";");
-                        output.AppendLine("                break;");
+                        output.AppendLine("                try");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     crud.Update(" + table.Name + "_entity);");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "modificado." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     severityType = NotificationSeverity.Success;");
+                        output.AppendLine("                }");
+                        output.AppendLine("                catch(Exception ex)");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = ex.Message;");
+                        output.AppendLine("                     severityType = NotificationSeverity.Error;");
+                        output.AppendLine("                }");
+                        output.AppendLine("            break;");
                         output.AppendLine("            case CrudMode.Delete:");
-                        output.AppendLine("                crud.Delete(" + table.Name + "_entity);");
-                        output.AppendLine("                actionInformation = " + System.Convert.ToChar(34) + "eliminado." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                try");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     crud.Delete(" + table.Name + "_entity);");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "eliminado." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     severityType = NotificationSeverity.Success;");
+                        output.AppendLine("                }");
+                        output.AppendLine("                catch(Exception ex)");
+                        output.AppendLine("                {");
+                        output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("                     actionInformation = ex.Message;");
+                        output.AppendLine("                     severityType = NotificationSeverity.Error;");
+                        output.AppendLine("                }");
                         output.AppendLine("                break;");
                         output.AppendLine("        }");
                         output.AppendLine(" ");
@@ -577,8 +794,8 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("        crudMode = CrudMode.List;");
                         output.AppendLine(" ");
                         output.AppendLine("        ShowNotification(new NotificationMessage { ");
-                        output.AppendLine("            Severity = NotificationSeverity.Success, ");
-                        output.AppendLine("            Summary = " + System.Convert.ToChar(34) + "El registro ha sido " + System.Convert.ToChar(34) + ", ");
+                        output.AppendLine("            Severity = severityType, ");
+                        output.AppendLine("            Summary = summary, ");
                         output.AppendLine("            Detail = actionInformation, ");
                         output.AppendLine("            Duration = 4000 });");
                         output.AppendLine("       ");
@@ -675,7 +892,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                         output.AppendLine("    /// <returns></returns>");
                                         output.AppendLine("    void " + column.Name + "Change(bool? value," + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + " item)");
                                         output.AppendLine("    {");
-                                                                output.AppendLine("         " + table.Name + "_entity = item;");
+                                        output.AppendLine("         " + table.Name + "_entity = item;");
                                         output.AppendLine("    }");
 
 
@@ -695,7 +912,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine(" ");
                         output.AppendLine("}");
 
- 
+
                         SaveOutputToFile(table.Schema + "\\" + table.Name + ".Crud.razor", output, relativepath, true);
                     }
                 }
@@ -716,7 +933,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
             foreach (MyMeta.IColumn item in table.Columns)
             {
-                if (item.DataTypeName.ToLower().StartsWith("char") 
+                if (item.DataTypeName.ToLower().StartsWith("char")
                     || item.DataTypeName.ToLower().StartsWith("varchar")
                     || item.DataTypeName.ToLower().StartsWith("nchar")
                     || item.DataTypeName.ToLower().StartsWith("nvarchar")
@@ -750,7 +967,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
         {
             if (!_workingdir.EndsWith("\\"))
                 _workingdir += "\\";
-            string filePath = _workingdir +  _generationFolder.Trim() + "\\" + relativepath + fileName;
+            string filePath = _workingdir + _generationFolder.Trim() + "\\" + relativepath + fileName;
             string fileDirectory = System.IO.Path.GetDirectoryName(filePath);
             if (!System.IO.Directory.Exists(fileDirectory))
                 System.IO.Directory.CreateDirectory(fileDirectory);
@@ -768,17 +985,17 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
             }
         }
-       
+
         private void DeletePreviousGeneratedFiles(string relativepath)
         {
             if (!_workingdir.EndsWith("\\"))
                 _workingdir += "\\";
-  
+
             string fileDirectory = _workingdir + _generationFolder.Trim() + "\\" + relativepath;
 
             foreach (var file in System.IO.Directory.GetFiles(fileDirectory))
             {
-                if(file.ToLower().EndsWith(".razor"))
+                if (file.ToLower().EndsWith(".razor"))
                     System.IO.File.Delete(file);
             }
 
@@ -908,9 +1125,12 @@ public class RadzenBlazorControlsBuilder : IPlugin
                 output.AppendLine("  <RadzenPanelMenu style=" + System.Convert.ToChar(34) + "height: 100%" + System.Convert.ToChar(34) + ">");
                 output.AppendLine("      <ChildContent>");
 
+                output.AppendLine("      <RadzenPanelMenuItem Icon=" + System.Convert.ToChar(34) + "settings" + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + generationProject.Namespace + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "padding-left:5%;" + System.Convert.ToChar(34) + ">");
+                output.AppendLine("      <ChildContent>");
+
                 foreach (MyMeta.ITable table in db.Tables)
                 {
-                     if (table.Selected)
+                    if (table.Selected)
                     {
                         if (!currentTableSchema.Equals(table.Schema))
                         {
@@ -924,7 +1144,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         }
                     }
                 }
-
+                output.AppendLine("       </ChildContent>");
                 output.AppendLine("      </ChildContent>");
                 output.AppendLine("    </RadzenPanelMenu>");
                 SaveOutputToFile(@"\RadzenNavMenu.razor", output, relativepath, true);
@@ -1162,7 +1382,11 @@ public class RadzenBlazorControlsBuilder : IPlugin
                     if (view.Selected)
                     {
                         output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + view.Schema + view.Name + "View" + System.Convert.ToChar(34) + "");
+                        output.AppendLine("@using  Permaquim.Depositary.Web.Administration.Controllers;");
+                        output.AppendLine(" ");
                         output.AppendLine("@inject NotificationService NotificationService");
+                        output.AppendLine("@inject Blazored.SessionStorage.ISessionStorageService sessionStorage");
+                        output.AppendLine("@inject NavigationManager NavManager");
                         output.AppendLine(" ");
                         output.AppendLine("@if (" + view.Name + "_entities != null)");
                         output.AppendLine("{");
@@ -1182,7 +1406,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("        <Columns>");
                         foreach (var column in view.Columns)
                         {
-                            output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34)  + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
+                            output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
                             output.AppendLine("            </RadzenDataGridColumn>");
 
                         }
@@ -1199,7 +1423,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    /// Variables to handle main entity");
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private " + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + " " + view.Name + "_entity = new();");
-                        output.AppendLine("    private List<" + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + ">? " + view.Name + "_entities");
+                        output.AppendLine("    private List<" + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + ">? " + view.Name + "_entities;");
                         output.AppendLine(" ");
                         output.AppendLine("    protected override async Task OnInitializedAsync()");
                         output.AppendLine("    {");
@@ -1353,4 +1577,3 @@ public class RadzenBlazorControlsBuilder : IPlugin
         #endregion
     }
 }
-  
