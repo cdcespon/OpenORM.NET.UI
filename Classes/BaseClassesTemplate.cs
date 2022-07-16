@@ -2152,7 +2152,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        finally");
         output.AppendLine("        {");
-        output.AppendLine("            if(_connection.State != ConnectionState.Closed)");
+        output.AppendLine("            if(_connection.State != ConnectionState.Closed && transaction == null)");
         output.AppendLine("                 _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -4622,10 +4622,9 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
-
+        output.AppendLine("using Microsoft.Extensions.Configuration;)");
         output.AppendLine("internal class ConfigurationHandler");
         output.AppendLine("{");
-        output.AppendLine("");
         output.AppendLine("     internal static String ConnectionString");
         output.AppendLine("     {");
         output.AppendLine("         get { return getConfiguration(Constants.CONNECTIONSTRING); }");
