@@ -141,26 +141,19 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
             {
                 case GenerationProject.NetVersionEnum.Net40:
                     BuildConfigurationHandler();
-                    BuildDataHandlerBaseNET40();
+                    BuildDataHandlerBaseNET40(generationProject.Namespace);
                     break;
                 case GenerationProject.NetVersionEnum.Net45:
                     BuildConfigurationHandler();
-                    BuildDataHandlerBaseNET45();
+                    BuildDataHandlerBaseNET45(generationProject.Namespace);
                     break;
                 case GenerationProject.NetVersionEnum.NetCore:
                     BuildConfigurationHandlerNETCore();
-                    BuildDataHandlerBaseNETCORE();
+                    BuildDataHandlerBaseNETCORE(generationProject.Namespace);
                     break;
                 default:
                     break;
             }
-
-            //if (generationProject.NetVersion == GenerationProject.NetVersionEnum.Net40)
-
-            //    BuildConfigurationHandler();
-            //    BuildDataHandlerBaseNET40();
-            //if (generationProject.NetVersion == GenerationProject.NetVersionEnum.Net45)
-            //    BuildDataHandlerBaseNET45();
 
             BuildDataHandler();
 
@@ -182,6 +175,8 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
             BuildBusinessMappedProcedures();
             BuildMappedProcedureDataHandler();
             BuildCore(generationProject.Namespace);
+            if (_generationProject.UsesEncription)
+                BuildEncriptionFile(generationProject.Namespace);
 
             return true;
         }
@@ -1662,7 +1657,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         }
 
     }
-    private void BuildDataHandlerBaseNET40()
+    private void BuildDataHandlerBaseNET40(string nameSpace)
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
@@ -2089,7 +2084,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                 // Create a  connection of the type");
         output.AppendLine("                 _connection = (IDbConnection)Activator.CreateInstance(_adoNetAssemblyName, _adoNetConnectionTypeName).Unwrap();");
         output.AppendLine("                 // Retrieve the Connection String    ");
-        output.AppendLine("                 _connection.ConnectionString = ConfigurationHandler.ConnectionString;");
+        if (_generationProject.UsesEncription)
+            output.AppendLine("                 _connection.ConnectionString = " +
+                nameSpace + ".Crypto.Decrypt(ConfigurationHandler.ConnectionString ,ConfigurationHandler.PasswordKey);");
+        else
+            output.AppendLine("                 _connection.ConnectionString = ConfigurationHandler.ConnectionString;");
+
         output.AppendLine("                 _connection.Open();");
         output.AppendLine("              }");
         output.AppendLine("        }");
@@ -2215,7 +2215,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output = new StringBuilder();
     }
 
-    private void BuildDataHandlerBaseNET45()
+    private void BuildDataHandlerBaseNET45(string nameSpace)
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
@@ -2721,7 +2721,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output = new StringBuilder();
     }
 
-    private void BuildDataHandlerBaseNETCORE()
+    private void BuildDataHandlerBaseNETCORE(string nameSpace)
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
@@ -3149,7 +3149,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                 // Create a  connection of the type");
         output.AppendLine("                 _connection = (IDbConnection)Activator.CreateInstance(_adoNetAssemblyName, _adoNetConnectionTypeName).Unwrap();");
         output.AppendLine("                 // Retrieve the Connection String    ");
-        output.AppendLine("                 _connection.ConnectionString = ConfigurationHandler.ConnectionString;");
+        if (_generationProject.UsesEncription)
+            output.AppendLine("                 _connection.ConnectionString = " +
+            nameSpace + ".Crypto.Decrypt(ConfigurationHandler.ConnectionString ,ConfigurationHandler.PasswordKey);");
+        else
+            output.AppendLine("                 _connection.ConnectionString = ConfigurationHandler.ConnectionString;");
+
         output.AppendLine("                 _connection.Open();");
         output.AppendLine("              }");
         output.AppendLine("        }");
@@ -4642,7 +4647,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using Microsoft.Extensions.Configuration;");
         output.AppendLine("internal class ConfigurationHandler");
         output.AppendLine("{");
-        output.AppendLine("");
+        output.AppendLine("     internal static String PasswordKey");
+        output.AppendLine("     {");
+        output.AppendLine("         get { return getConfiguration(Constants.PASSWORDKEY); }");
+        output.AppendLine("     }");
         output.AppendLine("     internal static String ConnectionString");
         output.AppendLine("     {");
         output.AppendLine("         get { return getConfiguration(Constants.CONNECTIONSTRING); }");
@@ -4709,6 +4717,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    #endregion");
         output.AppendLine("    #region Configuration Constants");
         output.AppendLine("         internal const string ADONETASSEMBLYNAME = " + System.Convert.ToChar(34) + "AdoNetAssemblyName" + System.Convert.ToChar(34) + ";");
+        output.AppendLine("         internal const string PASSWORDKEY = " + System.Convert.ToChar(34) + "PasswordKey" + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string ADONETCONNECTIONTYPENAME = " + System.Convert.ToChar(34) + "AdoNetConnectionTypeName" + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string ADONETCOMMANDTIMEOUT = " + System.Convert.ToChar(34) + "AdoNetCommandTimeout" + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string CONNECTIONSTRING = " + System.Convert.ToChar(34) + generationProject.ConnectionStringName + System.Convert.ToChar(34) + ";");
@@ -5347,6 +5356,109 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
 
     #endregion
+    #region Encription      
+    private void BuildEncriptionFile(string nameSpace)
+    {
+        StringBuilder output = new StringBuilder();
+
+        output.AppendLine("using System.Security.Cryptography;");
+        output.AppendLine("using System.Text;");
+        output.AppendLine("");
+        output.AppendLine("namespace " + nameSpace + "");
+        output.AppendLine("{");
+        output.AppendLine("    internal static class Crypto");
+        output.AppendLine("    {");
+        output.AppendLine("        public static string Encrypt(string textToEncrypt,string key)");
+        output.AppendLine("        {");
+        output.AppendLine("            if (string.IsNullOrEmpty(key))");
+        output.AppendLine("                throw new ArgumentException(" + System.Convert.ToChar(34) + "Key must have valid value." + System.Convert.ToChar(34) + ", nameof(key));");
+        output.AppendLine("            if (string.IsNullOrEmpty(textToEncrypt))");
+        output.AppendLine("                throw new ArgumentException(" + System.Convert.ToChar(34) + "The text must have valid value." + System.Convert.ToChar(34) + ", nameof(textToEncrypt));");
+        output.AppendLine("");
+        output.AppendLine("            var buffer = Encoding.UTF8.GetBytes(textToEncrypt);");
+        output.AppendLine("            var hash = SHA512.Create();");
+        output.AppendLine("            var aesKey = new byte[24];");
+        output.AppendLine("            Buffer.BlockCopy(hash.ComputeHash(Encoding.UTF8.GetBytes(key)), 0, aesKey, 0, 24);");
+        output.AppendLine("");
+        output.AppendLine("            using (var aes = Aes.Create())");
+        output.AppendLine("            {");
+        output.AppendLine("                if (aes == null)");
+        output.AppendLine("                    throw new ArgumentException(" + System.Convert.ToChar(34) + "Parameter must not be null." + System.Convert.ToChar(34) + ", nameof(aes));");
+        output.AppendLine("");
+        output.AppendLine("                aes.Key = aesKey;");
+        output.AppendLine("");
+        output.AppendLine("                using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))");
+        output.AppendLine("                using (var resultStream = new MemoryStream())");
+        output.AppendLine("                {");
+        output.AppendLine("                    using (var aesStream = new CryptoStream(resultStream, encryptor, CryptoStreamMode.Write))");
+        output.AppendLine("                    using (var plainStream = new MemoryStream(buffer))");
+        output.AppendLine("                    {");
+        output.AppendLine("                        plainStream.CopyTo(aesStream);");
+        output.AppendLine("                    }");
+        output.AppendLine("");
+        output.AppendLine("                    var result = resultStream.ToArray();");
+        output.AppendLine("                    var combined = new byte[aes.IV.Length + result.Length];");
+        output.AppendLine("                    Array.ConstrainedCopy(aes.IV, 0, combined, 0, aes.IV.Length);");
+        output.AppendLine("                    Array.ConstrainedCopy(result, 0, combined, aes.IV.Length, result.Length);");
+        output.AppendLine("");
+        output.AppendLine("                    return Convert.ToBase64String(combined);");
+        output.AppendLine("                }");
+        output.AppendLine("            }");
+        output.AppendLine("        }");
+        output.AppendLine("");
+        output.AppendLine("");
+        output.AppendLine("        public static string Decrypt(this string textToDecrypt,string key)");
+        output.AppendLine("        {");
+        output.AppendLine("            if (string.IsNullOrEmpty(key))");
+        output.AppendLine("                throw new ArgumentException(" + System.Convert.ToChar(34) + "Key must have valid value." + System.Convert.ToChar(34) + ", nameof(key));");
+        output.AppendLine("            if (string.IsNullOrEmpty(textToDecrypt))");
+        output.AppendLine("                throw new ArgumentException(" + System.Convert.ToChar(34) + "The encrypted text must have valid value." + System.Convert.ToChar(34) + ", nameof(textToDecrypt));");
+        output.AppendLine("");
+        output.AppendLine("            var combined = Convert.FromBase64String(textToDecrypt);");
+        output.AppendLine("            var buffer = new byte[combined.Length];");
+        output.AppendLine("            var hash = SHA512.Create();");
+        output.AppendLine("            var aesKey = new byte[24];");
+        output.AppendLine("            Buffer.BlockCopy(hash.ComputeHash(Encoding.UTF8.GetBytes(key)), 0, aesKey, 0, 24);");
+        output.AppendLine("");
+        output.AppendLine("            using (var aes = Aes.Create())");
+        output.AppendLine("            {");
+        output.AppendLine("                if (aes == null)");
+        output.AppendLine("                    throw new ArgumentException(" + System.Convert.ToChar(34) + "Parameter must not be null." + System.Convert.ToChar(34) + ", nameof(aes));");
+        output.AppendLine("");
+        output.AppendLine("                aes.Key = aesKey;");
+        output.AppendLine("");
+        output.AppendLine("                var iv = new byte[aes.IV.Length];");
+        output.AppendLine("                var ciphertext = new byte[buffer.Length - iv.Length];");
+        output.AppendLine("");
+        output.AppendLine("                Array.ConstrainedCopy(combined, 0, iv, 0, iv.Length);");
+        output.AppendLine("                Array.ConstrainedCopy(combined, iv.Length, ciphertext, 0, ciphertext.Length);");
+        output.AppendLine("");
+        output.AppendLine("                aes.IV = iv;");
+        output.AppendLine("");
+        output.AppendLine("                using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))");
+        output.AppendLine("                using (var resultStream = new MemoryStream())");
+        output.AppendLine("                {");
+        output.AppendLine("                    using (var aesStream = new CryptoStream(resultStream, decryptor, CryptoStreamMode.Write))");
+        output.AppendLine("                    using (var plainStream = new MemoryStream(ciphertext))");
+        output.AppendLine("                    {");
+        output.AppendLine("                        plainStream.CopyTo(aesStream);");
+        output.AppendLine("                    }");
+        output.AppendLine("");
+        output.AppendLine("                    return Encoding.UTF8.GetString(resultStream.ToArray());");
+        output.AppendLine("                }");
+        output.AppendLine("            }");
+        output.AppendLine("        }");
+        output.AppendLine("    }");
+        output.AppendLine("}");
+        output.AppendLine("");
+
+        SaveOutputToFile("Crypto.cs", output, true);
+
+        output = new StringBuilder();
+
+    }
+    #endregion
+
     #region Solution Files
     private void BuildProject(string _namespace)
     {

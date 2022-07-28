@@ -366,6 +366,16 @@ public class GenerationProject
         set { _templateConfigurationEntries = value; }
     }
 
+    bool _usesEncription  = false;
+    [Description("Uses ecription for connectionstrings.")]
+    [Category("Generation Options")]
+    [DisplayName("Uses Encription")]
+    public bool UsesEncription
+    {
+        get { return _usesEncription; }
+        set { _usesEncription = value; }
+    }
+
 }
 /// <summary>
 /// 
