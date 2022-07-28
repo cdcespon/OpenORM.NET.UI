@@ -4622,7 +4622,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
-        output.AppendLine("using Microsoft.Extensions.Configuration;)");
+        output.AppendLine("using Microsoft.Extensions.Configuration;");
         output.AppendLine("internal class ConfigurationHandler");
         output.AppendLine("{");
         output.AppendLine("     internal static String ConnectionString");
