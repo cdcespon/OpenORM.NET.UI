@@ -907,7 +907,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 {
                     if (!GetFormattedEntityName(column.Name).Equals("@RETURN_VALUE"))
                     {
-                    	nullable = column.IsNullable == true && column.LanguageType != "String" ? "?" : String.Empty;
+                        nullable = column.IsNullable == true && column.LanguageType != "String" ? "?" : String.Empty;
                         //definedColumnList += column.LanguageType + " " + GetFormattedEntityName(column.Name).Replace("@", "") + ",";
                         definedColumnList += column.LanguageType + nullable + " " + GetFormattedEntityName(column.Name).Replace("@", "") + ",";
                         columnList += " new ParameterItemValue(" + System.Convert.ToChar(34) + GetFormattedEntityName(column.Name).Replace("@", "") + System.Convert.ToChar(34) + ", " + GetFormattedEntityName(column.Name).Replace("@", "") + "),";
@@ -966,7 +966,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 String columnList = string.Empty;
 
                 output.AppendLine("		namespace " + _namespace + ".Entities.Tables." + GetSchemaName(entity.Schema) + " {");
-                if(_generationProject.SerializeEntitiesClases)
+                if (_generationProject.SerializeEntitiesClases)
                     output.AppendLine("			[Serializable()]                         //");
                 output.AppendLine("			[DataItemAttributeSchemaName(" + System.Convert.ToChar(34) + GetSchemaName(entity.Schema) + System.Convert.ToChar(34) + ")]  // Database Schema Name");
                 output.AppendLine("			[DataItemAttributeObjectName(" + System.Convert.ToChar(34) + entity.Name + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + entity.Alias + System.Convert.ToChar(34) + ")]    // Object name  and alias in Database");
@@ -1048,6 +1048,8 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                         output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Fk)] //Is Foreign Key");
                         output.AppendLine("             [PropertyAttributeForeignKeyObjectName(" + System.Convert.ToChar(34) + column.ForeignKeys[0].PrimaryTable.Name + System.Convert.ToChar(34) + ")]// Object name in Database");
                     }
+                    if (column.IsComputed)
+                        output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Computed)] //Is Computed");
                     if (_generationProject.ForceNullableDatetime == true && (column.DataTypeName.Equals("datetime") || column.DataTypeName.Equals("smalldatetime")))
                         nullable = "?";
                     else
@@ -1063,7 +1065,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 //////////////////////////////// Overrides section ////////////////////////
                 if (_generationProject.OverrideEntityDisplayName)
                 {
-                    
+
                     output.AppendLine("             public override int GetHashCode() => (" + displayColumn + " == null ? string.Empty : " + displayColumn + ").GetHashCode();");
                     output.AppendLine("             public override string ToString() => " + displayColumn + ";");
                 }
@@ -1333,7 +1335,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                         output.AppendLine("             [DataItemAttributeFieldName(" + System.Convert.ToChar(34) + procedureField.Name + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + GetFormattedEntityName(procedureField.Name) + System.Convert.ToChar(34) + ")]");
                         if (procedureField.Name.Equals("Name"))
                             output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Display)] //Id Display Default");
-                        output.AppendLine("             public " + procedureField.DataType  + (procedureField.IsNullable == true ? "?" : string.Empty)
+                        output.AppendLine("             public " + procedureField.DataType + (procedureField.IsNullable == true ? "?" : string.Empty)
                             + " " + procedureField.Name + " { get; set; }");
                     }
                     output.AppendLine("     }");
@@ -1617,7 +1619,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("}");
         output.AppendLine("public class DataFieldDefinition");
         output.AppendLine("{");
-        output.AppendLine("    public DataFieldDefinition(String name, String frameworkName,String dataTypeName, bool isPk,bool isAuto, bool isKey, bool isFk, bool isDp,bool isNone,bool exclude)");
+        output.AppendLine("    public DataFieldDefinition(String name, String frameworkName,String dataTypeName, bool isPk,bool isAuto, bool isKey, bool isFk, bool isDp,bool isNone,bool exclude, bool isComputed)");
         output.AppendLine("    {");
         output.AppendLine("        Name = name;");
         output.AppendLine("        FrameworkName = frameworkName;");
@@ -1629,6 +1631,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        IsDp = isDp;");
         output.AppendLine("        IsNone = isNone;");
         output.AppendLine("        Exclude = exclude;");
+        output.AppendLine("        IsComputed = isComputed;");
         output.AppendLine("    }");
         output.AppendLine("    public String Name { get; set; }");
         output.AppendLine("    public String FrameworkName { get; set; }");
@@ -1640,6 +1643,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    public bool IsDp { get; set; }");
         output.AppendLine("    public bool IsNone { get; set; }");
         output.AppendLine("    public bool Exclude { get; set; }");
+        output.AppendLine("    public bool IsComputed { get; set; }");
         output.AppendLine("}");
 
         SaveOutputToFile("DataField.cs", output, true);
@@ -1824,6 +1828,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                bool isDp = false;");
         output.AppendLine("                bool isNone = false;");
         output.AppendLine("                bool exclude = false;");
+        output.AppendLine("                bool isComputed = false;");
         output.AppendLine("                String fieldName = String.Empty;");
         output.AppendLine("                String fieldFrameworkName = String.Empty;");
 
@@ -1856,6 +1861,9 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                            case global::PropertyAttribute.PropertyAttributeEnum.Exclude:");
         output.AppendLine("                                exclude = true;");
         output.AppendLine("                                break;");
+        output.AppendLine("                            case global::PropertyAttribute.PropertyAttributeEnum.Computed:");
+        output.AppendLine("                                isComputed = true;");
+        output.AppendLine("                                break;");
         output.AppendLine("                            default:");
         output.AppendLine("                                break;");
         output.AppendLine("                        }");
@@ -1869,7 +1877,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                }");
 
         output.AppendLine("                 if(!exclude)");
-        output.AppendLine("                     _dataFieldDefinitions.Add(new DataFieldDefinition(fieldName, fieldFrameworkName,(info.PropertyType).FullName, isPk,isAuto, isKey, isFk, isDp,isNone,exclude));");
+        output.AppendLine("                     _dataFieldDefinitions.Add(new DataFieldDefinition(fieldName, fieldFrameworkName,(info.PropertyType).FullName, isPk,isAuto, isKey, isFk, isDp,isNone,exclude, isComputed));");
         output.AppendLine("            }");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -1891,12 +1899,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// Returns field list separated by colon eg.: " + System.Convert.ToChar(34) + "[Id],[Name],[Description]" + System.Convert.ToChar(34) + "");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("	protected String GetFieldList(bool includePk)");
+        output.AppendLine("	protected String GetFieldList(bool includePk, bool includeComputed)");
         output.AppendLine("	{");
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("		{");
-        output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
+        output.AppendLine("            if ((!field.IsPk && !field.IsComputed)) || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk) || (includeComputed && field.IsComputed))");
         output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("		}");
         output.AppendLine("		return result.Substring(0, result.Length - 1);	");
@@ -1983,7 +1991,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk)");
+        output.AppendLine("            if (!field.IsPk && !field.isComputed)");
         output.AppendLine("            {");
         output.AppendLine("				result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + " = " + System.Convert.ToChar(34) + " + _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2006,7 +2014,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("		}");
         output.AppendLine("		return result.Substring(0, result.Length - 5);	");
         output.AppendLine("	}");
- 
+
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// Begins a Transaction.");
         output.AppendLine("    /// </summary>");
@@ -2152,7 +2160,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        finally");
         output.AppendLine("        {");
-        output.AppendLine("            if(_connection.State != ConnectionState.Closed && transaction == null)");
+        output.AppendLine("            if(_connection.State != ConnectionState.Closed)");
         output.AppendLine("                 _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -2385,12 +2393,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// Returns field list separated by colon eg.: " + System.Convert.ToChar(34) + "[Id],[Name],[Description]" + System.Convert.ToChar(34) + "");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("	protected String GetFieldList(bool includePk)");
+        output.AppendLine("	protected String GetFieldList(bool includePk, bool includeComputed)");
         output.AppendLine("	{");
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("		{");
-        output.AppendLine("            if (!field.IsPk)");
+        output.AppendLine("            if (!field.IsPk && !field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2399,6 +2407,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
         output.AppendLine("            if (includePk && field.IsPk)");
+        output.AppendLine("            {");
+        output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
+        output.AppendLine("            }");
+        output.AppendLine("            if (includeComputed && field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2475,7 +2487,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk)");
+        output.AppendLine("            if (!field.IsPk && !field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("				result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + " = " + System.Convert.ToChar(34) + " + _parameterPrefix + item.GetType().GetProperty(field.Name).ToString() + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2876,11 +2888,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                bool isDp = false;");
         output.AppendLine("                bool isNone = false;");
         output.AppendLine("                bool exclude = false;");
+        output.AppendLine("                bool isComputed = false;");
         output.AppendLine("                String fieldName = String.Empty;");
         output.AppendLine("                String fieldFrameworkName = String.Empty;");
 
         output.AppendLine("                int customAttributesCount = info.GetCustomAttributes(false).GetLength(0);");
-         output.AppendLine("                for (int i = 0; i < customAttributesCount; i++)");
+        output.AppendLine("                for (int i = 0; i < customAttributesCount; i++)");
         output.AppendLine("                {");
         output.AppendLine("                    if ( info.GetCustomAttributes(false)[i].GetType().Name.Equals(Constants.PROPERTYATTRIBUTE))");
         output.AppendLine("                    {");
@@ -2907,6 +2920,9 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                            case global::PropertyAttribute.PropertyAttributeEnum.Exclude:");
         output.AppendLine("                                exclude = true;");
         output.AppendLine("                                break;");
+        output.AppendLine("                            case global::PropertyAttribute.PropertyAttributeEnum.Computed:");
+        output.AppendLine("                                isComputed = true;");
+        output.AppendLine("                                break;");
         output.AppendLine("                            default:");
         output.AppendLine("                                break;");
         output.AppendLine("                        }");
@@ -2920,7 +2936,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                }");
 
         output.AppendLine("                 if(!exclude)");
-        output.AppendLine("                     _dataFieldDefinitions.Add(new DataFieldDefinition(fieldName, fieldFrameworkName,(info.PropertyType).FullName, isPk,isAuto, isKey, isFk, isDp,isNone,exclude));");
+        output.AppendLine("                     _dataFieldDefinitions.Add(new DataFieldDefinition(fieldName, fieldFrameworkName,(info.PropertyType).FullName, isPk,isAuto, isKey, isFk, isDp,isNone,exclude, isComputed));");
         output.AppendLine("            }");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -2942,13 +2958,13 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// Returns field list separated by colon eg.: " + System.Convert.ToChar(34) + "[Id],[Name],[Description]" + System.Convert.ToChar(34) + "");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("	protected String GetFieldList(bool includePk)");
+        output.AppendLine("	protected String GetFieldList(bool includePk, bool includeComputed)");
         output.AppendLine("	{");
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("		{");
 
-        output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
+        output.AppendLine("            if ((!field.IsPk && !field.IsComputed) || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk) || (includeComputed && field.IsComputed))");
         output.AppendLine("                result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("		}");
         output.AppendLine("		return result.Substring(0, result.Length - 1);	");
@@ -2963,7 +2979,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-         output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
+        output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("        }");
         output.AppendLine("        return result.Substring(0, result.Length - 1);");
@@ -3035,7 +3051,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("		string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk)");
+        output.AppendLine("            if (!field.IsPk && !field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("				result += " + System.Convert.ToChar(34) + "[" + System.Convert.ToChar(34) + " + field.Name + " + System.Convert.ToChar(34) + "]" + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + " = " + System.Convert.ToChar(34) + " + _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -3058,7 +3074,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("		}");
         output.AppendLine("		return result.Substring(0, result.Length - 5);	");
         output.AppendLine("	}");
- 
+
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// Begins a Transaction.");
         output.AppendLine("    /// </summary>");
@@ -3337,7 +3353,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
         output.AppendLine("            _commandText = Constants.SQL_INSERT_INTO ;");
         output.AppendLine("            _commandText += GetFullDataEntityName();");
-        output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetFieldList(false);");
+        output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetFieldList(false, false);");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ) " + System.Convert.ToChar(34) + " + Constants.SQL_VALUES;");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetParameterizedValuesList(false);");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " )" + System.Convert.ToChar(34) + ";");
@@ -3400,10 +3416,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("            _itemList.Clear();");
 
         output.AppendLine("            _commandText = Constants.SQL_SELECT ;");
-        output.AppendLine("            _commandText += GetFieldList(true);");
+        output.AppendLine("            _commandText += GetFieldList(true, true);");
         output.AppendLine("            _commandText += Constants.SQL_FROM ;");
         output.AppendLine("            _commandText += GetFullDataEntityName();");
-        if(_generationProject.UseWithNolock)
+        if (_generationProject.UseWithNolock)
             output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " WITH (NOLOCK) " + System.Convert.ToChar(34) + ";");
 
         output.AppendLine("            _commandText += WhereParameter.ToString();");
@@ -4537,6 +4553,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        Key,");
         output.AppendLine("        Display,");
         output.AppendLine("        Exclude,");
+        output.AppendLine("        Computed,");
         output.AppendLine("        None");
         output.AppendLine("    }");
 
@@ -4622,9 +4639,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
     {
         System.Text.StringBuilder output = new StringBuilder();
         GetHeaderInfo(output);
-        output.AppendLine("using Microsoft.Extensions.Configuration;)");
+
         output.AppendLine("internal class ConfigurationHandler");
         output.AppendLine("{");
+        output.AppendLine("");
         output.AppendLine("     internal static String ConnectionString");
         output.AppendLine("     {");
         output.AppendLine("         get { return getConfiguration(Constants.CONNECTIONSTRING); }");
@@ -5009,7 +5027,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                 {");
                 output.AppendLine("                     this.whereParameter.Add(conjunction, Enum.GetName(typeof(ColumnEnum), column), operand, value);");
                 output.AppendLine("                 }");
-                output.AppendLine("                 public void Clear()"); 
+                output.AppendLine("                 public void Clear()");
                 output.AppendLine("                 {");
                 output.AppendLine("                     this.whereParameter.Clear();");
                 output.AppendLine("                 }");
@@ -5214,7 +5232,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                                 }
                             }
                         }
-                    } 
+                    }
                 }
 
                 //////////////////////////////// Overrides section ////////////////////////
@@ -5657,7 +5675,7 @@ public class WebFormsWebGridCrudTemplate_5G_CSHARP : ITemplate
     }
 
     public bool Execute(ref MyMeta.IDatabase db, string workingDir, GenerationProject generationProject)
-      {
+    {
 
         try
         {

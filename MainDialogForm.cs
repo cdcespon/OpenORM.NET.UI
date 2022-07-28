@@ -185,21 +185,14 @@ namespace OpenORM.UI
                 {
                     AddOutput("Argument: " + data , "", EventObject.EventTypeEnum.InfoEvent);
                 }
-                if (arguments.Length > 1)
-                {
+                //return;
+                _projectFile = arguments[1].ToString() + @"\" + OPEN_ORM_NET_PROJECT;
+                _workingDir = arguments[1].ToString();
+                _workingDir = _workingDir.Replace(System.Convert.ToChar(34).ToString(), "");
 
-                    _projectFile = arguments[1].ToString() + @"\" + OPEN_ORM_NET_PROJECT;
-                    _workingDir = arguments[1].ToString();
-                    _workingDir = _workingDir.Replace(System.Convert.ToChar(34).ToString(), "");
+                _projectFile = _projectFile.Replace(System.Convert.ToChar(34).ToString(), String.Empty);
 
-                    _projectFile = _projectFile.Replace(System.Convert.ToChar(34).ToString(), String.Empty);
-
-                    LoadProject();
-                }
-                else
-                {
-                    AddOutput("Not enough arguments where provided.", "Startup", EventObject.EventTypeEnum.WarningEvent);
-                }
+                LoadProject();
                 
             }
             catch (Exception ex)
@@ -1519,13 +1512,6 @@ namespace OpenORM.UI
         {
             try
             {
-                if (_projectFile.Equals(string.Empty))
-                {
-                    AddOutput("No working directory defined.", "Generate.", EventObject.EventTypeEnum.WarningEvent);
-                    return;
-                }
-
-
                 Cursor.Current = Cursors.WaitCursor;
 
                 GenerationProjectSerializer.Save(_projectFile, _projectConfig);
@@ -2109,11 +2095,6 @@ namespace OpenORM.UI
 
         private void btnReload_Click(object sender, EventArgs e)
         {
-            if (_projectFile.Equals(string.Empty))
-            {
-                AddOutput("No working directory defined.", "Reload project.", EventObject.EventTypeEnum.WarningEvent);
-                return;
-            }
             LoadProject();
         }
 
@@ -2135,10 +2116,7 @@ namespace OpenORM.UI
 
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
-            if(!_workingDir.Equals(string.Empty))
-                Process.Start(_workingDir);
-            else
-                AddOutput("No working directorydefined.", "Open Generation folder.", EventObject.EventTypeEnum.WarningEvent);
+            Process.Start(_workingDir);
         }
 
         private void MainDialogForm_FormClosed(object sender, FormClosedEventArgs e)
