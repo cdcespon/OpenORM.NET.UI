@@ -1909,12 +1909,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <param name=" + System.Convert.ToChar(34) + "includePk" + System.Convert.ToChar(34) + "></param>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk)");
+        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk, bool includeComputed)");
         output.AppendLine("    {");
         output.AppendLine("        string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
+        output.AppendLine("            if ((!field.IsPk && !field.IsComputed) || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk) || (includeComputed && field.IsComputed))");
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("        }");
         output.AppendLine("        return result.Substring(0, result.Length - 1);");
@@ -2422,12 +2422,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <param name=" + System.Convert.ToChar(34) + "includePk" + System.Convert.ToChar(34) + "></param>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk)");
+        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk, bool includeComputed)");
         output.AppendLine("    {");
         output.AppendLine("        string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk)");
+        output.AppendLine("            if (!field.IsPk && !field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2436,6 +2436,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
         output.AppendLine("            if (includePk && field.IsPk)");
+        output.AppendLine("            {");
+        output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
+        output.AppendLine("            }");
+        output.AppendLine("            if (includeComputed && field.IsComputed)");
         output.AppendLine("            {");
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("            }");
@@ -2974,12 +2978,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <param name=" + System.Convert.ToChar(34) + "includePk" + System.Convert.ToChar(34) + "></param>");
         output.AppendLine("    /// <returns></returns>");
-        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk)");
+        output.AppendLine("    protected String GetParameterizedValuesList(bool includePk, bool includeComputed)");
         output.AppendLine("    {");
         output.AppendLine("        string result = string.Empty;");
         output.AppendLine("        foreach (DataFieldDefinition field in _dataFieldDefinitions)");
         output.AppendLine("        {");
-        output.AppendLine("            if (!field.IsPk || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk))");
+        output.AppendLine("            if ((!field.IsPk && !field.IsComputed) || (field.IsPk && !field.IsAuto) || (includePk && field.IsPk) || (includeComputed && field.IsComputed))");
         output.AppendLine("                result += _parameterPrefix + field.Name + " + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + ";");
         output.AppendLine("        }");
         output.AppendLine("        return result.Substring(0, result.Length - 1);");
@@ -3360,7 +3364,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("            _commandText += GetFullDataEntityName();");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetFieldList(false, false);");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ) " + System.Convert.ToChar(34) + " + Constants.SQL_VALUES;");
-        output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetParameterizedValuesList(false);");
+        output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + " + GetParameterizedValuesList(false,false);");
         output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " )" + System.Convert.ToChar(34) + ";");
         output.AppendLine("            BuildParameterValuesList(item);");
 
