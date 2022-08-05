@@ -597,6 +597,14 @@ public class ReportingPlugin : IPlugin
 				{
 					string sql = @"SELECT value FROM fn_listextendedproperty(NULL, 'schema', '" + table.Schema + "', 'table', '" + table.Name + "', default, default)";
 
+
+					sql = String.Empty;
+					sql += " SELECT sys.objects.name AS TableName,  ep.value AS value ";
+					sql += " FROM sys.objects CROSS APPLY fn_listextendedproperty(default, ";
+					sql += "'SCHEMA', schema_name(schema_id),'TABLE', name, null, null) ep ";
+					sql += " WHERE sys.objects.name NOT IN ('sysdiagrams') AND sys.objects.name = '" + table.Name + "'";
+					sql += " ORDER BY sys.objects.name ";
+
 					ADODB.Command command = new ADODB.Command();
 					command.ActiveConnection = connection;
 					command.CommandText = sql;
