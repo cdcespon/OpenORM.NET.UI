@@ -217,7 +217,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     output.AppendLine("	    /// <summary>");
                     output.AppendLine("	    /// " + entity.Description);
                     output.AppendLine("	    /// </summary>");
-                    output.AppendLine("		public class " + GetFormattedEntityName(entity.Name) + " : DataHandler");
+                    output.AppendLine("		public partial class " + GetFormattedEntityName(entity.Name) + " : DataHandler");
                     output.AppendLine("		{");
                     output.AppendLine("				public enum ColumnEnum : int");
                     output.AppendLine("                {");

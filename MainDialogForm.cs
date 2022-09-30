@@ -1754,6 +1754,18 @@ namespace OpenORM.UI
 
             ListViewItem lvItemRadzenBlazorViewReportBuilder = pluginsListView.Items.Add(new ListViewItem(RadzenBlazorViewReportBuilderTemplate.Description, 7, new ListViewGroup(RadzenBlazorViewReportBuilderTemplate.Name)));
             lvItemRadzenBlazorViewReportBuilder.Tag = RadzenBlazorViewReportBuilderTemplate;
+            ////////////////////////////////////////////////
+            
+            ITemplate BaseclassesExtensionsBuilderTemplate = new BaseClassesExtensionsBuilder.LogBuilder(_projectConfig);
+
+            BaseclassesExtensionsBuilderTemplate.OnFileGenerated += baseClassesTemplate_OnFileGenerated;
+            BaseclassesExtensionsBuilderTemplate.OnException += baseClassesTemplate_OnException;
+            BaseclassesExtensionsBuilderTemplate.OnPercentDone += baseClassesTemplate_OnPercentDone;
+            BaseclassesExtensionsBuilderTemplate.OnInfo += baseClassesTemplate_OnInfo;
+
+            ListViewItem lvItemBaseClassesExtensionsBuilder = pluginsListView.Items.Add(new ListViewItem(BaseclassesExtensionsBuilderTemplate.Description, 7, new ListViewGroup(RadzenBlazorViewReportBuilderTemplate.Name)));
+            lvItemBaseClassesExtensionsBuilder.Tag = BaseclassesExtensionsBuilderTemplate;
+
 
 
             foreach (string item in _projectConfig.SelectedTemplates)
