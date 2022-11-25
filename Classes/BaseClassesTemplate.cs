@@ -317,7 +317,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     output.AppendLine("                dh.WhereParameter = this.Where;");
                     output.AppendLine("                dh.OrderByParameter = this.OrderBy;");
                     output.AppendLine("                dh.GroupByParameter = this.GroupBy;");
-
+                    output.AppendLine("                dh.TopQuantity = this.TopQuantity;");
                     output.AppendLine("                _entities = dh.Items().Cast<Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                     output.AppendLine("                return _entities;");
                     output.AppendLine("            }");
@@ -735,6 +735,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                dh.WhereParameter = this.Where.whereParameter;");
                 output.AppendLine("                dh.OrderByParameter = this.OrderBy.orderByParameter;");
                 output.AppendLine("                dh.GroupByParameter = this.GroupBy.groupByParameter;");
+                output.AppendLine("                dh.TopQuantity = this.TopQuantity;");
                 output.AppendLine("                List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _entities = new List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                _entities = dh.Items().Cast<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                return _entities;");
@@ -2187,7 +2188,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        finally");
         output.AppendLine("        {");
-        output.AppendLine("            if(_connection.State != ConnectionState.Closed)");
+        output.AppendLine("            if(_connection.State != ConnectionState.Closed && transaction == null)");
         output.AppendLine("                 _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -2708,7 +2709,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        finally");
         output.AppendLine("        {");
-        output.AppendLine("            if(_connection.State != ConnectionState.Closed)");
+        output.AppendLine("            if(_connection.State != ConnectionState.Closed && transaction == null)");
         output.AppendLine("                 _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -3262,7 +3263,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        finally");
         output.AppendLine("        {");
-        output.AppendLine("            if(_connection.State != ConnectionState.Closed)");
+        output.AppendLine("            if(_connection.State != ConnectionState.Closed && transaction == null)");
         output.AppendLine("                 _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -3446,6 +3447,9 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        throw new NotImplementedException();");
         output.AppendLine("    }");
+        output.AppendLine("");
+        output.AppendLine("    public int TopQuantity { get; set; }");
+        output.AppendLine("");
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// Returns a List<IDataItem> for a SQL query.");
         output.AppendLine("    /// </summary>");
@@ -3456,13 +3460,14 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            //Clears previous result");
         output.AppendLine("            _itemList.Clear();");
-
         output.AppendLine("            _commandText = Constants.SQL_SELECT ;");
+        output.AppendLine("            if (TopQuantity > 0)");
+        output.AppendLine("                 _commandText += Constants.SQL_TOP + TopQuantity.ToString() +" + System.Convert.ToChar(34) + " " + System.Convert.ToChar(34) + ";");
         output.AppendLine("            _commandText += GetFieldList(true, true);");
         output.AppendLine("            _commandText += Constants.SQL_FROM ;");
         output.AppendLine("            _commandText += GetFullDataEntityName();");
         if (_generationProject.UseWithNolock)
-            output.AppendLine("            _commandText += " + System.Convert.ToChar(34) + " WITH (NOLOCK) " + System.Convert.ToChar(34) + ";");
+            output.AppendLine("            _commandText += Constants.SQL_WITH_NOLOCK;");
 
         output.AppendLine("            _commandText += WhereParameter.ToString();");
         output.AppendLine("            _commandText += GroupByParameter.ToString();");
@@ -4735,7 +4740,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        var env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ")== null? String.Empty: ");
         output.AppendLine("             Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") + " + System.Convert.ToChar(34) + "." + System.Convert.ToChar(34) + ";");
         output.AppendLine("        var builder = new ConfigurationBuilder()");
-        output.AppendLine("                        .SetBasePath(System.IO.Directory.GetCurrentDirectory())");
+        output.AppendLine("                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)");
         output.AppendLine("                        .AddJsonFile( " + System.Convert.ToChar(34) + "appsettings." + System.Convert.ToChar(34) + " + env + " + System.Convert.ToChar(34) + "json" + System.Convert.ToChar(34) + ", optional: false, reloadOnChange: true);");
         output.AppendLine("        ");
         output.AppendLine("");
@@ -4793,6 +4798,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("         internal const string SQL_SELECT = " + System.Convert.ToChar(34) + " SELECT " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_UPDATE = " + System.Convert.ToChar(34) + " UPDATE " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_DELETE = " + System.Convert.ToChar(34) + " DELETE " + System.Convert.ToChar(34) + ";");
+        output.AppendLine("         internal const string SQL_TOP = " + System.Convert.ToChar(34) + " TOP " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_FROM = " + System.Convert.ToChar(34) + " FROM " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_WHERE = " + System.Convert.ToChar(34) + " WHERE " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_SET = " + System.Convert.ToChar(34) + " SET " + System.Convert.ToChar(34) + ";");
@@ -4802,7 +4808,8 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("         internal const string SQL_AND = " + System.Convert.ToChar(34) + " AND " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_OPENPARENTHESES = " + System.Convert.ToChar(34) + " ( " + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string SQL_CLOSEPARENTHESES = " + System.Convert.ToChar(34) + " ) " + System.Convert.ToChar(34) + ";");
-    output.AppendLine("    #endregion");
+        output.AppendLine("         internal const string SQL_WITH_NOLOCK = " + System.Convert.ToChar(34) + " WITH (NOLOCK) " + System.Convert.ToChar(34) + ";");
+        output.AppendLine("    #endregion");
         output.AppendLine("    #region Error Constants");
         output.AppendLine("         internal const string ERROR_CONSTRUCTOR = " + System.Convert.ToChar(34) + "DataHandler (constructor) : Transaction assignment Error." + System.Convert.ToChar(34) + ";");
         output.AppendLine("         internal const string ERROR_TRANSACTION_ALREADY_OPENED = " + System.Convert.ToChar(34) + "Transaction already opened" + System.Convert.ToChar(34) + ";");
@@ -4932,6 +4939,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                dh.WhereParameter = this.Where.whereParameter;");
                 output.AppendLine("                dh.OrderByParameter = this.OrderByParameter.orderByParameter;");
                 output.AppendLine("                dh.GroupByParameter = this.GroupByParameter.groupByParameter;");
+                output.AppendLine("                dh.TopQuantity = this.TopQuantity;");
                 output.AppendLine("                _entities = dh.Items().Cast<Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                return _entities;");
                 output.AppendLine("            }");

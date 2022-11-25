@@ -87,7 +87,7 @@ public class BaseClassesExtensionsBuilder : IPlugin
 
                 string displayColumn = generationProject.EntityDisplayName;
                 string relativepath = generationProject.Location;
-                
+
                 output = new System.Text.StringBuilder();
 
                 foreach (MyMeta.ITable table in db.Tables)
@@ -110,13 +110,13 @@ public class BaseClassesExtensionsBuilder : IPlugin
                         output.AppendLine("			Modificacion");
                         output.AppendLine("		}");
                         output.AppendLine("");
-                        output.AppendLine("		public Entities.Tables." + table.Schema  + "." + table.Name + " Add(Entities.Tables." + table.Schema  + "." + table.Name + " item,long aplicacionId)");
+                        output.AppendLine("		public Entities.Tables." + table.Schema + "." + table.Name + " Add(Entities.Tables." + table.Schema + "." + table.Name + " item,long aplicacionId)");
                         output.AppendLine("		{");
-                        output.AppendLine("			var refItem =  (Entities.Tables." + table.Schema  + "." + table.Name + ")base.Add((IDataItem)item);");
+                        output.AppendLine("			var refItem =  (Entities.Tables." + table.Schema + "." + table.Name + ")base.Add((IDataItem)item);");
                         output.AppendLine("			LogEvent(aplicacionId, LogTypeEnum.Alta, refItem);");
                         output.AppendLine("			return refItem;");
                         output.AppendLine("		}");
-                        output.AppendLine("		public Int64 Update(Entities.Tables." + table.Schema  + "." + table.Name + " item, long aplicacionId)");
+                        output.AppendLine("		public Int64 Update(Entities.Tables." + table.Schema + "." + table.Name + " item, long aplicacionId)");
                         output.AppendLine("		{");
                         output.AppendLine("			var refItem = base.Update((IDataItem)item);");
                         output.AppendLine("			LogEvent(aplicacionId, LogTypeEnum.Modificacion, item);");
@@ -125,7 +125,7 @@ public class BaseClassesExtensionsBuilder : IPlugin
                         output.AppendLine("");
                         output.AppendLine("		public Int64 Delete(Int64 id, long aplicacionId)");
                         output.AppendLine("		{");
-                        output.AppendLine("			Business.Tables." + table.Schema  + "." + table.Name + " refentities = new();");
+                        output.AppendLine("			Business.Tables." + table.Schema + "." + table.Name + " refentities = new();");
                         output.AppendLine("			refentities.Items(id);");
                         output.AppendLine("			var refentity = refentities.Result.FirstOrDefault();");
                         output.AppendLine("			LogEvent(aplicacionId, LogTypeEnum.Baja, refentity);");
@@ -133,11 +133,17 @@ public class BaseClassesExtensionsBuilder : IPlugin
                         output.AppendLine("");
                         output.AppendLine("		}");
                         output.AppendLine("");
-                        output.AppendLine("		private int LogEvent(long applicacionId, LogTypeEnum logType, " + generationProject.Namespace + ".Entities.Tables." + table.Schema  + "." + table.Name + " entity)");
+                        output.AppendLine("		private int LogEvent(long applicacionId, LogTypeEnum logType, " + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + " entity)");
                         output.AppendLine("");
                         output.AppendLine("		{");
                         output.AppendLine("			string descripcion = string.Empty;");
                         output.AppendLine("			string metodo = string.Empty;");
+                        output.AppendLine("			string identificador = string.Empty;");
+                        var idColumn = table.Columns.FirstOrDefault(c => c.Name == "Id");
+                        if (idColumn != null)
+                        {
+                            output.AppendLine("			identificador = " + System.Convert.ToChar(34) + " Id: " + System.Convert.ToChar(34) + " + entity.Id.ToString();");
+                        }
                         output.AppendLine("");
                         output.AppendLine("			switch (logType)");
                         output.AppendLine("			{");
@@ -146,22 +152,22 @@ public class BaseClassesExtensionsBuilder : IPlugin
                         output.AppendLine("					metodo = Enum.GetName(LogTypeEnum.Ninguno);");
                         output.AppendLine("					break;");
                         output.AppendLine("				case LogTypeEnum.Alta:");
-                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Alta de entidad: " + generationProject.Namespace + ".Business." + table.Schema  + "." + table.Name + "" + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Alta de entidad: " + generationProject.Namespace + ".Business." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " + identificador;");
                         output.AppendLine("					metodo = Enum.GetName(LogTypeEnum.Alta);");
                         output.AppendLine("					break;");
                         output.AppendLine("				case LogTypeEnum.Baja:");
-                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Baja de entidad: " + generationProject.Namespace + ".Business." + table.Schema  + "." + table.Name + "" + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Baja de entidad: " + generationProject.Namespace + ".Business." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " + identificador;");
                         output.AppendLine("					metodo = Enum.GetName(LogTypeEnum.Baja);");
                         output.AppendLine("					break;");
                         output.AppendLine("				case LogTypeEnum.Modificacion:");
-                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Modificacion de entidad: " + generationProject.Namespace + ".Business." + table.Schema  + "." + table.Name + "" + System.Convert.ToChar(34) + ";");
+                        output.AppendLine("					descripcion = " + System.Convert.ToChar(34) + "Modificacion de entidad: " + generationProject.Namespace + ".Business." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " + identificador;");
                         output.AppendLine("					metodo = Enum.GetName(LogTypeEnum.Modificacion);");
                         output.AppendLine("					break;");
                         output.AppendLine("				default:");
                         output.AppendLine("					break;");
                         output.AppendLine("			}");
                         output.AppendLine("");
-                        output.AppendLine("			" + generationProject.Namespace + ".Business.Tables.dbo.Log logEntities = new();");
+                        output.AppendLine("			" + generationProject.Namespace + ".Business.Tables.Auditoria.Log logEntities = new();");
                         output.AppendLine("			logEntities.Add(new()");
                         output.AppendLine("			{");
                         output.AppendLine("				AplicacionId = applicacionId,");
@@ -171,7 +177,15 @@ public class BaseClassesExtensionsBuilder : IPlugin
                         output.AppendLine("				Metodo = metodo,");
                         output.AppendLine("				Modulo = " + System.Convert.ToChar(34) + "" + System.Convert.ToChar(34) + ",");
                         output.AppendLine("				TipoId = (long)logType,");
-                        output.AppendLine("				UsuarioId = entity.UsuarioCreacion == null ? -1 : (long)entity.UsuarioCreacion");
+                        var userColumnsExistence = table.Columns.Where(x => x.Name == "UsuarioModificacion" || x.Name == "UsuarioCreacion").ToList();
+                        if (userColumnsExistence.Count > 0)
+                        {
+                            output.AppendLine("				UsuarioId = entity.UsuarioModificacion != null ? (long)entity.UsuarioModificacion : entity.UsuarioCreacion != null ? (long)entity.UsuarioCreacion : -1");
+                        }
+                        else
+                        {
+                            output.AppendLine("				UsuarioId = -1");
+                        }
                         output.AppendLine("			});");
                         output.AppendLine("");
                         output.AppendLine("			return 0;");
@@ -185,11 +199,11 @@ public class BaseClassesExtensionsBuilder : IPlugin
 
 
                     }
-                    
+
                 }
-                
+
                 SaveOutputToFile("Business.Tables.Extensions.cs", output, relativepath, true);
-                
+
                 return true;
             }
             catch (Exception ex)

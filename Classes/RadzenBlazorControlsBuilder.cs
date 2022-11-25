@@ -115,6 +115,25 @@ public class RadzenBlazorControlsBuilder : IPlugin
                     output = new System.Text.StringBuilder();
                     if (table.Selected)
                     {
+                        string gridCustomProperties = " AllowColumnReorder=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarMovilidad" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowColumnPicking=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarColumnasOpcionales" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowFiltering=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarFiltrado" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowColumnResize=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarRedimensionamiento" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowSorting=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarOrdenamiento" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowPaging=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarPaginado" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+                        gridCustomProperties += "AllowGrouping=@CustomizadorController.ObtenerPropiedadGrilla(" + System.Convert.ToChar(34) + "HabilitarAgrupamiento" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosTabla) ";
+
+                        string columnCustomProperties = " Filterable=@CustomizadorController.ObtenerPropiedadColumnaFiltrable(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Groupable=@CustomizadorController.ObtenerPropiedadColumnaAgrupable(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Resizable=@CustomizadorController.ObtenerPropiedadColumnaRedimensionable(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Reorderable=@CustomizadorController.ObtenerPropiedadColumnaMovible(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "MinWidth=@CustomizadorController.ObtenerPropiedadAnchoMinimoColumnaEnGrilla(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Width=@CustomizadorController.ObtenerPropiedadAnchoColumnaEnGrilla(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Pickable=@CustomizadorController.ObtenerPropiedadVisibilidadColumnaEnSelector(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "OrderIndex=@CustomizadorController.ObtenerPropiedadPosicionColumnaEnGrilla(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Sortable=@CustomizadorController.ObtenerPropiedadColumnaOrdenable(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                        columnCustomProperties += "Visible=@CustomizadorController.ObtenerPropiedadVisibilidadColumna(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+
                         output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
                         output.AppendLine("@using Permaquim." + generationProject.Namespace + ".Web.Administration.Controllers;");
                         output.AppendLine("@inject NotificationService NotificationService");
@@ -134,28 +153,28 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("     switch (crudMode)");
                         output.AppendLine("     {");
                         output.AppendLine("         case CrudMode.Add:");
-                        output.AppendLine("             <RadzenBadge  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("             <RadzenBadge Style=@EstiloController.ObtenerItemEstilo(dataEsquemaDetalle, " + System.Convert.ToChar(34) + "ColorFondoTituloBadge" + System.Convert.ToChar(34) + ", false) BadgeStyle =" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                 <ChildContent>");
                         output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "ABM_A_NAME_" + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ",dataLenguaje)</h4>");
                         output.AppendLine("                 </ChildContent>");
                         output.AppendLine("             </RadzenBadge>");
                         output.AppendLine("             break;");
                         output.AppendLine("         case CrudMode.Delete:");
-                        output.AppendLine("             <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Warning" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("             <RadzenBadge Style=@EstiloController.ObtenerItemEstilo(dataEsquemaDetalle, " + System.Convert.ToChar(34) + "ColorFondoTituloBadgeBorrar" + System.Convert.ToChar(34) + ", false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Warning" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                 <ChildContent>");
                         output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "ABM_D_NAME_" + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ",dataLenguaje)</h4>");
                         output.AppendLine("                 </ChildContent>");
                         output.AppendLine("             </RadzenBadge>");
                         output.AppendLine("             break;");
                         output.AppendLine("             case CrudMode.Edit:");
-                        output.AppendLine("             <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("             <RadzenBadge Style=@EstiloController.ObtenerItemEstilo(dataEsquemaDetalle, " + System.Convert.ToChar(34) + "ColorFondoTituloBadge" + System.Convert.ToChar(34) + ", false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                 <ChildContent>");
                         output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "ABM_M_NAME_" + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ",dataLenguaje)</h4>");
                         output.AppendLine("                 </ChildContent>");
                         output.AppendLine("             </RadzenBadge>");
                         output.AppendLine("             break;         ");
                         output.AppendLine("             case CrudMode.List:");
-                        output.AppendLine("             <RadzenBadge BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("             <RadzenBadge Style=@EstiloController.ObtenerItemEstilo(dataEsquemaDetalle, " + System.Convert.ToChar(34) + "ColorFondoTituloBadge" + System.Convert.ToChar(34) + ", false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
                         output.AppendLine("                 <ChildContent>");
                         output.AppendLine("                     <div>");
                         output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "ABM_L_NAME_" + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ",dataLenguaje)</h4>");
@@ -167,14 +186,15 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("     <hr>");
                         output.AppendLine("     if (crudMode == CrudMode.List)");
                         output.AppendLine("     {");
-                        output.AppendLine("         <RadzenDataGrid @bind-Settings=" + System.Convert.ToChar(34) + "@GridSettings" + System.Convert.ToChar(34) + " FilterCaseSensitivity= " + System.Convert.ToChar(34) + "FilterCaseSensitivity.CaseInsensitive" + System.Convert.ToChar(34) + (table.Columns.Where(x => x.Name == "Habilitado").Count() > 0 ? " RowRender=@" + table.Name + "RowRender" : "") + " AllowColumnPicking =" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " PageSizeOptions=" + System.Convert.ToChar(34) + "@(new int[]{10,20,50,100})" + System.Convert.ToChar(34) + " AllowFiltering =" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " AllowColumnResize=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " FilterMode=" + System.Convert.ToChar(34) + "FilterMode.Advanced" + System.Convert.ToChar(34) + " AllowSorting=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " PageSize=" + System.Convert.ToChar(34) + "10" + System.Convert.ToChar(34) + " AllowPaging=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " PagerHorizontalAlign=" + System.Convert.ToChar(34) + "HorizontalAlign.Left" + System.Convert.ToChar(34) + " ShowPagingSummary=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + "");
-                        output.AppendLine("         FilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "CABECERA_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) IsEmptyText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_ES_VACIO" + System.Convert.ToChar(34) + ", dataLenguaje) IsNotNullText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_NULO" + System.Convert.ToChar(34) + ", dataLenguaje) IsNullText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_ES_NULO" + System.Convert.ToChar(34) + ", dataLenguaje) LessThanText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MENOR_A" + System.Convert.ToChar(34) + ", dataLenguaje) LessThanOrEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MENOR_A_O_IGUAL" + System.Convert.ToChar(34) + ", dataLenguaje) NotEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_EQUIVALE" + System.Convert.ToChar(34) + ", dataLenguaje) IsNotEmptyText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_VACIO" + System.Convert.ToChar(34) + ", dataLenguaje) OrOperatorText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_OPERADOR_OR" + System.Convert.ToChar(34) + ", dataLenguaje) GreaterThanText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MAYOR_A" + System.Convert.ToChar(34) + ", dataLenguaje) GreaterThanOrEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MAYOR_A_O_IGUAL" + System.Convert.ToChar(34) + ", dataLenguaje) AndOperatorText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_OPERADOR_AND" + System.Convert.ToChar(34) + ", dataLenguaje) AllColumnsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "MOSTRAR_TODAS_COLUMNAS" + System.Convert.ToChar(34) + ", dataLenguaje) ContainsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_CONTIENE" + System.Convert.ToChar(34) + ", dataLenguaje) DoesNotContainText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_CONTIENE" + System.Convert.ToChar(34) + ", dataLenguaje) ClearFilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "LIMPIAR_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) ApplyFilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "APLICAR_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) EqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_EXACTO" + System.Convert.ToChar(34) + ", dataLenguaje) EndsWithText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_TERMINA_CON" + System.Convert.ToChar(34) + ", dataLenguaje) PageSizeText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "REGISTROS_POR_PAGINA" + System.Convert.ToChar(34) + ", dataLenguaje) StartsWithText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "EMPIEZA_CON" + System.Convert.ToChar(34) + ", dataLenguaje) ColumnsShowingText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "COLUMNAS_OPCIONALES" + System.Convert.ToChar(34) + ", dataLenguaje)");
+                        output.AppendLine("         <RadzenDataGrid @bind-Settings=" + System.Convert.ToChar(34) + "@GridSettings" + System.Convert.ToChar(34) + " FilterCaseSensitivity= " + System.Convert.ToChar(34) + "FilterCaseSensitivity.CaseInsensitive" + System.Convert.ToChar(34) + (table.Columns.Where(x => x.Name == "Habilitado").Count() > 0 ? " CellRender=@" + table.Name + "CellRender" : "") + " PageSizeOptions=" + System.Convert.ToChar(34) + "@(new int[]{10,20,50,100})" + System.Convert.ToChar(34) + " FilterMode=" + System.Convert.ToChar(34) + "FilterMode.Advanced" + System.Convert.ToChar(34) + " PageSize=" + System.Convert.ToChar(34) + "10" + System.Convert.ToChar(34) + " PagerHorizontalAlign=" + System.Convert.ToChar(34) + "HorizontalAlign.Left" + System.Convert.ToChar(34) + " ShowPagingSummary=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34));
+                        output.AppendLine("         " + gridCustomProperties);
+                        output.AppendLine("         FilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "CABECERA_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) GroupPanelText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "INDICADOR_AGRUPACION" + System.Convert.ToChar(34) + ", dataLenguaje) IsEmptyText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_ES_VACIO" + System.Convert.ToChar(34) + ", dataLenguaje) IsNotNullText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_NULO" + System.Convert.ToChar(34) + ", dataLenguaje) IsNullText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_ES_NULO" + System.Convert.ToChar(34) + ", dataLenguaje) LessThanText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MENOR_A" + System.Convert.ToChar(34) + ", dataLenguaje) LessThanOrEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MENOR_A_O_IGUAL" + System.Convert.ToChar(34) + ", dataLenguaje) NotEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_EQUIVALE" + System.Convert.ToChar(34) + ", dataLenguaje) IsNotEmptyText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_VACIO" + System.Convert.ToChar(34) + ", dataLenguaje) OrOperatorText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_OPERADOR_OR" + System.Convert.ToChar(34) + ", dataLenguaje) GreaterThanText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MAYOR_A" + System.Convert.ToChar(34) + ", dataLenguaje) GreaterThanOrEqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_MAYOR_A_O_IGUAL" + System.Convert.ToChar(34) + ", dataLenguaje) AndOperatorText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_OPERADOR_AND" + System.Convert.ToChar(34) + ", dataLenguaje) AllColumnsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "MOSTRAR_TODAS_COLUMNAS" + System.Convert.ToChar(34) + ", dataLenguaje) ContainsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_CONTIENE" + System.Convert.ToChar(34) + ", dataLenguaje) DoesNotContainText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_NO_CONTIENE" + System.Convert.ToChar(34) + ", dataLenguaje) ClearFilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "LIMPIAR_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) ApplyFilterText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "APLICAR_FILTRO" + System.Convert.ToChar(34) + ", dataLenguaje) EqualsText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_EXACTO" + System.Convert.ToChar(34) + ", dataLenguaje) EndsWithText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FILTRO_TERMINA_CON" + System.Convert.ToChar(34) + ", dataLenguaje) PageSizeText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "REGISTROS_POR_PAGINA" + System.Convert.ToChar(34) + ", dataLenguaje) StartsWithText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "EMPIEZA_CON" + System.Convert.ToChar(34) + ", dataLenguaje) ColumnsShowingText=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "COLUMNAS_OPCIONALES" + System.Convert.ToChar(34) + ", dataLenguaje)");
                         output.AppendLine("         Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entities" + System.Convert.ToChar(34) + " TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " ColumnWidth=" + System.Convert.ToChar(34) + "300px" + System.Convert.ToChar(34) + " LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("         <EmptyTemplate>");
                         output.AppendLine("             <p style=" + System.Convert.ToChar(34) + "color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;" + System.Convert.ToChar(34) + ">No existen registros.</p>");
                         output.AppendLine("         </EmptyTemplate>        ");
                         output.AppendLine("         <Columns>");
-                        output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "80px" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + columnCustomProperties + " >");
                         output.AppendLine("                 <HeaderTemplate>");
                         output.AppendLine("                     <RadzenButton Icon=" + System.Convert.ToChar(34) + "add_circle_outline" + System.Convert.ToChar(34) + " ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Success" + System.Convert.ToChar(34) + " Visible=@SeguridadController.VerificarPermisoFuncion(" + System.Convert.ToChar(34) + table.Schema + table.Name + System.Convert.ToChar(34) + ",dataFunciones," + System.Convert.ToChar(34) + "PuedeAgregar" + System.Convert.ToChar(34) + ")" + " Text =@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "BOTON_NUEVO" + System.Convert.ToChar(34) + ",dataLenguaje)" + " Click=" + System.Convert.ToChar(34) + "Add" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("                     </RadzenButton>");
@@ -188,11 +208,22 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("                 </RadzenDataGridColumn>");
                         foreach (var column in table.Columns)
                         {
+                            columnCustomProperties = " Filterable=@CustomizadorController.ObtenerPropiedadColumnaFiltrable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Groupable=@CustomizadorController.ObtenerPropiedadColumnaAgrupable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Resizable=@CustomizadorController.ObtenerPropiedadColumnaRedimensionable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Reorderable=@CustomizadorController.ObtenerPropiedadColumnaMovible(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "MinWidth=@CustomizadorController.ObtenerPropiedadAnchoMinimoColumnaEnGrilla(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Width=@CustomizadorController.ObtenerPropiedadAnchoColumnaEnGrilla(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Pickable=@CustomizadorController.ObtenerPropiedadVisibilidadColumnaEnSelector(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "OrderIndex=@CustomizadorController.ObtenerPropiedadPosicionColumnaEnGrilla(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Sortable=@CustomizadorController.ObtenerPropiedadColumnaOrdenable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+                            columnCustomProperties += "Visible=@CustomizadorController.ObtenerPropiedadVisibilidadColumna(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
+
                             if (!column.IsComputed)
                             {
                                 if (column.IsInPrimaryKey)
                                 {
-                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
+                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
                                 }
                                 else
                                 {
@@ -203,7 +234,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
                                         if (column.Name.Contains("Usuario"))
                                         {
-                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "100px" + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Type=" + System.Convert.ToChar(34) + "typeof(IEnumerable<Int64>)" + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@selectedFilter_" + column.Name + System.Convert.ToChar(34) + " FilterOperator=" + System.Convert.ToChar(34) + "FilterOperator.Contains" + System.Convert.ToChar(34) + " LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Type=" + System.Convert.ToChar(34) + "typeof(IEnumerable<Int64>)" + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@selectedFilter_" + column.Name + System.Convert.ToChar(34) + " FilterOperator=" + System.Convert.ToChar(34) + "FilterOperator.Contains" + System.Convert.ToChar(34) + " LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                 <Template>");
                                             output.AppendLine("                     @{");
                                             output.AppendLine("                         var usuario = " + fkTable.Name + "_" + column.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ");");
@@ -226,7 +257,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                         }
                                         else
                                         {
-                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "100px" + System.Convert.ToChar(34) + " Type=" + System.Convert.ToChar(34) + "typeof(IEnumerable<Int64>)" + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@selectedFilter_" + column.Name + System.Convert.ToChar(34) + " FilterOperator=" + System.Convert.ToChar(34) + "FilterOperator.Contains" + System.Convert.ToChar(34) + " LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Type=" + System.Convert.ToChar(34) + "typeof(IEnumerable<Int64>)" + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@selectedFilter_" + column.Name + System.Convert.ToChar(34) + " FilterOperator=" + System.Convert.ToChar(34) + "FilterOperator.Contains" + System.Convert.ToChar(34) + " LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                 <Template>");
                                             output.AppendLine("                     @if(" + fkTable.Name + "_" + column.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ") != null){");
                                             output.AppendLine("                         <RadzenLabel Text=" + System.Convert.ToChar(34) + "@" + fkTable.Name + "_" + column.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ")." + displayColumn + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
@@ -250,16 +281,11 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                     {
                                         if (fieldsToTreatAsImage.IndexOf(column.Name) < 0)
                                         {
-                                            string columnaVisible = "";
-                                            if (column.Name == "FechaModificacion" || column.Name == "FechaCreacion")
-                                                columnaVisible = "false";
-                                            else
-                                                columnaVisible = "true";
 
                                             switch (column.DataTypeName)
                                             {
                                                 case "bit":
-                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@" + column.Name + "_filter" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + columnaVisible + System.Convert.ToChar(34) + " >");
+                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " FilterValue=" + System.Convert.ToChar(34) + "@" + column.Name + "_filter" + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " >");
                                                     output.AppendLine("             <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                 <RadzenCheckBox TValue =" + System.Convert.ToChar(34) + (column.IsNullable ? "bool?" : "bool") + System.Convert.ToChar(34) + " Value=@data." + column.Name + " Disabled=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                 </RadzenCheckBox>");
@@ -274,21 +300,21 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
                                                     break;
                                                 case "ntext":
-                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + columnaVisible + System.Convert.ToChar(34) + " >");
+                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + columnCustomProperties + "Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " >");
                                                     output.AppendLine("             <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                     <RadzenImage Path=" + System.Convert.ToChar(34) + "@data." + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 40px; height: 40px; border-radius: 8px;" + System.Convert.ToChar(34) + " >");
                                                     output.AppendLine("                 </RadzenImage>");
                                                     output.AppendLine("             </Template>");
                                                     break;
                                                 default:
-                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "50px" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " Visible=" + System.Convert.ToChar(34) + columnaVisible + System.Convert.ToChar(34) + " >");
+                                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " >");
                                                     break;
                                             }
                                             output.AppendLine("     </RadzenDataGridColumn>");
                                         }
                                         else
                                         {
-                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Filterable=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
+                                            output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + System.Convert.ToChar(34) + columnCustomProperties + " Title=@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + column.Name.ToUpper() + System.Convert.ToChar(34) + ",dataLenguaje)" + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " >");
                                             output.AppendLine("                 <Template Context=" + System.Convert.ToChar(34) + "data" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                     <RadzenImage Path=" + System.Convert.ToChar(34) + "@data." + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 40px; height: 40px; border-radius: 8px;" + System.Convert.ToChar(34) + " />");
                                             output.AppendLine("                 </Template>");
@@ -404,16 +430,13 @@ public class RadzenBlazorControlsBuilder : IPlugin
                                                 switch (column.DataTypeName.ToLower())
                                                 {
                                                     case "int":
-                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + "int" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "int?" : "int") + System.Convert.ToChar(34);
                                                         break;
                                                     case "smallint":
-                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + "short" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "short?" : "short") + System.Convert.ToChar(34);
                                                         break;
                                                     case "bigint":
-                                                        if (column.IsNullable)
-                                                            numericFormat = " TValue=" + System.Convert.ToChar(34) + "long?" + System.Convert.ToChar(34);
-                                                        else
-                                                            numericFormat = " TValue=" + System.Convert.ToChar(34) + "long" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "long?" : "long") + System.Convert.ToChar(34);
                                                         break;
                                                     case "decimal":
                                                         numericFormat = " Format=" + System.Convert.ToChar(34) + "c" + System.Convert.ToChar(34);
@@ -598,9 +621,16 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private List<Entities.TextoLenguaje> dataLenguaje;");
                         output.AppendLine(" ");
+                        output.AppendLine("    private List<" + generationProject.Namespace + ".Entities.Tables.Estilo.EsquemaDetalle> dataEsquemaDetalle = new();");
+                        output.AppendLine(" ");
                         output.AppendLine("    private bool estaProcesando = false ;");
                         output.AppendLine(" ");
-                        output.AppendLine("    private Depositary.Entities.Tables.Seguridad.Rol? usuarioRol = new();");
+                        output.AppendLine("    private " + generationProject.Namespace + ".Entities.Tables.Seguridad.Rol? usuarioRol = new();");
+                        output.AppendLine(" ");
+                        output.AppendLine("    /// <summary>");
+                        output.AppendLine("    /// List which stores definitions to customize grid columns");
+                        output.AppendLine("    /// </summary>");
+                        output.AppendLine("    private CustomizadorEntities.CustomizacionPagina dataCustomizacionPagina = new();");
                         output.AppendLine(" ");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Variables to store permissions");
@@ -661,6 +691,8 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("        dataLenguaje = await sessionStorage.GetItemAsync<List<Entities.TextoLenguaje>>(" + System.Convert.ToChar(34) + "DataLenguaje" + System.Convert.ToChar(34) + ");");
                         output.AppendLine("        await sessionStorage.RemoveItemAsync(" + System.Convert.ToChar(34) + "DataFunciones" + System.Convert.ToChar(34) + ");");
                         output.AppendLine("        await sessionStorage.RemoveItemAsync(" + System.Convert.ToChar(34) + "RolId" + System.Convert.ToChar(34) + ");");
+                        output.AppendLine("        dataCustomizacionPagina = CustomizadorController.ObtenerCustomizacionPagina(" + System.Convert.ToChar(34) + table.Schema + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + table.Name + System.Convert.ToChar(34) + ");");
+                        output.AppendLine("        dataEsquemaDetalle = await sessionStorage.GetItemAsync<List<" + generationProject.Namespace +".Entities.Tables.Estilo.EsquemaDetalle>>(" + System.Convert.ToChar(34) + "DataEsquemaDetalle" + System.Convert.ToChar(34) + ");");
                         output.AppendLine("        usuarioRol = SeguridadController.ObtenerRolesPorUsuario(dataUsuario.Id);");
                         output.AppendLine("        dataFunciones = SeguridadController.ObtenerFuncionesPorRol(usuarioRol.Id);");
                         output.AppendLine("        await sessionStorage.SetItemAsync(" + System.Convert.ToChar(34) + "RolId" + System.Convert.ToChar(34) + ", usuarioRol.Id);");
@@ -674,6 +706,8 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    /// </summary>");
                         output.AppendLine("    private void LoadMainEntityData()");
                         output.AppendLine("    {");
+                        output.AppendLine("        if (dataCustomizacionPagina.AtributosTabla.HabilitarAuditoria)");
+                        output.AppendLine("             AuditController.Log(AuditController.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Acceso a " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString(), dataUsuario.Id);");
                         output.AppendLine("        estaProcesando = false;");
                         output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
                         output.AppendLine("        " + table.Name + "_entities = entity.Items();");
@@ -729,6 +763,8 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         }
 
                         output.AppendLine("        crudMode = CrudMode.Add;");
+                        output.AppendLine("        if (dataCustomizacionPagina.AtributosTabla.HabilitarAuditoria)");
+                        output.AppendLine("             AuditController.Log(AuditController.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Acceso a " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString(), dataUsuario.Id);");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// <summary>");
@@ -778,6 +814,9 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            crudMode = CrudMode.Delete;");
                         output.AppendLine("        else");
                         output.AppendLine("            crudMode = CrudMode.Edit;");
+                        output.AppendLine("");
+                        output.AppendLine("        if (dataCustomizacionPagina.AtributosTabla.HabilitarAuditoria)");
+                        output.AppendLine("             AuditController.Log(AuditController.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Acceso a " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString() + " + System.Convert.ToChar(34) + " Id: " + System.Convert.ToChar(34) + " + item.Id, dataUsuario.Id);");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Operation depending on Crud mode");
@@ -847,13 +886,14 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            case CrudMode.Add:");
                         output.AppendLine("                try");
                         output.AppendLine("                {");
-                        output.AppendLine("                     crud.Add(" + table.Name + "_entity);");
+                        output.AppendLine("                     crud.Add(" + table.Name + "_entity, (long)SeguridadEntities.Aplicacion.AdministradorWeb);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "agregado." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     severityType = NotificationSeverity.Success;");
                         output.AppendLine("                }");
                         output.AppendLine("                catch(Exception ex)");
                         output.AppendLine("                {");
+                        output.AppendLine("                     AuditController.Log(ex, dataUsuario.Id);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = ex.Message;");
                         output.AppendLine("                     severityType = NotificationSeverity.Error;");
@@ -862,13 +902,14 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            case CrudMode.Edit:");
                         output.AppendLine("                try");
                         output.AppendLine("                {");
-                        output.AppendLine("                     crud.Update(" + table.Name + "_entity);");
+                        output.AppendLine("                     crud.Update(" + table.Name + "_entity, (long)SeguridadEntities.Aplicacion.AdministradorWeb);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "modificado." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     severityType = NotificationSeverity.Success;");
                         output.AppendLine("                }");
                         output.AppendLine("                catch(Exception ex)");
                         output.AppendLine("                {");
+                        output.AppendLine("                     AuditController.Log(ex, dataUsuario.Id);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = ex.Message;");
                         output.AppendLine("                     severityType = NotificationSeverity.Error;");
@@ -880,16 +921,17 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         if (table.Columns.Where(x => x.Name == "Habilitado").FirstOrDefault() != null)
                         {
                             output.AppendLine("                     " + table.Name + "_entity.Habilitado=false;");
-                            output.AppendLine("                     crud.Update(" + table.Name + "_entity);");
+                            output.AppendLine("                     crud.Update(" + table.Name + "_entity, (long)SeguridadEntities.Aplicacion.AdministradorWeb);");
                         }
                         else
-                            output.AppendLine("                     crud.Delete(" + table.Name + "_entity);");
+                            output.AppendLine("                     crud.Delete(" + table.Name + "_entity, (long)SeguridadEntities.Aplicacion.AdministradorWeb);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "El registro se ha " + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = " + System.Convert.ToChar(34) + "eliminado." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     severityType = NotificationSeverity.Success;");
                         output.AppendLine("                }");
                         output.AppendLine("                catch(Exception ex)");
                         output.AppendLine("                {");
+                        output.AppendLine("                     AuditController.Log(ex, dataUsuario.Id);");
                         output.AppendLine("                     summary = " + System.Convert.ToChar(34) + "Error al procesar." + System.Convert.ToChar(34) + ";");
                         output.AppendLine("                     actionInformation = ex.Message;");
                         output.AppendLine("                     severityType = NotificationSeverity.Error;");
@@ -1048,10 +1090,10 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         if (table.Columns.Where(x => x.Name == "Habilitado").FirstOrDefault() != null)
                         {
                             output.AppendLine("    /// <summary>");
-                            output.AppendLine("    /// " + table.Name + "RowRender event");
+                            output.AppendLine("    /// " + table.Name + "CellRender event");
                             output.AppendLine("    /// </summary>");
                             output.AppendLine("    /// <param name=" + System.Convert.ToChar(34) + "args" + System.Convert.ToChar(34) + "></param>");
-                            output.AppendLine("    private void " + table.Name + "RowRender(RowRenderEventArgs<" + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "> args)");
+                            output.AppendLine("    private void " + table.Name + "CellRender(DataGridCellRenderEventArgs<" + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "> args)");
                             output.AppendLine("    {");
                             output.AppendLine("         if(!args.Data.Habilitado)");
                             output.AppendLine("             args.Attributes.Add(" + System.Convert.ToChar(34) + "class" + System.Convert.ToChar(34) + ", " + System.Convert.ToChar(34) + "row-highlight-disabled" + System.Convert.ToChar(34) + ");");
