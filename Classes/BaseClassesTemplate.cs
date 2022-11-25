@@ -1693,7 +1693,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using System.Collections;");
         output.AppendLine("using System.Reflection;");
 
-        output.AppendLine("public class DataHandlerBase: IDataHandler");
+        output.AppendLine("public class DataHandlerBase: IDataHandler, IDisposable");
         output.AppendLine("{");
         output.AppendLine("    #region Local Variables");
         output.AppendLine("    protected string _commandText = null;");
@@ -1748,6 +1748,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// and are loaded with Reflection");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    protected List<DataFieldDefinition> _dataFieldDefinitions = new List<DataFieldDefinition>();");
+        output.AppendLine("    private bool disposedValue;");
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// No constructor");
         output.AppendLine("    /// </summary>");
@@ -2223,7 +2224,6 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("            IDataItem newObject = (IDataItem)Activator.CreateInstance(dataItemType, false);");
         output.AppendLine("            for (int index = 0; index < dr.FieldCount; index++)");
         output.AppendLine("            {");
-
         output.AppendLine("                PropertyInfo info = (PropertyInfo)hashtable[_dataFieldDefinitions[index].Name];");
         output.AppendLine("                if ((info != null) && info.CanWrite)");
         output.AppendLine("                {");
@@ -2235,6 +2235,36 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        dr.Close();");
         output.AppendLine("        return entities;");
+        output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    protected virtual void Dispose(bool disposing)");
+        output.AppendLine("    {");
+        output.AppendLine("        if (!disposedValue)");
+        output.AppendLine("        {");
+        output.AppendLine("            if (disposing)");
+        output.AppendLine("            {");
+        output.AppendLine("                // TODO: dispose managed state (managed objects)");
+        output.AppendLine("                _itemList = null;");
+        output.AppendLine("                _fieldList = null;");
+        output.AppendLine("                _dataItem = null;");
+        output.AppendLine("            }");
+        output.AppendLine(" ");
+        output.AppendLine("            // TODO: free unmanaged resources (unmanaged objects) and override finalizer");
+        output.AppendLine("            // TODO: set large fields to null");
+        output.AppendLine("            _connection = null;");
+        output.AppendLine("            _command = null;");
+        output.AppendLine("            _transaction = null;");
+        output.AppendLine("            _datareader = null;");
+        output.AppendLine(" ");
+        output.AppendLine("            disposedValue = true;");
+        output.AppendLine("        }");
+        output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    void IDisposable.Dispose()");
+        output.AppendLine("    {");
+        output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
+        output.AppendLine("        Dispose(disposing: true);");
+        output.AppendLine("        GC.SuppressFinalize(this);");
         output.AppendLine("    }");
         output.AppendLine("}");
 
@@ -2254,7 +2284,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using System.Collections;");
         output.AppendLine("using System.Reflection;");
 
-        output.AppendLine("public class DataHandlerBase: IDataHandler");
+        output.AppendLine("public class DataHandlerBase: IDataHandler, IDisposable");
         output.AppendLine("{");
         output.AppendLine("    #region Local Variables");
         output.AppendLine("    protected string _commandText = null;");
@@ -2305,6 +2335,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// and are loaded with Reflection");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    private List<DataFieldDefinition> _dataFieldDefinitions = new List<DataFieldDefinition>();");
+        output.AppendLine("    private bool disposedValue;");
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// No constructor");
         output.AppendLine("    /// </summary>");
@@ -2750,6 +2781,36 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        dr.Close();");
         output.AppendLine("        return entities;");
         output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    protected virtual void Dispose(bool disposing)");
+        output.AppendLine("    {");
+        output.AppendLine("        if (!disposedValue)");
+        output.AppendLine("        {");
+        output.AppendLine("            if (disposing)");
+        output.AppendLine("            {");
+        output.AppendLine("                // TODO: dispose managed state (managed objects)");
+        output.AppendLine("                _itemList = null;");
+        output.AppendLine("                _fieldList = null;");
+        output.AppendLine("                _dataItem = null;");
+        output.AppendLine("            }");
+        output.AppendLine(" ");
+        output.AppendLine("            // TODO: free unmanaged resources (unmanaged objects) and override finalizer");
+        output.AppendLine("            // TODO: set large fields to null");
+        output.AppendLine("            _connection = null;");
+        output.AppendLine("            _command = null;");
+        output.AppendLine("            _transaction = null;");
+        output.AppendLine("            _datareader = null;");
+        output.AppendLine(" ");
+        output.AppendLine("            disposedValue = true;");
+        output.AppendLine("        }");
+        output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    void IDisposable.Dispose()");
+        output.AppendLine("    {");
+        output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
+        output.AppendLine("        Dispose(disposing: true);");
+        output.AppendLine("        GC.SuppressFinalize(this);");
+        output.AppendLine("    }");
         output.AppendLine("}");
 
         SaveOutputToFile("DataHandlerBase.cs", output, true);
@@ -2767,7 +2828,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using System.Collections;");
         output.AppendLine("using System.Reflection;");
 
-        output.AppendLine("public class DataHandlerBase: IDataHandler");
+        output.AppendLine("public class DataHandlerBase: IDataHandler, IDisposable");
         output.AppendLine("{");
         output.AppendLine("    #region Local Variables");
         output.AppendLine("    protected string _commandText = null;");
@@ -2822,6 +2883,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// and are loaded with Reflection");
         output.AppendLine("    /// </summary>");
         output.AppendLine("    protected List<DataFieldDefinition> _dataFieldDefinitions = new List<DataFieldDefinition>();");
+        output.AppendLine("    private bool disposedValue;");
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// No constructor");
         output.AppendLine("    /// </summary>");
@@ -3310,6 +3372,36 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        }");
         output.AppendLine("        dr.Close();");
         output.AppendLine("        return entities;");
+        output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    protected virtual void Dispose(bool disposing)");
+        output.AppendLine("    {");
+        output.AppendLine("        if (!disposedValue)");
+        output.AppendLine("        {");
+        output.AppendLine("            if (disposing)");
+        output.AppendLine("            {");
+        output.AppendLine("                // TODO: dispose managed state (managed objects)");
+        output.AppendLine("                _itemList = null;");
+        output.AppendLine("                _fieldList = null;");
+        output.AppendLine("                _dataItem = null;");
+        output.AppendLine("            }");
+        output.AppendLine(" ");
+        output.AppendLine("            // TODO: free unmanaged resources (unmanaged objects) and override finalizer");
+        output.AppendLine("            // TODO: set large fields to null");
+        output.AppendLine("            _connection = null;");
+        output.AppendLine("            _command = null;");
+        output.AppendLine("            _transaction = null;");
+        output.AppendLine("            _datareader = null;");
+        output.AppendLine(" ");
+        output.AppendLine("            disposedValue = true;");
+        output.AppendLine("        }");
+        output.AppendLine("    }");
+        output.AppendLine(" ");
+        output.AppendLine("    void IDisposable.Dispose()");
+        output.AppendLine("    {");
+        output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
+        output.AppendLine("        Dispose(disposing: true);");
+        output.AppendLine("        GC.SuppressFinalize(this);");
         output.AppendLine("    }");
         output.AppendLine("}");
 
