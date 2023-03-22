@@ -596,7 +596,17 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     output.AppendLine("                     base.Add(Enum.GetName(typeof(ColumnEnum), column));");
                     output.AppendLine("                 }");
                     output.AppendLine("            }");
-
+                    output.AppendLine("             public void Dispose()");
+                    output.AppendLine("             {");
+                    output.AppendLine("                 _entities = null;");
+                    output.AppendLine("                 _cacheItemList = null;");
+                    output.AppendLine("                 Where = null;");
+                    output.AppendLine("                 OrderBy = null;");
+                    output.AppendLine("                 GroupBy = null;");
+                    output.AppendLine("                 Aggregate = null;");
+                    output.AppendLine("				");
+                    output.AppendLine("                 base.Dispose(true);");
+                    output.AppendLine("             }");
                     output.AppendLine("        } // class " + GetFormattedEntityName(entity.Name));
                     output.AppendLine("	} //namespace " + _namespace + ".Business.Tables." + GetSchemaName(GetSchemaName(entity.Schema)));
                     System.Diagnostics.Debug.Print(GetFormattedEntityName(entity.Name));
@@ -1083,6 +1093,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     output.AppendLine("             public override string ToString() => " + displayColumn + ";");
                 }
                 output.AppendLine("				");
+
                 output.AppendLine("			} //Class " + GetFormattedEntityName(entity.Name) + " ");
                 output.AppendLine("} //namespace " + _namespace + ".Entities.Tables." + GetSchemaName(entity.Schema));
             }
@@ -2257,7 +2268,11 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
         output.AppendLine("        Dispose(disposing: true);");
-        output.AppendLine("        GC.SuppressFinalize(this);");
+        if( _generationProject.UsesExplicitGarbageCollection)
+        {
+            output.AppendLine("        " + _generationProject.GarbageCollectionCode);
+        }
+
         output.AppendLine("    }");
         output.AppendLine("}");
 
@@ -2601,7 +2616,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            if (_datareader != null)");
         output.AppendLine("                _datareader.Close();");
-        output.AppendLine("            if (_connection.State == ConnectionState.Open)");
+        output.AppendLine("            if (_connection.State == ConnectionState.Open && _transaction == null)");
         output.AppendLine("                _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -2802,7 +2817,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
         output.AppendLine("        Dispose(disposing: true);");
-        output.AppendLine("        GC.SuppressFinalize(this);");
+        if (_generationProject.UsesExplicitGarbageCollection)
+        {
+            output.AppendLine("        " + _generationProject.GarbageCollectionCode);
+        }
         output.AppendLine("    }");
         output.AppendLine("}");
 
@@ -3400,7 +3418,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method");
         output.AppendLine("        Dispose(disposing: true);");
-        output.AppendLine("        GC.SuppressFinalize(this);");
+        if (_generationProject.UsesExplicitGarbageCollection)
+        {
+            output.AppendLine("        " + _generationProject.GarbageCollectionCode);
+        }
         output.AppendLine("    }");
         output.AppendLine("}");
 
@@ -3579,7 +3600,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            if (_datareader != null)");
         output.AppendLine("                _datareader.Close();");
-        output.AppendLine("            if (_connection.State == ConnectionState.Open)");
+        output.AppendLine("            if (_connection.State == ConnectionState.Open && _transaction == null)");
         output.AppendLine("                _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -4382,7 +4403,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            if (_datareader != null)");
         output.AppendLine("                _datareader.Close();");
-        output.AppendLine("            if (_connection.State == ConnectionState.Open)");
+        output.AppendLine("            if (_connection.State == ConnectionState.Open  && _transaction == null)");
         output.AppendLine("                _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -4456,7 +4477,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            if (_datareader != null)");
         output.AppendLine("                _datareader.Close();");
-        output.AppendLine("            if (_connection.State == ConnectionState.Open)");
+        output.AppendLine("            if (_connection.State == ConnectionState.Open  && _transaction == null)");
         output.AppendLine("                _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -4544,7 +4565,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("        {");
         output.AppendLine("            if (_datareader != null)");
         output.AppendLine("                _datareader.Close();");
-        output.AppendLine("            if (_connection.State == ConnectionState.Open)");
+        output.AppendLine("            if (_connection.State == ConnectionState.Open && _transaction == null)");
         output.AppendLine("                _connection.Close();");
         output.AppendLine("        }");
         output.AppendLine("    }");
@@ -4958,17 +4979,18 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
                 output.AppendLine("			   protected List<Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _cacheItemList = new List<Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("			   protected List<Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _entities = null;");
-                output.AppendLine("            public new CustomWhereParameter Where { get; set; }");
-                output.AppendLine("            public new CustomOrderByParameter OrderByParameter { get; set; }");
-                output.AppendLine("            public new CustomGroupByParameter GroupByParameter { get; set; }");
-                output.AppendLine("            public new CustomAggregateParameter AggregateParameter { get; set; }");
+                output.AppendLine("            public CustomWhereParameter Where { get; set; }");
+                output.AppendLine("            public CustomOrderByParameter OrderBy { get; set; }");
+                output.AppendLine("            public CustomGroupByParameter GroupBy { get; set; }");
+                output.AppendLine("            public CustomAggregateParameter Aggregate { get; set; }");
 
                 output.AppendLine("            public " + GetFormattedEntityName(entity.Name) + "() : base()");
                 output.AppendLine("            {");
                 output.AppendLine("                base._dataItem = new Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "();");
                 output.AppendLine("                Where = new CustomWhereParameter();");
-                output.AppendLine("                OrderByParameter = new CustomOrderByParameter();");
-                output.AppendLine("                GroupByParameter = new CustomGroupByParameter();");
+                output.AppendLine("                OrderBy = new CustomOrderByParameter();");
+                output.AppendLine("                GroupBy = new CustomGroupByParameter();");
+                output.AppendLine("                Aggregate = new CustomAggregateParameter();");
                 output.AppendLine("            }");
 
                 output.AppendLine("            public class CustomAggregateParameter : AggregateParameter");
@@ -5026,10 +5048,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("			}");
                 output.AppendLine("            public new List<Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + "> Items()");
                 output.AppendLine("            {");
-                output.AppendLine("                this.WhereParameter = this.Where.whereParameter;");
-                output.AppendLine("                this.OrderByParameter.orderByParameter = this.OrderByParameter.orderByParameter;");
-                output.AppendLine("                this.GroupByParameter.groupByParameter = this.GroupByParameter.groupByParameter;");
-                output.AppendLine("                this.TopQuantity = this.TopQuantity;");
+                output.AppendLine("                base.WhereParameter = this.Where.whereParameter;");
+                output.AppendLine("                base.OrderByParameter = this.OrderBy.orderByParameter;");
+                output.AppendLine("                base.GroupByParameter = this.GroupBy.groupByParameter;");
+                output.AppendLine("                base.TopQuantity = this.TopQuantity;");
                 output.AppendLine("                base.AnalizeIDataItem();");
                 output.AppendLine("                _entities = base.Items().Cast<Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                return _entities;");
@@ -5520,7 +5542,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("");
         output.AppendLine("namespace " + nameSpace + "");
         output.AppendLine("{");
-        output.AppendLine("    internal static class Crypto");
+        output.AppendLine("    internal static partial class Crypto");
         output.AppendLine("    {");
         output.AppendLine("        public static string Encrypt(string textToEncrypt,string key)");
         output.AppendLine("        {");
