@@ -1269,6 +1269,10 @@ namespace OpenORM.UI
                 // Loads tables
                 try
                 {
+                    if(refDbNode == null)
+                    {
+                        return;
+                    }
                     Project.SelectedTables.Clear();
                     refTablesNode = refDbNode.Nodes[TABLES];
                     if (refTablesNode != null)

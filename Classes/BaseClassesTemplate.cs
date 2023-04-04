@@ -956,6 +956,13 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("             {");
                 output.AppendLine("                 get { return _result; }");
                 output.AppendLine("             }");
+                output.AppendLine("             public void Dispose()");
+                output.AppendLine("             {");
+                output.AppendLine("                 _cacheItemList = null;");
+
+                output.AppendLine("				");
+                output.AppendLine("                 base.Dispose(true);");
+                output.AppendLine("             }");
                 output.AppendLine("        }// class " + GetSchemaName(GetSchemaName(entity.Schema)));
                 output.AppendLine("	} // namespace " + _namespace + ".Business." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)));
 
@@ -5237,7 +5244,17 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                     this.groupByParameter.Add(Enum.GetName(typeof(ColumnEnum), column));");
                 output.AppendLine("                 }");
                 output.AppendLine("            }");
-
+                output.AppendLine("             public void Dispose()");
+                output.AppendLine("             {");
+                output.AppendLine("                 _entities = null;");
+                output.AppendLine("                 _cacheItemList = null;");
+                output.AppendLine("                 Where = null;");
+                output.AppendLine("                 OrderBy = null;");
+                output.AppendLine("                 GroupBy = null;");
+                output.AppendLine("                 Aggregate = null;");
+                output.AppendLine("				");
+                output.AppendLine("                 base.Dispose(true);");
+                output.AppendLine("             }");
                 output.AppendLine("        } // class " + GetFormattedEntityName(entity.Name));
                 output.AppendLine("	} //namespace " + _namespace + ".Business.Relations." + GetSchemaName(entity.Schema));
 
