@@ -671,11 +671,11 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
 
                 output.AppendLine("			protected List<IDataItem> _cacheItemList = new List<IDataItem>();");
-                output.AppendLine("         public WhereCollection Where { get; set; }");
-                output.AppendLine("         public OrderByCollection OrderBy { get; set; }");
-                output.AppendLine("         public GroupByCollection GroupBy { get; set; }");
+                output.AppendLine("         public WhereCollection Where = new WhereCollection();");
+                output.AppendLine("         public OrderByCollection OrderBy = new OrderByCollection();");
+                output.AppendLine("         public GroupByCollection GroupBy = new GroupByCollection();");
                 output.AppendLine("         public AggregateCollection Aggregate { get; set; }");
-
+                output.AppendLine("         private List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _entities = new List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
 
                 output.AppendLine("            public " + GetFormattedEntityName(entity.Name) + "() : base()");
                 output.AppendLine("            {");
@@ -734,15 +734,23 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("			}");
                 output.AppendLine("            public new List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> Items()");
                 output.AppendLine("            {");
-                output.AppendLine("                this.WhereParameter = this.Where.whereParameter;");
+                output.AppendLine("                this.WhereParameter = this.Where;");
                 output.AppendLine("                this.OrderByParameter = this.OrderBy.orderByParameter;");
                 output.AppendLine("                this.GroupByParameter = this.GroupBy.groupByParameter;");
                 output.AppendLine("                this.TopQuantity = this.TopQuantity;");
-                output.AppendLine("                List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _entities = new List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                base.AnalizeIDataItem();");
                 output.AppendLine("                _entities = base.Items().Cast<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
                 output.AppendLine("                return _entities;");
                 output.AppendLine("            }");
+                output.AppendLine("            /// <summary>");
+                output.AppendLine("            /// Holds last Items() executed.");
+                output.AppendLine("            /// </summary>");
+                output.AppendLine("            /// <returns>Last Items()</returns>");
+                output.AppendLine("            public List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> Result");
+                output.AppendLine("            {");
+                output.AppendLine("                get{return _entities;}");
+                output.AppendLine("            }");
+
                 output.AppendLine("            /// <summary>");
                 output.AppendLine("            /// Gets ");
                 output.AppendLine("            /// </summary>");
@@ -767,7 +775,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     definedColumnList = definedColumnList.Substring(0, definedColumnList.Length - 1);
                 output.AppendLine("            public List<Entities.Views." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> Items(" + definedColumnList + ")");
                 output.AppendLine("            {");
-                output.AppendLine("                this.Where.whereParameter.Clear();");
+                output.AppendLine("                this.Where.Clear();");
 
                 foreach (MyMeta.IColumn column in entity.Columns)
                 {
@@ -775,7 +783,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                     {
                         output.AppendLine("                if (" + GetFormattedEntityName(column.Name) + " != null)");
                         output.AppendLine("                {");
-                        output.AppendLine("                    if (this.Where.whereParameter.Count == 0)");
+                        output.AppendLine("                    if (this.Where.Count == 0)");
                         output.AppendLine("                    {");
                         output.AppendLine("                        this.Where.Add(ColumnEnum." + GetFormattedEntityName(column.Name) + ", " + _namespace + ".sqlEnum.OperandEnum.Equal, " + GetFormattedEntityName(column.Name) + ");");
                         output.AppendLine("                    }");
@@ -798,34 +806,34 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("            }");
 
                 output.AppendLine("            public class WhereCollection : WhereParameter {");
-                output.AppendLine("                 internal WhereParameter whereParameter = new WhereParameter();");
+
                 output.AppendLine("                 public void Add(ColumnEnum betweenColumn, " + _namespace + ".sqlEnum.OperandEnum operand, object valueFrom, object valueTo)");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.Add(Enum.GetName(typeof(ColumnEnum), betweenColumn), valueFrom, valueTo);");
+                output.AppendLine("                     base.Add(Enum.GetName(typeof(ColumnEnum), betweenColumn), valueFrom, valueTo);");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void  Add(ColumnEnum column, " + _namespace + ".sqlEnum.OperandEnum operand,object value)");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.Add(Enum.GetName(typeof(ColumnEnum), column), operand, value);");
+                output.AppendLine("                     base.Add(Enum.GetName(typeof(ColumnEnum), column), operand, value);");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void Add(" + _namespace + ".sqlEnum.ConjunctionEnum conjunction,ColumnEnum betweenColumn, " + _namespace + ".sqlEnum.OperandEnum operand, object valueFrom, object valueTo)");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.Add(conjunction, Enum.GetName(typeof(ColumnEnum), betweenColumn), valueFrom, valueTo);");
+                output.AppendLine("                     base.Add(conjunction, Enum.GetName(typeof(ColumnEnum), betweenColumn), valueFrom, valueTo);");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void Add(" + _namespace + ".sqlEnum.ConjunctionEnum conjunction,ColumnEnum column, " + _namespace + ".sqlEnum.OperandEnum operand, object value)");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.Add(conjunction, Enum.GetName(typeof(ColumnEnum), column), operand, value);");
+                output.AppendLine("                     base.Add(conjunction, Enum.GetName(typeof(ColumnEnum), column), operand, value);");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void AddOperand(" + _namespace + ".sqlEnum.ConjunctionEnum Conjunction)");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.AddConjunction(Conjunction);");
+                output.AppendLine("                     base.AddConjunction(Conjunction);");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void OpenParentheses()");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.OpenParentheses();");
+                output.AppendLine("                     base.OpenParentheses();");
                 output.AppendLine("                 }");
                 output.AppendLine("                 public void CloseParentheses()");
                 output.AppendLine("                 {");
-                output.AppendLine("                     this.whereParameter.CloseParentheses();");
+                output.AppendLine("                     base.CloseParentheses();");
                 output.AppendLine("                 }");
                 output.AppendLine("            }");
                 output.AppendLine("            public class OrderByCollection : OrderByParameter {");
@@ -901,39 +909,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                base._dataItem = new Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "();");
                 output.AppendLine("            }");
 
-                //definedColumnList = string.Empty; columnList = string.Empty;
-                //string nullable = string.Empty;
-                //foreach (MyMeta.IParameter column in entity.Parameters)
-                //{
-                //    if (!GetFormattedEntityName(column.Name).Equals("@RETURN_VALUE"))
-                //    {
-                //        nullable = column.IsNullable == true && column.LanguageType != "String" ? "?" : String.Empty;
-                //        definedColumnList += column.LanguageType + nullable + " " + GetFormattedEntityName(column.Name).Replace("@", "") + ",";
-                //        columnList += GetFormattedEntityName(column.Name).Replace("@", "") + ",";
-                //    }
-                //}
-                //if (definedColumnList.Length > 0)
-                //    definedColumnList = definedColumnList.Substring(0, definedColumnList.Length - 1);
-                //if (columnList.Length > 0)
-                //    columnList = columnList.Substring(0, columnList.Length - 1);
 
-                //string newKeyword = string.Empty;
-                //if (entity.Parameters.Count != 1)
-                //    newKeyword = string.Empty;//"new";
-
-                //output.AppendLine("            public " + newKeyword + " List<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> Items(" + definedColumnList + ")");
-                //output.AppendLine("            {");
-                //output.AppendLine("                " + _entityNamespace + "DataHandler dh =  new " + _entityNamespace + "DataHandler(this._dataItem);");
-                //output.AppendLine("                List<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> _entities = new List<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
-                //output.AppendLine("                _result = dh.Items(new object[] {" + columnList + "}).Cast<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">().ToList<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + ">();");
-                //output.AppendLine("                return _result;");
-                //output.AppendLine("             }");
-                //output.AppendLine("             public List<Entities." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + "> Resultset");
-                //output.AppendLine("             {");
-                //output.AppendLine("                 get { return _result; }");
-                //output.AppendLine("             }");
-                //output.AppendLine("        }// class " + GetSchemaName(GetSchemaName(entity.Schema)));
-                //output.AppendLine("	} // namespace " + _namespace + ".Business." + _entityType + "." + GetSchemaName(GetSchemaName(entity.Schema)));
                 string nullable = string.Empty;
                 definedColumnList = string.Empty; columnList = string.Empty;
                 foreach (MyMeta.IParameter column in entity.Parameters)
