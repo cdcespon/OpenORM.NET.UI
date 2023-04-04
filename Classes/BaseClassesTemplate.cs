@@ -842,6 +842,16 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                     this.groupByParameter.Add(Enum.GetName(typeof(ColumnEnum), column));");
                 output.AppendLine("                 }");
                 output.AppendLine("            }");
+                output.AppendLine("             public void Dispose()");
+                output.AppendLine("             {");
+                output.AppendLine("                 _cacheItemList = null;");
+                output.AppendLine("                 Where = null;");
+                output.AppendLine("                 OrderBy = null;");
+                output.AppendLine("                 GroupBy = null;");
+                output.AppendLine("                 Aggregate = null;");
+                output.AppendLine("				");
+                output.AppendLine("                 base.Dispose(true);");
+                output.AppendLine("             }");
                 output.AppendLine("        } // class " + GetFormattedEntityName(entity.Name));
                 output.AppendLine("	} //namespace " + _namespace + ".Business.Views." + GetSchemaName(GetSchemaName(entity.Schema)));
 
