@@ -40,7 +40,7 @@ public class GenerationProject
     private List<string> _selectedStoredProcedures = new List<string>();
     private List<string> _unSelectedStoredProcedures = new List<string>();
     private ObservableCollection<MappedStoredProcedure> _mappedStoredProcedures = new ObservableCollection<MappedStoredProcedure>();
-    
+
 
     private List<string> _selectedViews = new List<string>();
     private String _connectionString = String.Empty;
@@ -83,7 +83,30 @@ public class GenerationProject
 
     void _mappedStoredProcedures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
-        System.Diagnostics.Debug.Print(""); 
+        System.Diagnostics.Debug.Print("");
+    }
+
+    private string _garbageCollectionCode = string.Empty;
+
+    [Description("If Explicit garbage collection is true,this C# code is added.")]
+    [Category("Garbage Collection")]
+    [DisplayName("Garbage Collection explicit call")]
+    [TypeConverter(typeof(StringListStringConverter))]
+    public string GarbageCollectionCode
+    {
+        get { return _garbageCollectionCode; }
+        set { _garbageCollectionCode = value; }
+    }
+
+    private bool _usesExplicitGarbageCollection = false;
+
+    [Description("Uses explicit garbage collection.")]
+    [Category("Garbage Collection")]
+    [DisplayName("Uses explicit garbage collection.")]
+    public bool UsesExplicitGarbageCollection
+    {
+        get { return _usesExplicitGarbageCollection; }
+        set { _usesExplicitGarbageCollection = value; }
     }
 
     [Description("Characters that will be replaced to fit C# Naming convention.")]
@@ -1071,38 +1094,29 @@ public class TemplateConfigurationEntry
 
 }
 
-//[Serializable(), System.Xml.Serialization.XmlInclude(typeof(TemplateConfigurationItem))]
-//[TypeConverter(typeof(TemplateConfigurationItemConverter)), DefaultProperty("Key"), Browsable(true)]
-//public class TemplateConfigurationItem
-//{
-//    public String Key = String.Empty;
-//    public String Value = String.Empty;
-//    public TemplateConfigurationItem() { }
-//    public TemplateConfigurationItem(string keyName, string keyValue)
-//    {
-//        Key = keyName;
-//        Value = keyValue;
-//    }
-//}
 
-//public class TemplateConfigurationItemConverter : ExpandableObjectConverter
-//{
+public class StringListStringConverter : StringConverter
+{
+    public override Boolean GetStandardValuesSupported(ITypeDescriptorContext context) { return true; }
+    public override Boolean GetStandardValuesExclusive(ITypeDescriptorContext context) { return true; }
+    public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+    {
+        List<String> list = new List<String>();
+        list.Add("GC.SuppressFinalize(this);");
 
-//    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-//    {
-//        if (object.ReferenceEquals(sourceType, typeof(string)))
-//        {
-//            return true;
-//        }
-//        return base.CanConvertFrom(context, sourceType);
-//    }
-//    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-//    {
-//        if (object.ReferenceEquals(destinationType, typeof(TemplateConfigurationItem)))
-//        {
-//            return true;
-//        }
-//        return base.CanConvertFrom(context, destinationType);
-//    }
-//}
+        list.Add("GC.Collect(0, GCCollectionMode.Default);");
+        list.Add("GC.Collect(0, GCCollectionMode.Optimized);");
+        list.Add("GC.Collect(0, GCCollectionMode.Forced);");
 
+        list.Add("GC.Collect(1, GCCollectionMode.Default);");
+        list.Add("GC.Collect(1, GCCollectionMode.Optimized);");
+        list.Add("GC.Collect(1, GCCollectionMode.Forced);");
+
+        list.Add("GC.Collect(2, GCCollectionMode.Default);");
+        list.Add("GC.Collect(2, GCCollectionMode.Optimized);");
+        list.Add("GC.Collect(2, GCCollectionMode.Forced);");
+
+        return new StandardValuesCollection(list);
+    }
+    
+}

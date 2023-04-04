@@ -333,6 +333,7 @@
             this.pluginsListView.UseCompatibleStateImageBehavior = false;
             this.pluginsListView.View = System.Windows.Forms.View.Details;
             this.pluginsListView.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pluginsListView_ItemChecked);
+            this.pluginsListView.DoubleClick += new System.EventHandler(this.pluginsListView_DoubleClick);
             // 
             // Data
             // 

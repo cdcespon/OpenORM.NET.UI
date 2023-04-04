@@ -2135,5 +2135,10 @@ namespace OpenORM.UI
         {
             SaveProjectFile();
         }
+
+        private void pluginsListView_DoubleClick(object sender, EventArgs e)
+        {
+            //MessageBox.Show(sender.ToString());
+        }
     }
 }
