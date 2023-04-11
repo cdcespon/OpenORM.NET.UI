@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyMeta;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -1149,14 +1150,14 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
                 output.AppendLine("	               /// <summary>");
                 output.AppendLine("                /// Parameterless Constructor");
-                output.AppendLine("	               /// <summary>");
+                output.AppendLine("	               /// </summary>");
                 output.AppendLine("                public " + GetFormattedEntityName(entity.Name) + "()");
                 output.AppendLine("                {");
                 output.AppendLine("                }");
 
                 output.AppendLine("	               /// <summary>");
                 output.AppendLine("                /// Constructor with Parameters ");
-                output.AppendLine("	               /// <summary>");
+                output.AppendLine("	               /// </summary>");
                 foreach (MyMeta.IColumn column in entity.Columns)
                 {
                     definedColumnList += column.LanguageType + " " + GetFormattedEntityName(column.Name) + ",";
@@ -1177,7 +1178,10 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
                 foreach (MyMeta.IColumn column in entity.Columns)
                 {
-                    // Original name and framework name
+                    output.AppendLine("             /// <summary>");
+                    output.AppendLine("             /// " + GetViewColumnDescription(column, _generationProject.ConnectionString));
+                    output.AppendLine("             /// </summary>");
+                     // Original name and framework name
                     output.AppendLine("             [DataItemAttributeFieldName(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + GetFormattedEntityName(column.Name) + System.Convert.ToChar(34) + ")]");
                     if (column.Name.Equals("Name"))
                         output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Display)] //Id Display Default");
@@ -1678,6 +1682,35 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
             output.AppendLine(" // Warning: This file should not be edited.");
         }
 
+    }
+    private string GetViewColumnDescription(IColumn column, string connectionString)
+    {
+        string sql = @"SELECT S.name as [SchemaName], O.name AS [ViewName],C.Name As ColumnName, ep.value AS [Value]
+                    FROM sys.extended_properties EP
+                    INNER JOIN sys.all_objects O ON ep.major_id = O.object_id 
+                    INNER JOIN sys.schemas S on O.schema_id = S.schema_id
+                    INNER JOIN sys.columns AS c ON ep.major_id = c.object_id AND ep.minor_id = c.column_id
+                    WHERE s.name = '" + column.View.Schema + "' AND O.type = 'V' AND ep.name = 'Description'";
+        sql += "AND c.Name = '" + column.Name + "'";
+
+        ADODB.Recordset recordset = null;
+        ADODB.Connection connection = new ADODB.Connection();
+        ADODB.Command command = new ADODB.Command();
+        command.CommandText = sql;
+        command.CommandType = ADODB.CommandTypeEnum.adCmdText;
+        command.CommandTimeout = 30;
+
+        connection.Open(connectionString);
+        command.ActiveConnection = connection;
+        object rows;
+        recordset = command.Execute(out rows);
+        string res = string.Empty;
+        while (!recordset.EOF)
+        {
+            res = recordset.Fields["Value"].Value.ToString();
+            recordset.MoveNext();
+        }
+        return res;
     }
     private void BuildDataHandlerBaseNET40(string nameSpace)
     {
@@ -4027,7 +4060,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        _orderByParameters.Clear();");
         output.AppendLine("    }");
-        output.AppendLine("    public object Count");
+        output.AppendLine("    public long Count");
         output.AppendLine("    {");
         output.AppendLine("        get { return _orderByParameters.Count; }");
         output.AppendLine("    }");
@@ -4068,7 +4101,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        _groupByParameters.Clear();");
         output.AppendLine("    }");
-        output.AppendLine("    public object Count");
+        output.AppendLine("    public long Count");
         output.AppendLine("    {");
         output.AppendLine("        get { return _groupByParameters.Count; }");
         output.AppendLine("    }");
@@ -4143,7 +4176,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    {");
         output.AppendLine("        _aggregateParameters.Clear();");
         output.AppendLine("    }");
-        output.AppendLine("    public object Count");
+        output.AppendLine("    public long Count");
         output.AppendLine("    {");
         output.AppendLine("        get { return _aggregateParameters.Count; }");
         output.AppendLine("    }");
@@ -5222,12 +5255,32 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                 {");
                 output.AppendLine("                     this.orderByParameter.Add(Enum.GetName(typeof(ColumnEnum), column), direction);");
                 output.AppendLine("                 }");
+                output.AppendLine("                 public void Clear()");
+                output.AppendLine("                 {");
+                output.AppendLine("                     this.orderByParameter.Clear();");
+                output.AppendLine("                 }");
+                output.AppendLine("                 public long Count");
+                output.AppendLine("                 {");
+                output.AppendLine("                     get {");
+                output.AppendLine("                         return this.orderByParameter.Count;");
+                output.AppendLine("                     }");
+                output.AppendLine("                 }");
                 output.AppendLine("            }");
                 output.AppendLine("            public class CustomGroupByParameter : GroupByParameter {");
                 output.AppendLine("                 internal GroupByParameter groupByParameter = new GroupByParameter();");
                 output.AppendLine("                 public void Add(ColumnEnum column)");
                 output.AppendLine("                 {");
                 output.AppendLine("                     this.groupByParameter.Add(Enum.GetName(typeof(ColumnEnum), column));");
+                output.AppendLine("                 }");
+                output.AppendLine("                 public void Clear()");
+                output.AppendLine("                 {");
+                output.AppendLine("                     this.groupByParameter.Clear();");
+                output.AppendLine("                 }");
+                output.AppendLine("                 public long Count");
+                output.AppendLine("                 {");
+                output.AppendLine("                     get {");
+                output.AppendLine("                         return this.groupByParameter.Count;");
+                output.AppendLine("                     }");
                 output.AppendLine("                 }");
                 output.AppendLine("            }");
                 output.AppendLine("             public void Dispose()");
