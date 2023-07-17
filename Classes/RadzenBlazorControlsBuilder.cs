@@ -135,7 +135,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         columnCustomProperties += "Visible=@CustomizadorController.ObtenerPropiedadVisibilidadColumna(" + System.Convert.ToChar(34) + "TemplateABM" + System.Convert.ToChar(34) + ",dataCustomizacionPagina.AtributosColumnas) ";
 
                         output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
-                        output.AppendLine("@using Permaquim." + generationProject.Namespace + ".Web.Administration.Controllers;");
+                        output.AppendLine("@using " + generationProject.Namespace + ";");
                         output.AppendLine("@inject NotificationService NotificationService");
                         output.AppendLine("@inject Blazored.SessionStorage.ISessionStorageService sessionStorage");
                         output.AppendLine("@inject NavigationManager NavManager");
@@ -1603,7 +1603,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                     if (view.Selected)
                     {
                         output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + view.Schema + view.Name + "View" + System.Convert.ToChar(34) + "");
-                        output.AppendLine("@using  Permaquim." + generationProject.Namespace + ".Web.Administration.Controllers;");
+                        output.AppendLine("@using  " + generationProject.Namespace + ";");
                         output.AppendLine(" ");
                         output.AppendLine("@inject NotificationService NotificationService");
                         output.AppendLine("@inject Blazored.SessionStorage.ISessionStorageService sessionStorage");
