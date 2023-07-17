@@ -1,10 +1,14 @@
 ﻿
+using MyMeta;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using static Mono.Security.X509.X520;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using System.Windows.Forms;
 
 public class DatabaseObjectsPlugin : IPlugin
 {
@@ -114,8 +118,16 @@ public class DatabaseObjectsPlugin : IPlugin
 
                                 if(refColumn.Description.Length > 0)
                                 {
-                                    extendedpropertiesbuilder.AppendLine("EXEC sys.sp_addextendedproperty @name=N'Description', @value=N'" + refColumn.Description + "' , @level0type=N'SCHEMA',@level0name=N'" + destinationSchema + "', @level1type=N'VIEW',@level1name=N'"+ viewName+"', @level2type=N'COLUMN',@level2name=N'" + GetTableFullNameAsAlias(refTable) + "_" + refColumn.Name + "'");
-                                    extendedpropertiesbuilder.AppendLine("GO");
+
+                                    extendedpropertiesbuilder.AppendLine("IF NOT EXISTS (");
+                                    extendedpropertiesbuilder.AppendLine("  SELECT value FROM SYS.EXTENDED_PROPERTIES WHERE [major_id] = OBJECT_ID('" + destinationSchema + "."+ viewName + "')");
+                                    extendedpropertiesbuilder.AppendLine("  AND [name] = N'Description' AND[minor_id] = (");
+                                    extendedpropertiesbuilder.AppendLine("  SELECT [column_id] FROM SYS.COLUMNS WHERE [name] = '" + GetTableFullNameAsAlias(refTable) + "_" + refColumn.Name + "' AND [object_id] = OBJECT_ID('" + destinationSchema + "."+ viewName + "'))");
+                                    extendedpropertiesbuilder.AppendLine(")");
+                                    extendedpropertiesbuilder.AppendLine("      BEGIN");
+                                    extendedpropertiesbuilder.AppendLine("          EXEC sys.sp_addextendedproperty @name=N'Description', @value=N'" + refColumn.Description + "' , @level0type=N'SCHEMA',@level0name=N'" + destinationSchema + "', @level1type=N'VIEW',@level1name=N'"+ viewName +"', @level2type=N'COLUMN',@level2name=N'" + GetTableFullNameAsAlias(refTable) + "_" + refColumn.Name + "'");
+                                    extendedpropertiesbuilder.AppendLine("      END");
+                                    extendedpropertiesbuilder.AppendLine("  GO");
                                     extendedpropertiesbuilder.AppendLine("");
                                 }
 
@@ -150,8 +162,15 @@ public class DatabaseObjectsPlugin : IPlugin
 
                                             if (refFkColumn.Description.Length > 0)
                                             {
-                                                extendedpropertiesbuilder.AppendLine("EXEC sys.sp_addextendedproperty @name=N'Description', @value=N'" + refFkColumn.Description + "' , @level0type=N'SCHEMA',@level0name=N'" + destinationSchema + "', @level1type=N'VIEW',@level1name=N'" + viewName + "', @level2type=N'COLUMN',@level2name=N'" + GetTableFullNameAsAlias(refFkColumn.Table) + "_" + refFkColumn.Name + "'");
-                                                extendedpropertiesbuilder.AppendLine("GO");
+                                                extendedpropertiesbuilder.AppendLine("IF NOT EXISTS (");
+                                                extendedpropertiesbuilder.AppendLine("  SELECT value FROM SYS.EXTENDED_PROPERTIES WHERE [major_id] = OBJECT_ID('" + destinationSchema + "." + viewName + "')");
+                                                extendedpropertiesbuilder.AppendLine("  AND[name] = N'Description' AND[minor_id] = (");
+                                                extendedpropertiesbuilder.AppendLine("  SELECT[column_id] FROM SYS.COLUMNS WHERE[name] = '" + GetTableFullNameAsAlias(refFkColumn.Table) + "_" + refFkColumn.Name + "' AND[object_id] = OBJECT_ID('" + destinationSchema + "." + viewName + "'))");
+                                                extendedpropertiesbuilder.AppendLine(")");
+                                                extendedpropertiesbuilder.AppendLine("      BEGIN");
+                                                extendedpropertiesbuilder.AppendLine("          EXEC sys.sp_addextendedproperty @name=N'Description', @value=N'" + refFkColumn.Description + "' , @level0type=N'SCHEMA',@level0name=N'" + destinationSchema + "', @level1type=N'VIEW',@level1name=N'" + viewName + "', @level2type=N'COLUMN',@level2name=N'" + GetTableFullNameAsAlias(refFkColumn.Table) + "_" + refFkColumn.Name + "'");
+                                                extendedpropertiesbuilder.AppendLine("      END");
+                                                extendedpropertiesbuilder.AppendLine("  GO");
                                                 extendedpropertiesbuilder.AppendLine("");
                                             }
                                         }
