@@ -973,6 +973,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("            Duration = 4000 });");
                         output.AppendLine("       ");
                         output.AppendLine("            await Task.Run(LoadMainEntityData);");
+                        output.AppendLine("            await Task.Run(LoadTypesData);");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Crud mode cancellation and default mode");
@@ -981,6 +982,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("    {");
                         output.AppendLine("        crudMode = CrudMode.List;  ");
                         output.AppendLine("        LoadMainEntityData();");
+                        output.AppendLine("        LoadTypesData();");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Sets detail panel title - TODO: Implement Multilanguage");
