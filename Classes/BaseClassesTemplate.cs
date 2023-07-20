@@ -5414,24 +5414,28 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                         nullable = column.IsNullable == true && column.LanguageType != "String" ? "?" : String.Empty;
 
                         output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Exclude)] //Exclude");
-                        output.AppendLine("             internal " + column.LanguageType + nullable + " _" + GetFormattedEntityName(column.Name) + " { get; set; }");
+
+                        string lazyLoadingValueHolderVisible = _generationProject.LazyLoadingValueHolderVisible ? "internal " : "private "; 
+
+                        output.AppendLine("             " + lazyLoadingValueHolderVisible + column.LanguageType + nullable + " _" + GetFormattedEntityName(column.Name) + " { get; set; }");
 
                         output.AppendLine("             [PropertyAttribute(PropertyAttribute.PropertyAttributeEnum.Fk)] //Is Foreign Key");
                         output.AppendLine("             [PropertyAttributeForeignKeyObjectName(" + System.Convert.ToChar(34) + column.ForeignKeys[0].PrimaryTable.Name + System.Convert.ToChar(34) + ")]// Object name in Database");
                         output.AppendLine("             public " + _namespace + ".Entities.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + column.ForeignKeys[0].PrimaryTable.Name + nullable + " " + column.Name);
                         output.AppendLine("             {");
                         output.AppendLine("                 get {");
-                        output.AppendLine("                     if (" + GetFormattedEntityName(column.Name) + "_ == null || " + GetFormattedEntityName(column.Name) + "_." + GetFormattedEntityName(GetPrimaryKeyName(column.ForeignKeys[0].PrimaryTable)) + " != _" + GetFormattedEntityName(column.Name) + ")");
-                        output.AppendLine("                         {");
-                        output.AppendLine("                             if(this._" + GetFormattedEntityName(column.Name) +" != null)");
-                        output.AppendLine("                                 " + GetFormattedEntityName(column.Name) + " = new " + _namespace + ".Business.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + column.ForeignKeys[0].PrimaryTable.Name + "().Items((" + column.LanguageType + ")this._" + GetFormattedEntityName(column.Name) + ").FirstOrDefault();");
-                        output.AppendLine("                         }");
-                        output.AppendLine("                     return " + GetFormattedEntityName(column.Name) + "_;");
+                        //output.AppendLine("                     if (" + GetFormattedEntityName(column.Name) + "_ == null || " + GetFormattedEntityName(column.Name) + "_." + GetFormattedEntityName(GetPrimaryKeyName(column.ForeignKeys[0].PrimaryTable)) + " != _" + GetFormattedEntityName(column.Name) + ")");
+                        //output.AppendLine("                         {");
+                        output.AppendLine("                         if(this._" + GetFormattedEntityName(column.Name) +" != null && this." + GetFormattedEntityName(column.Name) + "_EntityHolder == null)");
+                        output.AppendLine("                             this." + GetFormattedEntityName(column.Name) + "_EntityHolder = this." + GetFormattedEntityName(column.Name) + "_BusinessHolder.Items((" + column.LanguageType + ")this._" + GetFormattedEntityName(column.Name) + ").FirstOrDefault();");
+                        //output.AppendLine("                         }");
+                        output.AppendLine("                         return this." + GetFormattedEntityName(column.Name) + "_EntityHolder;");
                         output.AppendLine("                     }");
-                        output.AppendLine("                 set {" + GetFormattedEntityName(column.Name) + "_  =  value;}");
+                        output.AppendLine("                 set {" + GetFormattedEntityName(column.Name) + "_EntityHolder  =  value;}");
                         output.AppendLine("             }");
 
-                        output.AppendLine("             static " + _namespace + ".Entities.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_ = null;");
+                        output.AppendLine("             private " + _namespace + ".Entities.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_EntityHolder = null;");
+                        output.AppendLine("             private " + _namespace + ".Business.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_BusinessHolder = new();");
                     }
                     else
                     {

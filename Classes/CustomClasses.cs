@@ -399,6 +399,16 @@ public class GenerationProject
         set { _usesEncription = value; }
     }
 
+    bool _lazyLoadingValueHolderVisible = false;
+    [Description("Shows lazy loading value holder variable (_[VARIABLE]) is visible.")]
+    [Category("Generation Options")]
+    [DisplayName("Lazy Loading Value Holder Visible")]
+    public bool LazyLoadingValueHolderVisible
+    {
+        get { return _lazyLoadingValueHolderVisible; }
+        set { _lazyLoadingValueHolderVisible = value; }
+    }
+
 }
 /// <summary>
 /// 
