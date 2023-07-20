@@ -5177,25 +5177,27 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                get { return _entities; }");
                 output.AppendLine("            }");
 
-                output.AppendLine("            public Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + " Add(Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + " item)");
+                output.AppendLine("            public Entities.Tables." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + " Add(Entities.Tables." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + " item)");
                 output.AppendLine("            {");
-                output.AppendLine("                RelationsDataHandler dh = new RelationsDataHandler(this._dataItem);");
-                output.AppendLine("                return (Entities.Relations." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ")base.Add((IDataItem)item);");
+                output.AppendLine("                DataHandler dh = new DataHandler(item);");
+                output.AppendLine("                return (Entities.Tables." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ")dh.Add((IDataItem)item);");
                 output.AppendLine("            }");
                 ////////////////////////////////////// UPDATE /////////////////////////////////////////77
 
-                output.AppendLine("            public Int64 Update(Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " item)");
+                output.AppendLine("            public Int64 Update(Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " item)");
                 output.AppendLine("            {");
+                output.AppendLine("                DataHandler dh = new DataHandler(item);");
                 output.AppendLine("                return base.Update((IDataItem)item);");
                 output.AppendLine("            }");
 
 
-                output.AppendLine("            public Int64 Delete(Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " item)");
+                output.AppendLine("            public Int64 Delete(Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " item)");
                 output.AppendLine("            {");
-                output.AppendLine("                return base.DeleteItem((IDataItem)item);");
+                output.AppendLine("                DataHandler dh = new DataHandler(item);");
+                output.AppendLine("                return dh.DeleteItem((IDataItem)item);");
                 output.AppendLine("            }");
 
-                output.AppendLine("            /// Updates an instance of Entities.Relations." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " with parameters");
+                output.AppendLine("            /// Updates an instance of Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " with parameters");
                 output.AppendLine("            /// </summary>");
                 definedColumnList = string.Empty;
                 columnList = string.Empty;
