@@ -135,6 +135,7 @@
     <Compile Include="Classes\MudblazorCrudBuilder.cs" />
     <Compile Include="Classes\ProcedureMapper.cs" />
     <Compile Include="Classes\RadzenBlazorControlsBuilder.cs" />
+    <Compile Include="Classes\RadzenBlazorControlsBuilderV2.cs" />
     <Compile Include="Classes\SyncfusionJsControlsBuilder.cs" />
     <Compile Include="Classes\WebServiceBuilderTemplate.cs" />
     <Compile Include="MainDialogForm.cs">

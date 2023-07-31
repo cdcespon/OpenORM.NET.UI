@@ -1770,7 +1770,38 @@ namespace OpenORM.UI
             ListViewItem lvItemBaseClassesExtensionsBuilder = pluginsListView.Items.Add(new ListViewItem(BaseclassesExtensionsBuilderTemplate.Description, 7, new ListViewGroup(RadzenBlazorViewReportBuilderTemplate.Name)));
             lvItemBaseClassesExtensionsBuilder.Tag = BaseclassesExtensionsBuilderTemplate;
 
+            //////////////////////// RV2
+            ITemplate RadzenBlazorCrudBuilderTemplateV2 = new RadzenBlazorControlsBuilderV2.RadzenBlazorCrudBuilderV2(_projectConfig);
 
+            RadzenBlazorCrudBuilderTemplateV2.OnFileGenerated += baseClassesTemplate_OnFileGenerated;
+            RadzenBlazorCrudBuilderTemplateV2.OnException += baseClassesTemplate_OnException;
+            RadzenBlazorCrudBuilderTemplateV2.OnPercentDone += baseClassesTemplate_OnPercentDone;
+            RadzenBlazorCrudBuilderTemplateV2.OnInfo += baseClassesTemplate_OnInfo;
+
+            ListViewItem lvItemRadzenBlazorCrudBuilderV2 = pluginsListView.Items.Add(new ListViewItem(RadzenBlazorCrudBuilderTemplateV2.Description, 7, new ListViewGroup(RadzenBlazorCrudBuilderTemplateV2.Name)));
+            lvItemRadzenBlazorCrudBuilderV2.Tag = RadzenBlazorCrudBuilderTemplateV2;
+
+
+            ITemplate RadzenBlazorLeftMenuBuilderTemplateV2 = new RadzenBlazorControlsBuilderV2.RadzenBlazorLeftMenuBuilderV2(_projectConfig);
+
+            RadzenBlazorLeftMenuBuilderTemplateV2.OnFileGenerated += baseClassesTemplate_OnFileGenerated;
+            RadzenBlazorLeftMenuBuilderTemplateV2.OnException += baseClassesTemplate_OnException;
+            RadzenBlazorLeftMenuBuilderTemplateV2.OnPercentDone += baseClassesTemplate_OnPercentDone;
+            RadzenBlazorLeftMenuBuilderTemplateV2.OnInfo += baseClassesTemplate_OnInfo;
+
+            ListViewItem lvItemRadzenBlazorLeftMenuBuilderV2 = pluginsListView.Items.Add(new ListViewItem(RadzenBlazorLeftMenuBuilderTemplateV2.Description, 7, new ListViewGroup(RadzenBlazorLeftMenuBuilderTemplateV2.Name)));
+            lvItemRadzenBlazorLeftMenuBuilderV2.Tag = RadzenBlazorLeftMenuBuilderTemplateV2;
+
+            ITemplate RadzenBlazorViewReportBuilderTemplateV2 = new RadzenBlazorControlsBuilderV2.RadzenBlazorViewReportBuilderV2(_projectConfig);
+
+            RadzenBlazorViewReportBuilderTemplateV2.OnFileGenerated += baseClassesTemplate_OnFileGenerated;
+            RadzenBlazorViewReportBuilderTemplateV2.OnException += baseClassesTemplate_OnException;
+            RadzenBlazorViewReportBuilderTemplateV2.OnPercentDone += baseClassesTemplate_OnPercentDone;
+            RadzenBlazorViewReportBuilderTemplateV2.OnInfo += baseClassesTemplate_OnInfo;
+
+            ListViewItem lvItemRadzenBlazorViewReportBuilderV2 = pluginsListView.Items.Add(new ListViewItem(RadzenBlazorViewReportBuilderTemplateV2.Description, 7, new ListViewGroup(RadzenBlazorViewReportBuilderTemplateV2.Name)));
+            lvItemRadzenBlazorViewReportBuilderV2.Tag = RadzenBlazorViewReportBuilderTemplateV2;
+            ////////////////////////////////////////////////
 
             foreach (string item in _projectConfig.SelectedTemplates)
             {
@@ -1799,7 +1830,12 @@ namespace OpenORM.UI
                 if (RadzenBlazorViewReportBuilderTemplate.GUID.Equals(item))
                     lvItemRadzenBlazorViewReportBuilder.Checked = true;
 
-                
+                if (RadzenBlazorCrudBuilderTemplateV2.GUID.Equals(item))
+                    lvItemRadzenBlazorCrudBuilderV2.Checked = true;
+                if (RadzenBlazorLeftMenuBuilderTemplateV2.GUID.Equals(item))
+                    lvItemRadzenBlazorLeftMenuBuilderV2.Checked = true;
+                if (RadzenBlazorViewReportBuilderTemplateV2.GUID.Equals(item))
+                    lvItemRadzenBlazorViewReportBuilderV2.Checked = true;
 
 
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Text;
 
 
@@ -5182,7 +5183,6 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 output.AppendLine("                DataHandler dh = new DataHandler(item);");
                 output.AppendLine("                return (Entities.Tables." + GetSchemaName(entity.Schema) + "." + GetFormattedEntityName(entity.Name) + ")dh.Add((IDataItem)item);");
                 output.AppendLine("            }");
-                ////////////////////////////////////// UPDATE /////////////////////////////////////////77
 
                 output.AppendLine("            public Int64 Update(Entities.Tables." + GetSchemaName(GetSchemaName(entity.Schema)) + "." + GetFormattedEntityName(entity.Name) + " item)");
                 output.AppendLine("            {");
