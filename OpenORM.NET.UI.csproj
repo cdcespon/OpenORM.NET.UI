@@ -168,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="OpenORM.NET.UI_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DbTargets.xml">
