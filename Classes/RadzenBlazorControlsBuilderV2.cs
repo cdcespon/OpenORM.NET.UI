@@ -304,7 +304,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                             output.AppendLine("                         var usuario = " + fkTable.Name + "_" + column.Name + "_entities.FirstOrDefault( c => c.Id == @context." + column.Name + ");");
                                             output.AppendLine("                         if(usuario != null)");
                                             output.AppendLine("                         {");
-                                            output.AppendLine("                             <RadzenLabel Text=@(User.FullName) Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                             <RadzenLabel Text=@(_userData.FullName) Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                             </RadzenLabel>");
                                             output.AppendLine("                         }");
                                             output.AppendLine("                         else");
