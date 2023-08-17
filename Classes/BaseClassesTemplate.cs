@@ -5429,7 +5429,8 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                         //output.AppendLine("                     if (" + GetFormattedEntityName(column.Name) + "_ == null || " + GetFormattedEntityName(column.Name) + "_." + GetFormattedEntityName(GetPrimaryKeyName(column.ForeignKeys[0].PrimaryTable)) + " != _" + GetFormattedEntityName(column.Name) + ")");
                         //output.AppendLine("                         {");
                         output.AppendLine("                         if(this._" + GetFormattedEntityName(column.Name) +" != null && this." + GetFormattedEntityName(column.Name) + "_EntityHolder == null)");
-                        output.AppendLine("                             this." + GetFormattedEntityName(column.Name) + "_EntityHolder = this." + GetFormattedEntityName(column.Name) + "_BusinessHolder.Items((" + column.LanguageType + ")this._" + GetFormattedEntityName(column.Name) + ").FirstOrDefault();");
+                        //output.AppendLine("                             this." + GetFormattedEntityName(column.Name) + "_EntityHolder = this." + GetFormattedEntityName(column.Name) + "_BusinessHolder.Items((" + column.LanguageType + ")this._" + GetFormattedEntityName(column.Name) + ").FirstOrDefault();");
+                        output.AppendLine("                             this." + GetFormattedEntityName(column.Name) + "_EntityHolder = new " + _namespace + ".Business.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + "().Items((" + column.LanguageType + ")this._" + GetFormattedEntityName(column.Name) + ").FirstOrDefault();");
                         //output.AppendLine("                         }");
                         output.AppendLine("                         return this." + GetFormattedEntityName(column.Name) + "_EntityHolder;");
                         output.AppendLine("                     }");
@@ -5437,7 +5438,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                         output.AppendLine("             }");
 
                         output.AppendLine("             private " + _namespace + ".Entities.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_EntityHolder = null;");
-                        output.AppendLine("             private " + _namespace + ".Business.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_BusinessHolder = new();");
+                        //output.AppendLine("             private " + _namespace + ".Business.Relations." + GetSchemaName(column.ForeignKeys[0].PrimaryTable.Schema) + "." + GetFormattedEntityName(column.ForeignKeys[0].PrimaryTable.Name) + " " + GetFormattedEntityName(column.Name) + "_BusinessHolder = new();");
                     }
                     else
                     {
@@ -5493,7 +5494,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
                 //////////////////////////    End Children   ///////////////////////////////////////////////
                 output.AppendLine("				");
                 output.AppendLine("			} //Class " + GetFormattedEntityName(entity.Name) + " ");
-                output.AppendLine("} //namespace " + _namespace + ".Entities.Relations." + GetSchemaName(entity.Schema));
+                output.AppendLine("		 } //namespace " + _namespace + ".Entities.Relations." + GetSchemaName(entity.Schema));
             }
 
         }
