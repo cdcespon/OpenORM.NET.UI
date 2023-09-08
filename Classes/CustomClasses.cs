@@ -409,6 +409,27 @@ public class GenerationProject
         set { _lazyLoadingValueHolderVisible = value; }
     }
 
+    bool _useBlazorRouting = false;
+    [Description("Use page routing in Blazor Radzen component generation.")]
+    [Category("Blazor generation Options")]
+    [DisplayName("Use page routing in Blazor Radzen")]
+    public bool UseBlazorRouting
+    {
+        get { return _useBlazorRouting; }
+        set { _useBlazorRouting = value; }
+    }
+
+    bool _generateParametersOnPks = false;
+
+    [Description("Generate component parameters for each Pk to be nested by another comonents")]
+    [Category("Blazor generation Options")]
+    [DisplayName("Generate component parameters for each Pk")]
+    public bool GenerateComponentParameters
+    {
+        get { return _generateParametersOnPks; }
+        set { _generateParametersOnPks = value; }
+    }
+
 }
 /// <summary>
 /// 

@@ -126,8 +126,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         columnCustomProperties += "              OrderIndex=@CustomizationService.GetColumnOrderIndex() " + Environment.NewLine;
                         columnCustomProperties += "              Sortable=@CustomizationService.GetColumnSortable() " + Environment.NewLine;
                         columnCustomProperties += "              Visible=@CustomizationService.GetColumnVisible() " + Environment.NewLine;
-
-                        output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
+                        if(generationProject.UseBlazorRouting)
+                            output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
                         output.AppendLine("@using " + generationProject.Namespace + ";");
                         output.AppendLine("@using Radzen;");
 
@@ -690,6 +690,24 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("        Edit,");
                         output.AppendLine("        Delete");
                         output.AppendLine("    }");
+
+                        string itemParameterColumn = String.Empty;
+  
+                        if (generationProject.GenerateComponentParameters)
+                        {
+                            foreach (var column in table.Columns)
+                            {
+                                itemParameterColumn += column.Name + ",";
+
+                                //if (column.IsInPrimaryKey)
+                                //{
+                                    output.AppendLine(" [Parameter]");
+                                    output.AppendLine(" public " + column.LanguageType + "? " + column.Name + " { get; set; }");
+                                //}
+                            }
+                        }
+                        output.AppendLine("");   
+
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Variable to save grid state");
                         output.AppendLine("    /// </summary>");
@@ -762,7 +780,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             AuditService.Log(AuditService.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Access to " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString());");
                         output.AppendLine("        _isProcessing = false;");
                         output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
-                        output.AppendLine("        " + table.Name + "_entities = entity.Items();");
+                        output.AppendLine("        " + table.Name + "_entities = entity.Items(" + itemParameterColumn.Substring(0,itemParameterColumn.Length -1) + ");");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Loads Type Tables data");
@@ -876,11 +894,11 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("    private async Task Save()");
                         output.AppendLine("    {");
                         output.AppendLine("        _isProcessing = true;");
-                        output.AppendLine("        await Task.Run(Procesar);");
+                        output.AppendLine("        await Task.Run(Process);");
                         output.AppendLine("        _isProcessing = false;");
                         output.AppendLine("    }");
                         output.AppendLine("");
-                        output.AppendLine("    private async Task Procesar()");
+                        output.AppendLine("    private async Task Process()");
                         output.AppendLine("    {");
                         output.AppendLine("        string actionInformation = string.Empty;");
                         output.AppendLine("        NotificationSeverity severityType = NotificationSeverity.Error;");
