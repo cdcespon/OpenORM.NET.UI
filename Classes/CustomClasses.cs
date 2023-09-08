@@ -72,9 +72,19 @@ public class GenerationProject
         NetCore
     }
     [Description(".NET Frameworks generation option.")]
-    [Category(".NET Framework option")]
+    [Category(".NET Framework")]
     [DisplayName(".NET Version")]
     public NetVersionEnum NetVersion { get; set; }
+
+    public enum ConfigurationSettingsModeEnum
+    {
+        AppSettings,
+        Environment
+    }
+    [Description(".NET Configuration Settings option.")]
+    [Category(".NET Framework")]
+    [DisplayName(".NET Configuration Settings mode")]
+    public ConfigurationSettingsModeEnum ConfigurationSettingsMode { get; set; }
 
     public GenerationProject()
     {
