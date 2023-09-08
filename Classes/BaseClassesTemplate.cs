@@ -4878,6 +4878,29 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
 
         switch (_generationProject.ConfigurationSettingsMode)
         {
+            case GenerationProject.ConfigurationSettingsModeEnum.Conditional:
+
+
+                output.AppendLine("     string? env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + _generationProject.EnvironmentVariableModeName + System.Convert.ToChar(34) + ");");
+
+                output.AppendLine("     if (env == null || env.ToUpper().Equals(" + System.Convert.ToChar(34) + _generationProject.EnvironmentVariableModeValue + System.Convert.ToChar(34) + "))");
+                output.AppendLine("     {");
+                output.AppendLine("         return Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "APPSETTING_" + System.Convert.ToChar(34) + " + configurationEntry);");
+
+                output.AppendLine("     }");
+                output.AppendLine("     else");
+                output.AppendLine("     {");
+                output.AppendLine("             env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ")== null? String.Empty: ");
+                output.AppendLine("                 Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") + " + System.Convert.ToChar(34) + "." + System.Convert.ToChar(34) + ";");
+                output.AppendLine("             var builder = new ConfigurationBuilder()");
+                output.AppendLine("                         .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)");
+                output.AppendLine("                         .AddJsonFile( " + System.Convert.ToChar(34) + "appsettings." + System.Convert.ToChar(34) + " + env + " + System.Convert.ToChar(34) + "json" + System.Convert.ToChar(34) + ", optional: false, reloadOnChange: true);");
+                output.AppendLine("");
+                output.AppendLine("             IConfigurationRoot configuration = builder.Build();");
+                output.AppendLine("             return configuration.GetSection(" + System.Convert.ToChar(34) + "AppSettings" + System.Convert.ToChar(34) + ").GetSection(configurationEntry).Value.ToString();");
+                output.AppendLine("     }");
+                break;
+
             case GenerationProject.ConfigurationSettingsModeEnum.AppSettings:
                 output.AppendLine("        var env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ")== null? String.Empty: ");
                 output.AppendLine("             Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") + " + System.Convert.ToChar(34) + "." + System.Convert.ToChar(34) + ";");

@@ -78,6 +78,7 @@ public class GenerationProject
 
     public enum ConfigurationSettingsModeEnum
     {
+        Conditional,
         AppSettings,
         Environment
     }
@@ -85,6 +86,30 @@ public class GenerationProject
     [Category(".NET Framework")]
     [DisplayName(".NET Configuration Settings mode")]
     public ConfigurationSettingsModeEnum ConfigurationSettingsMode { get; set; }
+
+
+    private String _environmentVariableModeName = String.Empty;
+
+    [Description("Environment variable name wich determines 'Conditional' settings variables origin.")]
+    [Category(".NET Framework")]
+    [DisplayName("Environment Variable Conditional Mode Name")]
+    public String EnvironmentVariableModeName
+    {
+        get { return _environmentVariableModeName; }
+        set { _environmentVariableModeName = value; }
+    }
+
+
+    private String _environmentVariableModeValue = String.Empty;
+
+    [Description("Environment variable value wich compares 'Conditional' settings variables origin.")]
+    [Category(".NET Framework")]
+    [DisplayName("Environment Variable Conditional Mode value")]
+    public String EnvironmentVariableModeValue
+    {
+        get { return _environmentVariableModeValue; }
+        set { _environmentVariableModeValue = value; }
+    }
 
     public GenerationProject()
     {
