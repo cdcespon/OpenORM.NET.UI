@@ -4875,14 +4875,14 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("");
         output.AppendLine("   private static string getConfiguration(string configurationEntry)");
         output.AppendLine("   {");
-        output.AppendLine("       string? env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + _generationProject.EnvironmentConfigurationVariableName + System.Convert.ToChar(34) + ");");
-        output.AppendLine("       if (env != null && env.ToUpper().Equals(" + System.Convert.ToChar(34) + "ENVIRONMENT" + System.Convert.ToChar(34) + "))");
+        output.AppendLine("       string? conf = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + _generationProject.EnvironmentConfigurationVariableName + System.Convert.ToChar(34) + ");");
+        output.AppendLine("       if (conf != null && conf.ToUpper().Equals(" + System.Convert.ToChar(34) + "ENVIRONMENT" + System.Convert.ToChar(34) + "))");
         output.AppendLine("       {");
         output.AppendLine("           return Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "APPSETTING_" + System.Convert.ToChar(34) + " + configurationEntry);");
         output.AppendLine("       }");
         output.AppendLine("       else");
         output.AppendLine("       {");
-        output.AppendLine("           env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") == null ? String.Empty :");
+        output.AppendLine("           var env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") == null ? String.Empty :");
         output.AppendLine("               Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") + " + System.Convert.ToChar(34) + "." + System.Convert.ToChar(34) + ";");
         output.AppendLine("           var builder = new ConfigurationBuilder()");
         output.AppendLine("                       .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)");
