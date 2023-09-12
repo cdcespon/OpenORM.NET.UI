@@ -398,7 +398,31 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                 }
                             }
                         }
+                        output.AppendLine("                     <Template>");
+                        output.AppendLine("							<RadzenTabs>");
+                        output.AppendLine("                             <Tabs>");
+                        foreach (var column in table.Columns)
+                        {
+                            Debug.Print(column.Name);
 
+                            if (column.Name != "CreationUser" && column.Name != "ModificationUser"
+                                && column.Name != "CreationDate" && column.Name != "ModificationDate")
+                            {
+                                foreach (var item in column.ForeignKeys)
+                                {
+                                    if (column.Name != item.ForeignColumns.FirstOrDefault().Name)
+                                    {
+                                        output.AppendLine("                                 <RadzenTabsItem Text=" + System.Convert.ToChar(34) + item.ForeignTable.Name + System.Convert.ToChar(34) + ">");
+                                        output.AppendLine("                                     <" + item.ForeignTable.Name + "Crud " + item.ForeignColumns.FirstOrDefault().Name + " = " + System.Convert.ToChar(34) + "@context." + column.Name + System.Convert.ToChar(34) + ">");
+                                        output.AppendLine("                                     </" + item.ForeignTable.Name + "Crud>");
+                                        output.AppendLine("                                 </RadzenTabsItem>");
+                                    }
+                                }
+                            }
+                        }
+                        output.AppendLine("                             </Tabs>");
+                        output.AppendLine("                         </RadzenTabs>");
+                        output.AppendLine("					<Template>");
 
                         output.AppendLine("         </Columns>");
                         output.AppendLine("         </RadzenDataGrid>");
@@ -780,7 +804,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             AuditService.Log(AuditService.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Access to " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString());");
                         output.AppendLine("        _isProcessing = false;");
                         output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
-                        output.AppendLine("        " + table.Name + "_entities = entity.Items(" + itemParameterColumn.Substring(0,itemParameterColumn.Length -1) + ");");
+                        if(itemParameterColumn.Length > 0)
+                            output.AppendLine("        " + table.Name + "_entities = entity.Items(" + itemParameterColumn.Substring(0,itemParameterColumn.Length -1) + ");");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Loads Type Tables data");
