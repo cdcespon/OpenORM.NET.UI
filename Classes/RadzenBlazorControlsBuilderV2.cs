@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 
 public class RadzenBlazorControlsBuilderV2 : IPlugin
 {
@@ -177,13 +178,20 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             </RadzenBadge>");
                         output.AppendLine("             break;         ");
                         output.AppendLine("             case CrudMode.List:");
-                        output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                 <ChildContent>");
-                        output.AppendLine("                     <div>");
-                        output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                     </div>");
-                        output.AppendLine("                 </ChildContent>");
-                        output.AppendLine("             </RadzenBadge>");
+                        output.AppendLine("                    <RadzenStack Orientation=" + System.Convert.ToChar(34) + "Orientation.Horizontal" + System.Convert.ToChar(34) + " AlignItems=" + System.Convert.ToChar(34) + "AlignItems.Center" + System.Convert.ToChar(34) + " JustifyContent=" + System.Convert.ToChar(34) + "JustifyContent.SpaceBetween" + System.Convert.ToChar(34) + " Gap=" + System.Convert.ToChar(34) + "1rem" + System.Convert.ToChar(34) + ">");
+
+                        output.AppendLine("                         <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("                             <ChildContent>");
+                        output.AppendLine("                                 <div>");
+                        output.AppendLine("                                     <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                        output.AppendLine("                                 </div>");
+                        output.AppendLine("                             </ChildContent>");
+                        output.AppendLine("                         </RadzenBadge>");
+
+                        output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design;)></RadzenButton>");
+                        output.AppendLine("                    </RadzenStack>");
+
+
                         output.AppendLine("             break;  ");
                         output.AppendLine("     }");
                         output.AppendLine("     <hr>");
@@ -406,7 +414,12 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("         </RadzenDataGrid>");
                         output.AppendLine("     <hr>");
                         output.AppendLine("     }");
-                        output.AppendLine(" ");
+                        output.AppendLine("     if (crudMode == CrudMode.Design)");
+                        output.AppendLine("     {");
+                        output.AppendLine("          <CustomizationEntityCrud EntityId = " + System.Convert.ToChar(34) + "@context.Id" + System.Convert.ToChar(34) + "></CustomizationEntityCrud>");
+                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.List;)></RadzenButton>");
+                        output.AppendLine("     }");
+
                         output.AppendLine("     if (crudMode == CrudMode.Add || crudMode == CrudMode.Edit || crudMode == CrudMode.Delete)");
                         output.AppendLine("     {");
                         output.AppendLine("             <RadzenTemplateForm TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity" + System.Convert.ToChar(34) + "  @bind-Value=" + System.Convert.ToChar(34) + table.Name + "_entity" + System.Convert.ToChar(34) + " Submit =" + System.Convert.ToChar(34) + "Save" + System.Convert.ToChar(34) + " Visible =" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity != null)" + System.Convert.ToChar(34) + ">");
@@ -690,7 +703,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("        List,");
                         output.AppendLine("        Add,");
                         output.AppendLine("        Edit,");
-                        output.AppendLine("        Delete");
+                        output.AppendLine("        Delete,");
+                        output.AppendLine("        Design");
                         output.AppendLine("    }");
 
                         string itemParameterColumn = String.Empty;
