@@ -188,7 +188,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("                             </ChildContent>");
                         output.AppendLine("                         </RadzenBadge>");
 
-                        output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design;)></RadzenButton>");
+                        output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design)></RadzenButton>");
                         output.AppendLine("                    </RadzenStack>");
 
 
@@ -416,8 +416,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("     }");
                         output.AppendLine("     if (crudMode == CrudMode.Design)");
                         output.AppendLine("     {");
-                        output.AppendLine("          <CustomizationEntityCrud EntityId = " + System.Convert.ToChar(34) + "@context.Id" + System.Convert.ToChar(34) + "></CustomizationEntityCrud>");
-                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.List;)></RadzenButton>");
+                        output.AppendLine("          <CustomizationEntityCrud Id=" + System.Convert.ToChar(34) + "@CustomizationService.GetEntityId(" + System.Convert.ToChar(34) + table.Schema + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + table.Name + System.Convert.ToChar(34) + ")" + System.Convert.ToChar(34) + "></CustomizationEntityCrud>");
+                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.List)></RadzenButton>");
                         output.AppendLine("     }");
 
                         output.AppendLine("     if (crudMode == CrudMode.Add || crudMode == CrudMode.Edit || crudMode == CrudMode.Delete)");
@@ -1240,16 +1240,17 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
 
 
                         MyMeta.ITable refFkTable = ((MyMeta.IForeignKey)item).ForeignTable;
-                        if (!refFkTable.Name.Equals(table.Name) && refFkTable.Name.StartsWith(column.Table.Name)) // Exclude same table
-
-                        //   if (item.ForeignColumns != null && column.Name != item.ForeignColumns.FirstOrDefault().Name)
+                        if (!refFkTable.Name.Equals(table.Name)) // Excludes same table
                         {
-                            fkCounter += 1;
+                            if (item.ForeignColumns != null)
+                            {
+                                fkCounter += 1;
 
-                            output.AppendLine("                     <RadzenTabsItem Text=" + System.Convert.ToChar(34) + item.ForeignTable.Name + System.Convert.ToChar(34) + ">");
-                            output.AppendLine("                         <" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud " + item.ForeignColumns.FirstOrDefault().Name + " = " + System.Convert.ToChar(34) + "@context." + column.Name + System.Convert.ToChar(34) + ">");
-                            output.AppendLine("                         </" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud>");
-                            output.AppendLine("                     </RadzenTabsItem>");
+                                output.AppendLine("                     <RadzenTabsItem Text=" + System.Convert.ToChar(34) + item.ForeignTable.Name + System.Convert.ToChar(34) + ">");
+                                output.AppendLine("                         <" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud " + item.ForeignColumns.FirstOrDefault().Name + " = " + System.Convert.ToChar(34) + "@context." + column.Name + System.Convert.ToChar(34) + ">");
+                                output.AppendLine("                         </" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud>");
+                                output.AppendLine("                     </RadzenTabsItem>");
+                            }
                         }
                     }
                 }
