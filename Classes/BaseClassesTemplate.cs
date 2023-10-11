@@ -4878,7 +4878,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("       string? conf = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + _generationProject.EnvironmentConfigurationVariableName + System.Convert.ToChar(34) + ");");
         output.AppendLine("       if (conf != null && conf.ToUpper().Equals(" + System.Convert.ToChar(34) + "ENVIRONMENT" + System.Convert.ToChar(34) + "))");
         output.AppendLine("       {");
-        output.AppendLine("           return Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "APPSETTING_" + System.Convert.ToChar(34) + " + configurationEntry);");
+        output.AppendLine("           return Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + System.Convert.ToChar(34) + " + configurationEntry);");
         output.AppendLine("       }");
         output.AppendLine("       else");
         output.AppendLine("       {");

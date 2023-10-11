@@ -1,9 +1,11 @@
+using MyMeta;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 
 public class RadzenBlazorControlsBuilderV2 : IPlugin
 {
@@ -126,7 +128,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         columnCustomProperties += "              OrderIndex=@CustomizationService.GetColumnOrderIndex() " + Environment.NewLine;
                         columnCustomProperties += "              Sortable=@CustomizationService.GetColumnSortable() " + Environment.NewLine;
                         columnCustomProperties += "              Visible=@CustomizationService.GetColumnVisible() " + Environment.NewLine;
-                        if(generationProject.UseBlazorRouting)
+                        if (generationProject.UseBlazorRouting)
                             output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + "");
                         output.AppendLine("@using " + generationProject.Namespace + ";");
                         output.AppendLine("@using Radzen;");
@@ -176,13 +178,20 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             </RadzenBadge>");
                         output.AppendLine("             break;         ");
                         output.AppendLine("             case CrudMode.List:");
-                        output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                 <ChildContent>");
-                        output.AppendLine("                     <div>");
-                        output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                     </div>");
-                        output.AppendLine("                 </ChildContent>");
-                        output.AppendLine("             </RadzenBadge>");
+                        output.AppendLine("                    <RadzenStack Orientation=" + System.Convert.ToChar(34) + "Orientation.Horizontal" + System.Convert.ToChar(34) + " AlignItems=" + System.Convert.ToChar(34) + "AlignItems.Center" + System.Convert.ToChar(34) + " JustifyContent=" + System.Convert.ToChar(34) + "JustifyContent.SpaceBetween" + System.Convert.ToChar(34) + " Gap=" + System.Convert.ToChar(34) + "1rem" + System.Convert.ToChar(34) + ">");
+
+                        output.AppendLine("                         <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                        output.AppendLine("                             <ChildContent>");
+                        output.AppendLine("                                 <div>");
+                        output.AppendLine("                                     <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                        output.AppendLine("                                 </div>");
+                        output.AppendLine("                             </ChildContent>");
+                        output.AppendLine("                         </RadzenBadge>");
+
+                        output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design)></RadzenButton>");
+                        output.AppendLine("                    </RadzenStack>");
+
+
                         output.AppendLine("             break;  ");
                         output.AppendLine("     }");
                         output.AppendLine("     <hr>");
@@ -195,7 +204,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                             "           PageSize=" + System.Convert.ToChar(34) + "@CustomizationService.GetDefaultPaging()" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           PagerHorizontalAlign=" + System.Convert.ToChar(34) + "HorizontalAlign.Left" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           ShowPagingSummary=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + Environment.NewLine);
-                        
+
                         string gridCustomProperties = "  AllowColumnReorder=@CustomizationService.GetGridPropertyValue(" + System.Convert.ToChar(34) + "AllowColumnReorder" + System.Convert.ToChar(34) + ") " + Environment.NewLine;
                         gridCustomProperties += "           AllowColumnPicking=@CustomizationService.GetGridPropertyValue(" + System.Convert.ToChar(34) + "AllowColumnPicking" + System.Convert.ToChar(34) + ") " + Environment.NewLine;
                         gridCustomProperties += "           AllowFiltering=@CustomizationService.GetGridPropertyValue(" + System.Convert.ToChar(34) + "AllowFiltering" + System.Convert.ToChar(34) + ") " + Environment.NewLine;
@@ -229,7 +238,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                             "           StartsWithText=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + "STARTS_WITH" + System.Convert.ToChar(34) + ") " + Environment.NewLine +
                             "           ColumnsShowingText=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + "OPTIONAL_COLUMNS" + System.Convert.ToChar(34) + ")" + Environment.NewLine +
                             "           Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entities" + System.Convert.ToChar(34) + Environment.NewLine +
-                            "           TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + Environment.NewLine + 
+                            "           TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           ColumnWidth=" + System.Convert.ToChar(34) + "100px" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           LogicalFilterOperator=" + System.Convert.ToChar(34) + "LogicalFilterOperator.And" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("         <EmptyTemplate>");
@@ -239,7 +248,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + ">");
                         output.AppendLine("                 <HeaderTemplate>");
                         output.AppendLine("                     <RadzenButton Icon=" + System.Convert.ToChar(34) + "add_circle_outline" + System.Convert.ToChar(34) +
-                            Environment.NewLine + "                         ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Success" + System.Convert.ToChar(34) + 
+                            Environment.NewLine + "                         ButtonStyle=" + System.Convert.ToChar(34) + "ButtonStyle.Success" + System.Convert.ToChar(34) +
                             Environment.NewLine + "                         Visible=@SecurityService.VerifySecurityPermission(" + System.Convert.ToChar(34) + table.Schema + table.Name + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + "AddEnabled" + System.Convert.ToChar(34) + ")" +
                             Environment.NewLine + "                         Text =@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + "NEW_BUTTON" + System.Convert.ToChar(34) + ")" +
                             Environment.NewLine + "                         Click=" + System.Convert.ToChar(34) + "Add" + System.Convert.ToChar(34) + ">");
@@ -263,7 +272,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("                 </RadzenDataGridColumn>");
                         foreach (var column in table.Columns)
                         {
-                            columnCustomProperties =  Environment.NewLine;
+                            columnCustomProperties = Environment.NewLine;
                             columnCustomProperties += "                     Filterable=@CustomizationService.GetColumnFilterable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ") " + Environment.NewLine;
                             columnCustomProperties += "                     Groupable=@CustomizationService.GetColumnGroupable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ") " + Environment.NewLine;
                             columnCustomProperties += "                     Resizable=@CustomizationService.GetColumnResizable(" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + ") " + Environment.NewLine;
@@ -280,7 +289,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                             {
                                 if (column.IsInPrimaryKey)
                                 {
-                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + columnCustomProperties + 
+                                    output.AppendLine("             <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + columnCustomProperties +
                                         Environment.NewLine + "                     Title=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" +
                                         Environment.NewLine + "                     TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " />");
                                 }
@@ -382,7 +391,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                                         Environment.NewLine + "                     TextAlign=" + System.Convert.ToChar(34) + "TextAlign.Center" + System.Convert.ToChar(34) + " >");
                                                     break;
                                             }
-                                            output.AppendLine("     </RadzenDataGridColumn>");
+                                            output.AppendLine("             </RadzenDataGridColumn>");
                                         }
                                         else
                                         {
@@ -398,13 +407,19 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                 }
                             }
                         }
-
-
                         output.AppendLine("         </Columns>");
+
+                        output.AppendLine(BuildDetailsTemplate(table));
+
                         output.AppendLine("         </RadzenDataGrid>");
                         output.AppendLine("     <hr>");
                         output.AppendLine("     }");
-                        output.AppendLine(" ");
+                        output.AppendLine("     if (crudMode == CrudMode.Design)");
+                        output.AppendLine("     {");
+                        output.AppendLine("          <CustomizationEntityCrud Id=" + System.Convert.ToChar(34) + "@CustomizationService.GetEntityId(" + System.Convert.ToChar(34) + table.Schema + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + table.Name + System.Convert.ToChar(34) + ")" + System.Convert.ToChar(34) + "></CustomizationEntityCrud>");
+                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.List)></RadzenButton>");
+                        output.AppendLine("     }");
+
                         output.AppendLine("     if (crudMode == CrudMode.Add || crudMode == CrudMode.Edit || crudMode == CrudMode.Delete)");
                         output.AppendLine("     {");
                         output.AppendLine("             <RadzenTemplateForm TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Tables." + table.Schema + "." + table.Name + "" + System.Convert.ToChar(34) + " Data=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity" + System.Convert.ToChar(34) + "  @bind-Value=" + System.Convert.ToChar(34) + table.Name + "_entity" + System.Convert.ToChar(34) + " Submit =" + System.Convert.ToChar(34) + "Save" + System.Convert.ToChar(34) + " Visible =" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity != null)" + System.Convert.ToChar(34) + ">");
@@ -688,11 +703,12 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("        List,");
                         output.AppendLine("        Add,");
                         output.AppendLine("        Edit,");
-                        output.AppendLine("        Delete");
+                        output.AppendLine("        Delete,");
+                        output.AppendLine("        Design");
                         output.AppendLine("    }");
 
                         string itemParameterColumn = String.Empty;
-  
+
                         if (generationProject.GenerateComponentParameters)
                         {
                             foreach (var column in table.Columns)
@@ -701,12 +717,12 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
 
                                 //if (column.IsInPrimaryKey)
                                 //{
-                                    output.AppendLine(" [Parameter]");
-                                    output.AppendLine(" public " + column.LanguageType + "? " + column.Name + " { get; set; }");
+                                output.AppendLine(" [Parameter]");
+                                output.AppendLine(" public " + column.LanguageType + "? " + column.Name + " { get; set; }");
                                 //}
                             }
                         }
-                        output.AppendLine("");   
+                        output.AppendLine("");
 
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Variable to save grid state");
@@ -780,7 +796,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("             AuditService.Log(AuditService.LogTypeEnum.Navigation, " + System.Convert.ToChar(34) + "Access to " + System.Convert.ToChar(34) + " + " + System.Convert.ToChar(34) + table.Schema + table.Name + "Crud" + System.Convert.ToChar(34) + ", crudMode.ToString());");
                         output.AppendLine("        _isProcessing = false;");
                         output.AppendLine("        " + generationProject.Namespace + ".Business.Tables." + table.Schema + "." + table.Name + " entity = new();");
-                        output.AppendLine("        " + table.Name + "_entities = entity.Items(" + itemParameterColumn.Substring(0,itemParameterColumn.Length -1) + ");");
+                        if (itemParameterColumn.Length > 0)
+                            output.AppendLine("        " + table.Name + "_entities = entity.Items(" + itemParameterColumn.Substring(0, itemParameterColumn.Length - 1) + ");");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Loads Type Tables data");
@@ -1200,6 +1217,51 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                 }
                 return false;
             }
+        }
+
+        private string BuildDetailsTemplate(ITable table)
+        {
+            System.Text.StringBuilder output = new System.Text.StringBuilder();
+
+            int fkCounter = 0;
+
+            output.AppendLine("         <Template>");
+            output.AppendLine("				<RadzenTabs>");
+            output.AppendLine("                 <Tabs>");
+            foreach (var column in table.Columns)
+            {
+                Debug.Print(column.Name);
+
+                if (column.Name != "CreationUser" && column.Name != "ModificationUser"
+                    && column.Name != "CreationDate" && column.Name != "ModificationDate")
+                {
+                    foreach (var item in column.ForeignKeys)
+                    {
+
+
+                        MyMeta.ITable refFkTable = ((MyMeta.IForeignKey)item).ForeignTable;
+                        if (!refFkTable.Name.Equals(table.Name)) // Excludes same table
+                        {
+                            if (item.ForeignColumns != null)
+                            {
+                                fkCounter += 1;
+
+                                output.AppendLine("                     <RadzenTabsItem Text=" + System.Convert.ToChar(34) + item.ForeignTable.Name + System.Convert.ToChar(34) + ">");
+                                output.AppendLine("                         <" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud " + item.ForeignColumns.FirstOrDefault().Name + " = " + System.Convert.ToChar(34) + "@context." + column.Name + System.Convert.ToChar(34) + ">");
+                                output.AppendLine("                         </" + item.ForeignTable.Schema + item.ForeignTable.Name + "Crud>");
+                                output.AppendLine("                     </RadzenTabsItem>");
+                            }
+                        }
+                    }
+                }
+            }
+            output.AppendLine("                 </Tabs>");
+            output.AppendLine("             </RadzenTabs>");
+            output.AppendLine("		</Template>");
+            if (fkCounter > 0)
+                return output.ToString();
+            else
+                return string.Empty;
         }
         private string FindFirstVarcharColumnName(MyMeta.ITable table)
         {
