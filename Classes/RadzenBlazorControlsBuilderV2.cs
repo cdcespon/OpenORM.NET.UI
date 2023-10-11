@@ -823,6 +823,35 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         }
                         output.AppendLine("    }");
                         output.AppendLine(" ");
+
+                        output.AppendLine("    /// <summary>");
+                        output.AppendLine("    /// Loads Filters data");
+                        output.AppendLine("    /// </summary>");
+                        output.AppendLine("    private void LoadFiltersData()");
+                        output.AppendLine("    {");
+
+                        foreach (var column in table.Columns)
+                        {
+                            if (!column.IsInPrimaryKey)
+                            {
+                                if (column.IsInForeignKey)
+                                {
+                                    var foreignKey = column.ForeignKeys.FirstOrDefault();
+                                    MyMeta.ITable fkTable = foreignKey.PrimaryTable;
+
+                                    output.AppendLine("        " + fkTable.Name + "_" + column.Name + "_filter = " + fkTable.Name + "_" + column.Name + "_entities.Join(");
+                                    output.AppendLine("             " + table.Name + "_entities, " + fkTable.Name + "FkTable => " + fkTable.Name + "FkTable.Id, " + table.Name + "Table => " + table.Name + "Table." + column.Name + ",");
+                                    output.AppendLine("             " + "(" + fkTable.Name + "FkTable, " + table.Name + "Table) => new");
+                                    output.AppendLine("             {");
+                                    output.AppendLine("                 " + fkTable.Name + "FkTable");
+                                    output.AppendLine("             }).Select(x => x." + fkTable.Name + "FkTable).Distinct().ToList();");
+
+                                    output.AppendLine(" ");
+                                }
+                            }
+                        }
+                        output.AppendLine("    }");
+
                         output.AppendLine("    #endregion");
                         output.AppendLine(" ");
                         output.AppendLine("    /// <summary>");
@@ -1042,6 +1071,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("       ");
                         output.AppendLine("            await Task.Run(LoadMainEntityData);");
                         output.AppendLine("            await Task.Run(LoadTypesData);");
+                        output.AppendLine("             Task.Run(LoadFiltersData);");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Crud mode cancellation and default mode");
