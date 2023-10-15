@@ -622,32 +622,63 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                                 output.AppendLine("                 </div>");
 
                                                 break;
+
+                                            case "uniqueidentifier":
+                                                if (fieldsToTreatAsImage.IndexOf(column.Name) < 0)
+                                                {
+                                                    output.AppendLine("              @if (crudMode != CrudMode.Add)");
+                                                    output.AppendLine("              {");
+                                                    output.AppendLine("                 <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         <RadzenLabel Text=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         </RadzenLabel>");
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + fieldWidth + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         <RadzenLabel Text=@(" + table.Name + "_entity." + column.Name + ".ToString()) Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         </RadzenLabel>");
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                 </div>");
+                                                    output.AppendLine("              }");
+
+                                                }
+                                                else
+                                                {
+                                                    output.AppendLine("                 <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                 <RadzenLabel Text=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "margin-left: 0px; vertical-align: middle;" + System.Convert.ToChar(34) + " />");
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + fieldWidth + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         <RadzenFileInput @bind-Value=" + System.Convert.ToChar(34) + "@" + table.Name + "_entity." + column.Name + System.Convert.ToChar(34) + " TValue=" + System.Convert.ToChar(34) + "string" + System.Convert.ToChar(34) + " Class=" + System.Convert.ToChar(34) + "w-100" + System.Convert.ToChar(34) + " />  ");
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                 </div>");
+
+                                                }
+                                                break;
                                             case "text":
                                             default:
 
                                                 if (fieldsToTreatAsImage.IndexOf(column.Name) < 0)
                                                 {
-                                                    if (!column.IsInPrimaryKey)
+
+                                                    output.AppendLine("                 <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         <RadzenLabel Text=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         </RadzenLabel>");
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + fieldWidth + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         <RadzenTextBox  style=" + System.Convert.ToChar(34) + "display: block" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + ">");
+                                                    output.AppendLine("                         </RadzenTextBox>");
+                                                    if (!column.IsNullable)
                                                     {
-                                                        output.AppendLine("                 <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
-                                                        output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
-                                                        output.AppendLine("                         <RadzenLabel Text=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
-                                                        output.AppendLine("                         </RadzenLabel>");
-                                                        output.AppendLine("                     </div>");
-                                                        output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + fieldWidth + System.Convert.ToChar(34) + ">");
-                                                        output.AppendLine("                         <RadzenTextBox  style=" + System.Convert.ToChar(34) + "display: block" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + ">");
-                                                        output.AppendLine("                         </RadzenTextBox>");
-                                                        if (!column.IsNullable)
-                                                        {
-                                                            output.AppendLine("                         @if(@crudMode!=CrudMode.Delete)");
-                                                            output.AppendLine("                         {");
-                                                            output.AppendLine("                             <RadzenRequiredValidator Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + column.Name + " is required" + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "position: absolute" + System.Convert.ToChar(34) + ">");
-                                                            output.AppendLine("                             </RadzenRequiredValidator>");
-                                                            output.AppendLine("                         }");
-                                                        }
-                                                        output.AppendLine("                     </div>");
-                                                        output.AppendLine("                 </div>");
+                                                        output.AppendLine("                         @if(@crudMode!=CrudMode.Delete)");
+                                                        output.AppendLine("                         {");
+                                                        output.AppendLine("                             <RadzenRequiredValidator Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Text=" + System.Convert.ToChar(34) + column.Name + " is required" + System.Convert.ToChar(34) + " Style=" + System.Convert.ToChar(34) + "position: absolute" + System.Convert.ToChar(34) + ">");
+                                                        output.AppendLine("                             </RadzenRequiredValidator>");
+                                                        output.AppendLine("                         }");
                                                     }
+                                                    output.AppendLine("                     </div>");
+                                                    output.AppendLine("                 </div>");
+
                                                 }
                                                 else
                                                 {
@@ -1010,6 +1041,14 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("            case CrudMode.Add:");
                         output.AppendLine("                try");
                         output.AppendLine("                {");
+                        foreach (var column in table.Columns)
+                        {
+                            if(column.DataTypeName.ToLower().Equals("uniqueidentifier") && column.IsInPrimaryKey 
+                                && column.HasDefault  && column.Default.Equals("(newid())"))
+                            {
+                                output.AppendLine("                     " + table.Name + "_entity."+ column.Name + " = Guid.NewGuid();");
+                            }
+                        }
                         output.AppendLine("                     crud.Add(" + table.Name + "_entity);");
                         output.AppendLine("                     summary = RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + "RECORD_HAS_BEEN" + System.Convert.ToChar(34) + ");");
                         output.AppendLine("                     actionInformation = RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + "ADDED" + System.Convert.ToChar(34) + ");");
