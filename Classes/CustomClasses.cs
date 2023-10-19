@@ -430,6 +430,17 @@ public class GenerationProject
         set { _useBlazorRouting = value; }
     }
 
+
+    bool _useBlazorBadgesForViews = false;
+    [Description("Use Badges For Views grid reports in Blazor Radzen component generation.")]
+    [Category("Blazor generation Options")]
+    [DisplayName("Use Badges For Views grid reports in Blazor Radzen")]
+    public bool UseBlazorBadgesForViews
+    {
+        get { return _useBlazorBadgesForViews; }
+        set { _useBlazorBadgesForViews = value; }
+    }
+
     bool _generateParametersOnPks = false;
 
     [Description("Generate component parameters for each Pk to be nested by another comonents")]
