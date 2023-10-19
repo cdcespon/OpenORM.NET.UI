@@ -1789,7 +1789,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                     output = new System.Text.StringBuilder();
                     if (view.Selected)
                     {
-                        output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + view.Schema + view.Name + "View" + System.Convert.ToChar(34) + "");
+                        if (generationProject.UseBlazorRouting)
+                            output.AppendLine("@page " + System.Convert.ToChar(34) + "/" + view.Schema + view.Name + "View" + System.Convert.ToChar(34) + "");
                         output.AppendLine("@using  " + generationProject.Namespace + ";");
                         output.AppendLine(" ");
                         output.AppendLine("@inject NotificationService NotificationService");
