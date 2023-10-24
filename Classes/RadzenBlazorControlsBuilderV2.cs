@@ -198,7 +198,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("     if (crudMode == CrudMode.List)");
                         output.AppendLine("     {");
                         output.AppendLine("         <RadzenDataGrid @bind-Settings=" + System.Convert.ToChar(34) + "@GridSettings" + System.Convert.ToChar(34) + Environment.NewLine +
-                            "           FilterCaseSensitivity= " + System.Convert.ToChar(34) + "FilterCaseSensitivity.CaseInsensitive" + System.Convert.ToChar(34) + (table.Columns.Where(x => x.Name == "Enabled").Count() > 0 ? " CellRender=@" + table.Name + "CellRender" : "") + Environment.NewLine +
+                            "           FilterCaseSensitivity= " + System.Convert.ToChar(34) + "FilterCaseSensitivity.CaseInsensitive" + System.Convert.ToChar(34) + Environment.NewLine +
+                            (table.Columns.Where(x => x.Name == "Enabled").Count() > 0 ? " CellRender=@" + table.Name + "CellRender" : "") + Environment.NewLine +
                             "           PageSizeOptions=" + System.Convert.ToChar(34) + "@(new int[]{10,20,50,100})" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           FilterMode=" + System.Convert.ToChar(34) + "FilterMode.Advanced" + System.Convert.ToChar(34) + Environment.NewLine +
                             "           PageSize=" + System.Convert.ToChar(34) + "@CustomizationService.GetDefaultPaging()" + System.Convert.ToChar(34) + Environment.NewLine +
@@ -417,7 +418,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("     if (crudMode == CrudMode.Design)");
                         output.AppendLine("     {");
                         output.AppendLine("          <CustomizationEntityCrud Id=" + System.Convert.ToChar(34) + "@CustomizationService.GetEntityId(" + System.Convert.ToChar(34) + table.Schema + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + table.Name + System.Convert.ToChar(34) + ")" + System.Convert.ToChar(34) + "></CustomizationEntityCrud>");
-                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.List)></RadzenButton>");
+                        output.AppendLine("          <RadzenButton Text=" + System.Convert.ToChar(34) + "Accept" + System.Convert.ToChar(34) + " Click=@(() => Task.Run(LoadGridCustomizationSettings))></RadzenButton>");
                         output.AppendLine("     }");
 
                         output.AppendLine("     if (crudMode == CrudMode.Add || crudMode == CrudMode.Edit || crudMode == CrudMode.Delete)");
@@ -817,10 +818,20 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("    {");
                         output.AppendLine("        if (SecurityService.CurrentUser == null)");
                         output.AppendLine("             NavManager.NavigateTo(" + System.Convert.ToChar(34) + "login" + System.Convert.ToChar(34) + ", true);");
-                        output.AppendLine("        await Task.Run(LoadMainEntityData);");
-                        output.AppendLine("        await Task.Run(LoadTypesData);");
+                        output.AppendLine("        Task.Run(LoadGridCustomizationSettings);");
+                        output.AppendLine("        await Task.Run(LoadInformation);");
                         output.AppendLine("    }");
                         output.AppendLine("    #region Loading entities data");
+                        output.AppendLine("    /// <summary>");
+                        output.AppendLine("    /// Loads information about main entity, associated and filters data");
+                        output.AppendLine("    /// </summary>");
+                        output.AppendLine("    private async Task LoadInformation()");
+                        output.AppendLine("    {");
+                        output.AppendLine("        await Task.Run(LoadMainEntityData);");
+                        output.AppendLine("        await Task.Run(LoadTypesData);");
+                        output.AppendLine("        Task.Run(LoadFiltersData);");
+                        output.AppendLine("    }");
+                        output.AppendLine(" ");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Loads main entity data");
                         output.AppendLine("    /// </summary>");
@@ -1043,10 +1054,10 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("                {");
                         foreach (var column in table.Columns)
                         {
-                            if(column.DataTypeName.ToLower().Equals("uniqueidentifier") && column.IsInPrimaryKey 
-                                && column.HasDefault  && column.Default.Equals("(newid())"))
+                            if (column.DataTypeName.ToLower().Equals("uniqueidentifier") && column.IsInPrimaryKey
+                                && column.HasDefault && column.Default.Equals("(newid())"))
                             {
-                                output.AppendLine("                     " + table.Name + "_entity."+ column.Name + " = Guid.NewGuid();");
+                                output.AppendLine("                     " + table.Name + "_entity." + column.Name + " = Guid.NewGuid();");
                             }
                         }
                         output.AppendLine("                     crud.Add(" + table.Name + "_entity);");
@@ -1111,18 +1122,17 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("            Detail = actionInformation, ");
                         output.AppendLine("            Duration = 4000 });");
                         output.AppendLine("       ");
-                        output.AppendLine("            await Task.Run(LoadMainEntityData);");
-                        output.AppendLine("            await Task.Run(LoadTypesData);");
-                        output.AppendLine("             Task.Run(LoadFiltersData);");
+                        output.AppendLine("        await Task.Run(LoadInformation);");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Crud mode cancellation and default mode");
                         output.AppendLine("    /// </summary>");
-                        output.AppendLine("    private void Cancel()");
+                        output.AppendLine("    private async Task Cancel()");
                         output.AppendLine("    {");
-                        output.AppendLine("        crudMode = CrudMode.List;  ");
-                        output.AppendLine("        LoadMainEntityData();");
-                        output.AppendLine("        LoadTypesData();");
+                        output.AppendLine("        _isProcessing = true;");
+                        output.AppendLine("        crudMode = CrudMode.List;");
+                        output.AppendLine("        await Task.Run(LoadInformation);");
+                        output.AppendLine("        _isProcessing = false;");
                         output.AppendLine("    }");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Sets detail panel title - TODO: Implement Multilanguage");
@@ -1269,7 +1279,15 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
 
                         output.AppendLine("    #endregion");
                         output.AppendLine(" ");
-                        output.AppendLine("    #region Export");
+                        output.AppendLine("    #region Customize");
+                        output.AppendLine(" ");
+                        output.AppendLine("    private void LoadGridCustomizationSettings()");
+                        output.AppendLine("    {");
+                        output.AppendLine("        CustomizationService.GetCustomizationEntities(" + System.Convert.ToChar(34) + table.Schema + System.Convert.ToChar(34) + "," + System.Convert.ToChar(34) + table.Name + System.Convert.ToChar(34) + ");");
+                        output.AppendLine(" ");
+                        output.AppendLine("        if(crudMode != CrudMode.List)");
+                        output.AppendLine("            crudMode = CrudMode.List;");
+                        output.AppendLine("    }");
                         output.AppendLine(" ");
                         output.AppendLine("    #endregion");
                         output.AppendLine(" ");
@@ -1820,7 +1838,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine("        <Columns>");
                         foreach (var column in view.Columns)
                         {
-                
+
                             switch (column.DataTypeName.ToLower())
                             {
                                 case "numeric":
@@ -1854,7 +1872,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                 default:
                                     output.AppendLine("            <RadzenDataGridColumn TItem=" + System.Convert.ToChar(34) + generationProject.Namespace + ".Entities.Views." + view.Schema + "." + view.Name + System.Convert.ToChar(34) + " Property=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Title=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Frozen=" + System.Convert.ToChar(34) + "false" + System.Convert.ToChar(34) + " Sortable=" + System.Convert.ToChar(34) + "true" + System.Convert.ToChar(34) + " Width=" + System.Convert.ToChar(34) + "60px" + System.Convert.ToChar(34) + " >");
                                     output.AppendLine("            </RadzenDataGridColumn>");
-                                   break;
+                                    break;
                             }
                         }
                         output.AppendLine("        </Columns>");
