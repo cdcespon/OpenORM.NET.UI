@@ -7,11 +7,36 @@ using System.Text;
 
 
 [Serializable]
-public class MappedStoredProcedure  
+public class MappedStoredProcedure
 {
     private ObservableCollection<ResultSet> _resultSet = new ObservableCollection<ResultSet>();
     private ObservableCollection<ProcedureParameter> _procedureParameter = new ObservableCollection<ProcedureParameter>();
     private String _procedureName = String.Empty;
+
+    [Serializable]
+    public enum CustomTypeCode
+    {
+        Empty = 0,
+        Object = 1,
+        DBNull = 2,
+        Boolean = 3,
+        Char = 4,
+        SByte = 5,
+        Byte = 6,
+        Int16 = 7,
+        UInt16 = 8,
+        Int32 = 9,
+        UInt32 = 10,
+        Int64 = 11,
+        UInt64 = 12,
+        Single = 13,
+        Double = 14,
+        Decimal = 15,
+        DateTime = 16,
+        String = 18,
+        Guid = 19
+    }
+
 
     public ObservableCollection<ResultSet> ResultSets
     {
@@ -58,21 +83,21 @@ public class MappedStoredProcedure
     [Serializable]
     public class ProcedureField
     {
-        private TypeCode _dataType = new TypeCode();
+        private CustomTypeCode _dataType = new CustomTypeCode();
         private String _name = String.Empty;
         private bool _isNullable = false;
 
         public ProcedureField()
         {
         }
-        public ProcedureField(TypeCode dataType, String name,bool isNullable)
+        public ProcedureField(CustomTypeCode dataType, String name,bool isNullable)
         {
             DataType = dataType;
             Name = name;
             IsNullable = IsNullable;
         }
 
-        public TypeCode DataType
+        public CustomTypeCode DataType
         {
             get { return _dataType; }
             set { _dataType = value; }
@@ -127,19 +152,19 @@ public class MappedStoredProcedure
     [Serializable]
     public class ProcedureParameter
     {
-        private TypeCode _dataType = new TypeCode();
+        private CustomTypeCode _dataType = new CustomTypeCode();
         private String _name = String.Empty;
 
         public ProcedureParameter()
         {
         }
-        public ProcedureParameter(TypeCode dataType, String name)
+        public ProcedureParameter(CustomTypeCode dataType, String name)
         {
             DataType = dataType;
             Name = name;
         }
 
-        public TypeCode DataType
+        public CustomTypeCode DataType
         {
             get { return _dataType; }
             set { _dataType = value; }
