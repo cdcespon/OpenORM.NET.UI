@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using MyMeta;
@@ -247,6 +248,8 @@ namespace OpenORM.UI
 
                 if (_projectConfig.Name!= null && _projectConfig.Description != null)
                     this.Text = "OpenORM.NET :.: " + _projectConfig.Name + " - " + _projectConfig.Description;
+
+                this.Text += " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
             catch (Exception ex)
             {
