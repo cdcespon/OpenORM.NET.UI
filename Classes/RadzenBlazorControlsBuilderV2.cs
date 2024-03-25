@@ -555,13 +555,14 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
 
                                                 if (column.Name != "ModificationUser" && column.Name != "CreationUser")
                                                 {
+                                                    string castTypeString = column.IsNullable == true ? "(" + column.DataTypeName + ")" : string.Empty;
                                                     output.AppendLine("                 <div style=" + System.Convert.ToChar(34) + "margin-bottom: 1rem" + System.Convert.ToChar(34) + " class=" + System.Convert.ToChar(34) + "row" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + "col-md-3" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                         <RadzenLabel Text=@RegionalizationService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + "." + column.Name + System.Convert.ToChar(34) + ")" + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
                                                     output.AppendLine("                         </RadzenLabel>");
                                                     output.AppendLine("                     </div>");
                                                     output.AppendLine("                     <div class=" + System.Convert.ToChar(34) + fieldWidth + System.Convert.ToChar(34) + ">");
-                                                    output.AppendLine("                         <RadzenNumeric " + numericFormat + " style=" + System.Convert.ToChar(34) + "display: block; width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
+                                                    output.AppendLine("                         <RadzenNumeric " + numericFormat + " style=" + System.Convert.ToChar(34) + "display: block; width: 100%" + System.Convert.ToChar(34) + " @bind-Value=" + System.Convert.ToChar(34) + "@(" + castTypeString + table.Name + "_entity." + column.Name + ")" + System.Convert.ToChar(34) + " Name=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " Disabled=" + System.Convert.ToChar(34) + Disabled + System.Convert.ToChar(34) + " >");
                                                     output.AppendLine("                     </RadzenNumeric>");
                                                     output.AppendLine("                     </div>");
                                                     output.AppendLine("                 </div>");
