@@ -255,8 +255,7 @@ namespace OpenORM.UI
             {
                 AddOutput(ex);
             }
- 
-        }
+         }
 
         private bool Connect(GenerationProject projectConfig)
         {

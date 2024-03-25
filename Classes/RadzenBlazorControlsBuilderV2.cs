@@ -542,14 +542,14 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                                         break;
                                                     case "decimal":
                                                         numericFormat = " Format=" + System.Convert.ToChar(34) + "c" + System.Convert.ToChar(34);
-                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + "decimal" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "decimal?" : "decimal") + System.Convert.ToChar(34);
                                                         break;
                                                     case "float":
                                                         numericFormat = " Format=" + System.Convert.ToChar(34) + "c" + System.Convert.ToChar(34);
-                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + "float" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "float?" : "float") + System.Convert.ToChar(34);
                                                         break;
                                                     default:
-                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + "int" + System.Convert.ToChar(34);
+                                                        numericFormat = " TValue=" + System.Convert.ToChar(34) + (column.IsNullable ? "int?" : "int") + System.Convert.ToChar(34);
                                                         break;
                                                 }
 
