@@ -243,13 +243,16 @@ namespace OpenORM.UI
         {
             try
             {
-              if (_projectConfig.Name != null)
-                this.Text = "OpenORM.NET :.: " + _projectConfig.Name;
+                if (_projectConfig.Name != null)
+                    this.Text = "OpenORM.NET :.: " +
+                    " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " - " +
+                     _projectConfig.Name;
 
-                if (_projectConfig.Name!= null && _projectConfig.Description != null)
-                    this.Text = "OpenORM.NET :.: " + _projectConfig.Name + " - " + _projectConfig.Description;
+                if (_projectConfig.Name != null && _projectConfig.Description != null)
+                    this.Text = "OpenORM.NET :.: " + _projectConfig.Name + " - " +
+                    " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " - " +
+                    _projectConfig.Description;
 
-                this.Text += " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
             catch (Exception ex)
             {
