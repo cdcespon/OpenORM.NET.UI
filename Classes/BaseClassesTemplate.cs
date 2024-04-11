@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlTypes;
 using System.Text;
 
@@ -4845,6 +4846,8 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using Microsoft.Extensions.Configuration;");
         output.AppendLine("internal class ConfigurationHandler");
         output.AppendLine("{");
+        output.AppendLine("     private static ConfigurationBuilder _configurationBuilder = null;");
+        output.AppendLine("     private static IConfigurationRoot _configuration = null;");
         output.AppendLine("     internal static String PasswordKey");
         output.AppendLine("     {");
         output.AppendLine("         get { return getConfiguration(Constants.PASSWORDKEY); }");
@@ -4885,12 +4888,14 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("       {");
         output.AppendLine("           var env = Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") == null ? String.Empty :");
         output.AppendLine("               Environment.GetEnvironmentVariable(" + System.Convert.ToChar(34) + "ASPNETCORE_ENVIRONMENT" + System.Convert.ToChar(34) + ") + " + System.Convert.ToChar(34) + "." + System.Convert.ToChar(34) + ";");
-        output.AppendLine("           var builder = new ConfigurationBuilder()");
-        output.AppendLine("                       .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)");
+        output.AppendLine("           if (_configurationBuilder == null)");
+        output.AppendLine("           {");
+        output.AppendLine("               _configurationBuilder = new ConfigurationBuilder();");
+        output.AppendLine("               _configurationBuilder.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)");
         output.AppendLine("                       .AddJsonFile(" + System.Convert.ToChar(34) + "appsettings." + System.Convert.ToChar(34) + " + env + " + System.Convert.ToChar(34) + "json" + System.Convert.ToChar(34) + ", optional: false, reloadOnChange: true);");
-        output.AppendLine("");
-        output.AppendLine("           IConfigurationRoot configuration = builder.Build();");
-        output.AppendLine("           return configuration.GetSection(" + System.Convert.ToChar(34) + "AppSettings" + System.Convert.ToChar(34) + ").GetSection(configurationEntry).Value.ToString();");
+        output.AppendLine("               _configuration = _configurationBuilder.Build();");
+        output.AppendLine("           }");
+        output.AppendLine("           return _configuration.GetSection(" + System.Convert.ToChar(34) + "AppSettings" + System.Convert.ToChar(34) + ").GetSection(configurationEntry).Value.ToString();");
         output.AppendLine("       }");
         output.AppendLine("   }");
         output.AppendLine("}");
