@@ -12,6 +12,7 @@ namespace OpenORM.UI
 {
     public partial class MainDialogForm : Form
     {
+        private const string OpenORM_NET = "OpenORM.NET ";
 
         //Selected Datasource
         public MyMeta.dbRoot _meta;
@@ -243,15 +244,21 @@ namespace OpenORM.UI
         {
             try
             {
-                if (_projectConfig.Name != null)
-                    this.Text = "OpenORM.NET :.: " +
-                    " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " - " +
+                var executingAssembly = Assembly.GetExecutingAssembly();
+
+                if (_projectConfig.Name.Length > 0)
+                    this.Text = OpenORM_NET +
+                    " Version: " + executingAssembly.GetName().Version.ToString() + " :.: " +
                      _projectConfig.Name;
 
-                if (_projectConfig.Name != null && _projectConfig.Description != null)
-                    this.Text = "OpenORM.NET :.: " + _projectConfig.Name + " - " +
-                    " Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " - " +
+                if (_projectConfig.Name.Length == 0 && _projectConfig.Description.Length > 0)
+                    this.Text = OpenORM_NET + _projectConfig.Name +
+                    " Version: " + executingAssembly.GetName().Version.ToString() + " :.: " +
                     _projectConfig.Description;
+
+                if (_projectConfig.Name.Length == 0 && _projectConfig.Description.Length == 0)
+                    this.Text = OpenORM_NET +
+                    " Version: " + executingAssembly.GetName().Version.ToString();
 
             }
             catch (Exception ex)

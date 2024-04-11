@@ -3492,6 +3492,7 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("using System.Collections.Generic;");
         output.AppendLine("public class DataHandler : DataHandlerBase");
         output.AppendLine("{");
+        output.AppendLine("    protected string _pkFunction = ConfigurationHandler.PkFunction;");
         output.AppendLine("    /// <summary>");
         output.AppendLine("    /// No argument constructor");
         output.AppendLine("    /// </summary>");
@@ -3542,12 +3543,12 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("            BuildParameterValuesList(item);");
 
         if (_generationProject.MultiQuery)
-            output.AppendLine("            _commandText +=  ConfigurationHandler.PkFunction;");
+            output.AppendLine("            _commandText += _pkFunction;");
 
         output.AppendLine("            result = ExecuteNonQuery(_commandText, _transaction,true);");
 
         if (!_generationProject.MultiQuery)
-            output.AppendLine("            ExecuteNonQuery(ConfigurationHandler.PkFunction, _transaction, true);");
+            output.AppendLine("            ExecuteNonQuery(_pkFunction, _transaction, true);");
 
 
         output.AppendLine("            if (result > 0)");
