@@ -441,6 +441,16 @@ public class GenerationProject
         set { _useBlazorBadgesForViews = value; }
     }
 
+    bool _useBlazorBadgesForTables = false;
+    [Description("Use Badges For Tables grid cruds in Blazor Radzen component generation.")]
+    [Category("Blazor generation Options")]
+    [DisplayName("Use Badges For Tables grid cruds in Blazor Radzen")]
+    public bool UseBlazorBadgesForTables
+    {
+        get { return _useBlazorBadgesForViews; }
+        set { _useBlazorBadgesForTables = value; }
+    }
+
     bool _generateParametersOnPks = false;
 
     [Description("Generate component parameters for each Pk to be nested by another comonents")]

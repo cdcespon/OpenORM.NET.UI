@@ -154,46 +154,49 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                         output.AppendLine(" }");
                         output.AppendLine(" else");
                         output.AppendLine(" {");
-                        output.AppendLine("     switch (crudMode)");
-                        output.AppendLine("     {");
-                        output.AppendLine("         case CrudMode.Add:");
-                        output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false) BadgeStyle =" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                 <ChildContent>");
-                        output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                 </ChildContent>");
-                        output.AppendLine("             </RadzenBadge>");
-                        output.AppendLine("             break;");
-                        output.AppendLine("         case CrudMode.Delete:");
-                        output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.DELETE_BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Warning" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                 <ChildContent>");
-                        output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                 </ChildContent>");
-                        output.AppendLine("             </RadzenBadge>");
-                        output.AppendLine("             break;");
-                        output.AppendLine("             case CrudMode.Edit:");
-                        output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                 <ChildContent>");
-                        output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                 </ChildContent>");
-                        output.AppendLine("             </RadzenBadge>");
-                        output.AppendLine("             break;         ");
-                        output.AppendLine("             case CrudMode.List:");
-                        output.AppendLine("                    <RadzenStack Orientation=" + System.Convert.ToChar(34) + "Orientation.Horizontal" + System.Convert.ToChar(34) + " AlignItems=" + System.Convert.ToChar(34) + "AlignItems.Center" + System.Convert.ToChar(34) + " JustifyContent=" + System.Convert.ToChar(34) + "JustifyContent.SpaceBetween" + System.Convert.ToChar(34) + " Gap=" + System.Convert.ToChar(34) + "1rem" + System.Convert.ToChar(34) + ">");
+                        if (generationProject.UseBlazorBadgesForTables)
+                        {
+                            output.AppendLine("     switch (crudMode)");
+                            output.AppendLine("     {");
+                            output.AppendLine("         case CrudMode.Add:");
+                            output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false) BadgeStyle =" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                            output.AppendLine("                 <ChildContent>");
+                            output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                            output.AppendLine("                 </ChildContent>");
+                            output.AppendLine("             </RadzenBadge>");
+                            output.AppendLine("             break;");
+                            output.AppendLine("         case CrudMode.Delete:");
+                            output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.DELETE_BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Warning" + System.Convert.ToChar(34) + " >");
+                            output.AppendLine("                 <ChildContent>");
+                            output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                            output.AppendLine("                 </ChildContent>");
+                            output.AppendLine("             </RadzenBadge>");
+                            output.AppendLine("             break;");
+                            output.AppendLine("             case CrudMode.Edit:");
+                            output.AppendLine("             <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                            output.AppendLine("                 <ChildContent>");
+                            output.AppendLine("                         <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                            output.AppendLine("                 </ChildContent>");
+                            output.AppendLine("             </RadzenBadge>");
+                            output.AppendLine("             break;         ");
+                            output.AppendLine("             case CrudMode.List:");
+                            output.AppendLine("                    <RadzenStack Orientation=" + System.Convert.ToChar(34) + "Orientation.Horizontal" + System.Convert.ToChar(34) + " AlignItems=" + System.Convert.ToChar(34) + "AlignItems.Center" + System.Convert.ToChar(34) + " JustifyContent=" + System.Convert.ToChar(34) + "JustifyContent.SpaceBetween" + System.Convert.ToChar(34) + " Gap=" + System.Convert.ToChar(34) + "1rem" + System.Convert.ToChar(34) + ">");
 
-                        output.AppendLine("                         <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
-                        output.AppendLine("                             <ChildContent>");
-                        output.AppendLine("                                 <div>");
-                        output.AppendLine("                                     <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
-                        output.AppendLine("                                 </div>");
-                        output.AppendLine("                             </ChildContent>");
-                        output.AppendLine("                         </RadzenBadge>");
+                            output.AppendLine("                         <RadzenBadge Style=@StyleService.GetSchemaDetail(StyleService.StyleDataEnum.BADGE_TITLE_BACKCOLOR, false)  BadgeStyle=" + System.Convert.ToChar(34) + "BadgeStyle.Secondary" + System.Convert.ToChar(34) + " >");
+                            output.AppendLine("                             <ChildContent>");
+                            output.AppendLine("                                 <div>");
+                            output.AppendLine("                                     <h4 style=" + System.Convert.ToChar(34) + "color:white;" + System.Convert.ToChar(34) + ">" + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + table.Schema + "." + table.Name + System.Convert.ToChar(34) + ")</h4>");
+                            output.AppendLine("                                 </div>");
+                            output.AppendLine("                             </ChildContent>");
+                            output.AppendLine("                         </RadzenBadge>");
 
-                        output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design)></RadzenButton>");
-                        output.AppendLine("                    </RadzenStack>");
+                            output.AppendLine("                         <RadzenButton Text=" + System.Convert.ToChar(34) + "Customize" + System.Convert.ToChar(34) + " Click=@(() => crudMode=CrudMode.Design)></RadzenButton>");
+                            output.AppendLine("                    </RadzenStack>");
 
 
-                        output.AppendLine("             break;  ");
-                        output.AppendLine("     }");
+                            output.AppendLine("             break;  ");
+                            output.AppendLine("     }");
+                        }
                         output.AppendLine("     <hr>");
                         output.AppendLine("     if (crudMode == CrudMode.List)");
                         output.AppendLine("     {");
@@ -319,7 +322,7 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                             output.AppendLine("                         }");
                                             output.AppendLine("                         else");
                                             output.AppendLine("                         {");
-                                            output.AppendLine("                             <RadzenLabel Text=" + System.Convert.ToChar(34) + "No data available" + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                             <RadzenLabel Text=" + System.Convert.ToChar(34) + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + "NO_DATA_AVAILABLE" + System.Convert.ToChar(34) + ")" + System.Convert.ToChar(34) + " Component =" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
                                             output.AppendLine("                             </RadzenLabel>                        ");
                                             output.AppendLine("                         }");
                                             output.AppendLine("                     }");
@@ -343,8 +346,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                                             output.AppendLine("                         }");
                                             output.AppendLine("                         else");
                                             output.AppendLine("                         {");
-                                            output.AppendLine("                         <RadzenLabel Text=" + System.Convert.ToChar(34) + "No data available" + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
-                                            output.AppendLine("                             </RadzenLabel>                        ");
+                                            output.AppendLine("                         <RadzenLabel Text=" + System.Convert.ToChar(34) + "@CultureService.GetTextByKey(" + System.Convert.ToChar(34) + "NO_DATA_AVAILABLE" + System.Convert.ToChar(34) + ")" + System.Convert.ToChar(34) + " Component=" + System.Convert.ToChar(34) + column.Name + System.Convert.ToChar(34) + " style=" + System.Convert.ToChar(34) + "width: 100%" + System.Convert.ToChar(34) + ">");
+                                            output.AppendLine("                             </RadzenLabel>");
                                             output.AppendLine("                         }");
                                             output.AppendLine("                 </Template>");
                                             output.AppendLine("                 <FilterTemplate>");
@@ -1271,8 +1274,8 @@ public class RadzenBlazorControlsBuilderV2 : IPlugin
                             output.AppendLine("    {");
                             output.AppendLine("         if(!args.Data.Enabled)");
                             output.AppendLine("             args.Attributes.Add(" + System.Convert.ToChar(34) + "class" + System.Convert.ToChar(34) + ", " + System.Convert.ToChar(34) + "row-highlight-disabled" + System.Convert.ToChar(34) + ");");
-                            output.AppendLine("         else");
-                            output.AppendLine("             args.Attributes.Add(" + System.Convert.ToChar(34) + "class" + System.Convert.ToChar(34) + ", " + System.Convert.ToChar(34) + "rz-datatable-even" + System.Convert.ToChar(34) + ");");
+                            //output.AppendLine("         else");
+                            //output.AppendLine("             args.Attributes.Add(" + System.Convert.ToChar(34) + "class" + System.Convert.ToChar(34) + ", " + System.Convert.ToChar(34) + "rz-datatable-even" + System.Convert.ToChar(34) + ");");
                             output.AppendLine("    }");
                             output.AppendLine(" ");
                         }
