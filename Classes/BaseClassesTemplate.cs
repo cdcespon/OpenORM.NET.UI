@@ -3763,14 +3763,14 @@ public class BusinessLogicLayerTemplate_5G_CSHARP : ITemplate
         output.AppendLine("    /// </summary>");
         output.AppendLine("    /// <returns></returns>");
         output.AppendLine("    /// <remarks></remarks>");
-        output.AppendLine("    public new IDbTransaction BeginTransaction()");
+        output.AppendLine("    public new IDbTransaction BeginTransaction(System.Data.IsolationLevel isolationLebel = IsolationLevel.Unspecified)");
         output.AppendLine("    {");
         output.AppendLine("        try");
         output.AppendLine("        {");
         output.AppendLine("            if (_connection == null)");
         output.AppendLine("            {");
         output.AppendLine("                GetConnection();");
-        output.AppendLine("                _transaction = _connection.BeginTransaction();");
+        output.AppendLine("                _transaction = _connection.BeginTransaction(isolationLebel);");
         output.AppendLine("                return _transaction;");
         output.AppendLine("            }");
         output.AppendLine("            else");
