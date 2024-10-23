@@ -148,9 +148,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine(" ");
                         output.AppendLine("@if(dataFunciones != null)");
                         output.AppendLine("{");
-                        output.AppendLine("@if(SeguridadController.VerificarFuncionHabilitada(NOMBRE_FUNCION))");
-                        output.AppendLine("{");
-                        output.AppendLine("@if (SeguridadController.VerificarPermisoFuncion(NOMBRE_FUNCION, dataFunciones," + System.Convert.ToChar(34) + "PuedeVisualizar" + System.Convert.ToChar(34) + "))");
+                        output.AppendLine("@if (SeguridadController.VerificarPermisoFuncion(" + System.Convert.ToChar(34) + table.Schema + table.Name + System.Convert.ToChar(34) + ",dataFunciones," + System.Convert.ToChar(34) + "PuedeVisualizar" + System.Convert.ToChar(34) + "))");
                         output.AppendLine("{");
                         output.AppendLine(" @if (" + table.Name + "_entities == null)");
                         output.AppendLine(" {");
@@ -606,12 +604,7 @@ public class RadzenBlazorControlsBuilder : IPlugin
                         output.AppendLine("}");
                         output.AppendLine("else");
                         output.AppendLine("{");
-                        output.AppendLine("     <p>@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "SIN_PERMISO_VISUALIZACION" + System.Convert.ToChar(34) + ", dataLenguaje)</p>");
-                        output.AppendLine("}");
-                        output.AppendLine("}");
-                        output.AppendLine("else");
-                        output.AppendLine("{");
-                        output.AppendLine("     <p>@MultilenguajeController.ObtenerTextoPorClave(" + System.Convert.ToChar(34) + "FUNCION_DESHABILITADA" + System.Convert.ToChar(34) + ", dataLenguaje)</p>");
+                        output.AppendLine("     <p>No tiene permisos para visualizar los registros.</p>");
                         output.AppendLine("}");
                         output.AppendLine("}");
                         output.AppendLine("else");
@@ -621,7 +614,6 @@ public class RadzenBlazorControlsBuilder : IPlugin
 
                         output.AppendLine(" ");
                         output.AppendLine("@code {");
-                        output.AppendLine("const string NOMBRE_FUNCION = " + System.Convert.ToChar(34) + table.Schema + table.Name + System.Convert.ToChar(34) + ";");
                         output.AppendLine("    /// <summary>");
                         output.AppendLine("    /// Crud Mode Enum");
                         output.AppendLine("    /// </summary>");
